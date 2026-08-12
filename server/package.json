@@ -1,0 +1,23 @@
+{
+  "name": "stock-idx-backend",                                                                                                                                                                                 
+  "version": "1.0.0",                                                                                                                                                                                          
+  "type": "module",                                                                                                                                                                                            
+  "scripts": {                                                                                                                                                                                                 
+    "start": "node server.js",                                                                                                                                                                                 
+    "dev": "nodemon server.js"                                                                                                                                                                                 
+  },               
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3",
+    "yahoo-finance2": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

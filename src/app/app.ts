@@ -1,12 +1,186 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-
-@Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
-})
-export class App {
-  protected readonly title = signal('stock-idx-dashboard');
-}
+import { Component, signal, computed, inject } from '@angular/core';                                                                                                                                   
+import { RouterOutlet } from '@angular/router';                                                                                                                                                                
+import { DecimalPipe, PercentPipe, CurrencyPipe, SlicePipe } from '@angular/common';                                                                                                                           
+import { StockService, Stock } from './stock.service';                                                                                                                                                         
+                                                                                                                                                                                                                
+// Import our new subcomponents                                                                                                                                                                                
+import { IndexHeader } from './components/index-header/index-header';                                                                                                                                          
+import { SectorSidebar } from './components/sector-sidebar/sector-sidebar';                                                                                                                                    
+import { HeatmapGrid } from './components/heatmap-grid/heatmap-grid';                                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                
+@Component({                                                                                                                                                                                                   
+  selector: 'app-root',                                                                                                                                                                                        
+  imports: [                                                                                                                                                                                                   
+    RouterOutlet, DecimalPipe, PercentPipe, CurrencyPipe, SlicePipe,                                                                                                                                           
+    IndexHeader, SectorSidebar, HeatmapGrid
+  ],                                                                                                                                                                                                           
+  templateUrl: './app.html',                                                                                                                                                                                   
+  styleUrl: './app.css',                                                                                                                                                                                       
+})                                                                                                                                                                                                             
+export class App {                                                                                                                                                                           
+  private readonly stockService = inject(StockService);                                                                                                                                                        
+                                                                                                                                                                                                                
+  readonly stocks = this.stockService.stocks;                                                                                                                                                                  
+  readonly ihsg = this.stockService.ihsg;                                                                                                                                                                      
+  readonly isLive = this.stockService.isLive;                                                                                                                                                                  
+                                                                                                                                                                                                                
+  // Local UI States                                                                                                                                                                                           
+  searchQuery = signal<string>('');                                                                                                                                                                            
+  selectedSector = signal<string>('All');                                                                                                                                                                      
+  selectedIndex = signal<string>('KOMPAS100');                                                                                                                                                                 
+  // selectedStockSymbol = signal<string | null>('BBCA');                                                                                                                                                         
+  sortBy = signal<'change' | 'symbol' | 'price' | 'marketCap'>('change');                                                                                                                                      
+  sortOrder = signal<'asc' | 'desc'>('desc');                                                                                                                                                                  
+  viewMode = signal<'grid' | 'list' | 'sectors'>('grid');                                                                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                
+  // selectedStockHistory = signal<{ date: string; close: number; volume: number }[]>([]);                                                                                                                        
+                                                                                                                                                                                                                
+  // ngOnInit() {                                                                                                                                                                                                 
+  //   this.fetchHistoryForSelected();                                                                                                                                                                            
+  // }                                                                                                                                                                                                            
+                                                                                                                                                                                                                
+  // readonly selectedStock = computed(() => {                                                                                                                                                                    
+  //   const symbol = this.selectedStockSymbol();                                                                                                                                                                 
+  //   return this.stocks().find(s => s.symbol === symbol) || null;                                                                                                                                               
+  // });                                                                                                                                                                                                          
+                                                                                                                                                                                                                
+  readonly filteredStocks = computed(() => {                                                                                                                                                                   
+    const query = this.searchQuery().toLowerCase().trim();                                                                                                                                                       
+      const sector = this.selectedSector();                                                                                                                                                                        
+      const index = this.selectedIndex();                                                                                                                                                                          
+      const sortVal = this.sortBy();                                                                                                                                                                               
+      const order = this.sortOrder();                                                                                                                                                                              
+      const allStocks = this.stocks();                                                                                                                                                                             
+                                                                                                                                                                                                                   
+      // 1. Filter by selected index                                                                                                                                                                               
+      let result = allStocks.filter(s => s.indices.includes(index));                                                                                                                                               
+                                                                                                                                                                                                                   
+      // 2. Always filter (hide) by sector if it's not 'All'                                                                                                                                                       
+      if (sector !== 'All') {                                                                                                                                                                                      
+        result = result.filter(s => s.sector === sector);                                                                                                                                                          
+      }                                                                                                                                                                                                            
+                                                                                                                                                                                                                   
+      // 3. Always filter (hide) by search query                                                                                                                                                                   
+      if (query) {                                                                                                                                                                                                 
+        result = result.filter(s => s.symbol.toLowerCase().includes(query) || s.name.toLowerCase().includes(query));                                                                                               
+      }                                                                                                                                                                                                            
+                                                                                                                                                                                                                   
+      // 4. Sort results                                                                                                                                                                                           
+      result.sort((a, b) => {                                                                                                                                                                                      
+        let comparison = 0;                                                                                                                                                                                        
+        if (sortVal === 'change') {                                                                                                                                                                                
+          comparison = a.change - b.change;                                                                                                                                                                        
+        } else if (sortVal === 'symbol') {                                                                                                                                                                         
+          comparison = a.symbol.localeCompare(b.symbol);                                                                                                                                                           
+        } else if (sortVal === 'price') {                                                                                                                                                                          
+          comparison = a.price - b.price;                                                                                                                                                                          
+        } else if (sortVal === 'marketCap') {                                                                                                                                                                      
+          comparison = a.marketCap - b.marketCap;                                                                                                                                                                  
+        }                                                                                                                                                                                                          
+        return order === 'asc' ? comparison : -comparison;                                                                                                                                                         
+      });                                                                                                                                                                                                          
+                                                                                                                                                                                                                   
+      return result;                                                                                                                                                                                                  
+  });                                                                                                                                                                                                          
+                                                                                                                                                                                                                
+  readonly marketStats = computed(() => {                                                                                                                                                                      
+    const index = this.selectedIndex();                                                                                                                                                                        
+    const list = this.stocks().filter(s => s.indices.includes(index));                                                                                                                                         
+    let advancing = 0;                                                                                                                                                                                         
+    let declining = 0;                                                                                                                                                                                         
+    let unchanged = 0;                                                                                                                                                                                         
+    for (const s of list) {                                                                                                                                                                                    
+      if (s.change > 0) advancing++;                                                                                                                                                                           
+      else if (s.change < 0) declining++;                                                                                                                                                                      
+      else unchanged++;                                                                                                                                                                                        
+    }                                                                                                                                                                                                          
+    return { advancing, declining, unchanged, total: list.length || 1 };                                                                                                                                       
+  });                                                                                                                                                                                                          
+                                                                                                                                                                                                                
+  readonly sectorPerformances = computed(() => {                                                                                                                                                               
+    const index = this.selectedIndex();                                                                                                                                                                        
+    const list = this.stocks().filter(s => s.indices.includes(index));                                                                                                                                         
+    const uniqueSectors = Array.from(new Set(list.map(s => s.sector)));                                                                                                                                        
+                                                                                                                                                                                                                
+    const result = uniqueSectors.map(sec => {                                                                                                                                                                  
+      const sectorStocks = list.filter(s => s.sector === sec);                                                                                                                                                 
+      const count = sectorStocks.length;                                                                                                                                                                       
+      const avgChange = count > 0                                                                                                                                                                              
+        ? Number((sectorStocks.reduce((sum, s) => sum + s.change, 0) / count).toFixed(2))                                                                                                                      
+        : 0;                                                                                                                                                                                                   
+      const advancing = sectorStocks.filter(s => s.change > 0).length;                                                                                                                                         
+      const declining = sectorStocks.filter(s => s.change < 0).length;                                                                                                                                         
+      return { sector: sec, avgChange, count, advancing, declining };                                                                                                                                          
+    });                                                                                                                                                                                                        
+                                                                                                                                                                                                                
+    return result.sort((a, b) => b.avgChange - a.avgChange);                                                                                                                                                   
+  });                                                                                                                                                                                                          
+                                                                                                                                                                                                                
+  onSearchInput(event: Event) {                                                                                                                                                                                
+    const target = event.target as HTMLInputElement;                                                                                                                                                           
+    this.searchQuery.set(target.value);                                                                                                                                                                        
+  }                                                                                                                                                                                                            
+                                                                                                                                                                                                                
+  selectSector(sector: string) {                                                                                                                                                                               
+    this.selectedSector.set(sector);                                                                                                                                                                           
+  }                                                                                                                                                                                                            
+                                                                                                                                                                                                                
+  selectIndex(index: string) {                                                                                                                                                                                 
+    this.selectedIndex.set(index);                                                                                                                                                                                                                                                                                                                                                                                
+  }                                                                                                                                                                                                            
+                                                                                                                                                                                                                
+  // selectStock(symbol: string) {                                                                                                                                                                                
+  //   this.selectedStockSymbol.set(symbol);                                                                                                                                                                      
+  //   this.fetchHistoryForSelected();                                                                                                                                                                            
+  // }                                                                                                                                                                                                            
+                                                                                                                                                                                                                
+  // private fetchHistoryForSelected() {                                                                                                                                                                          
+  //   const symbol = this.selectedStockSymbol();                                                                                                                                                                 
+  //   if (symbol) {                                                                                                                                                                                              
+  //     this.stockService.getHistory(symbol).subscribe({                                                                                                                                                         
+  //       next: (data) => {                                                                                                                                                                                      
+  //         this.selectedStockHistory.set(data);                                                                                                                                                                 
+  //       },                                                                                                                                                                                                     
+  //       error: (err) => console.error(`Error loading history:`, err)                                                                                                                                           
+  //     });                                                                                                                                                                                                      
+  //   }                                                                                                                                                                                                          
+  // }                                                                                                                                                                                                            
+                                                                                                                                                                                                                
+  setSortBy(field: 'change' | 'symbol' | 'price' | 'marketCap') {                                                                                                                                              
+    if (this.sortBy() === field) {                                                                                                                                                                             
+      this.sortOrder.update(o => o === 'asc' ? 'desc' : 'asc');                                                                                                                                                
+    } else {                                                                                                                                                                                                   
+      this.sortBy.set(field);                                                                                                                                                                                  
+      this.sortOrder.set(field === 'symbol' ? 'asc' : 'desc');                                                                                                                                                 
+    }                                                                                                                                                                                                          
+  }                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                
+  setViewMode(mode: 'grid' | 'list' | 'sectors') {                                                                                                                                                             
+    this.viewMode.set(mode);                                                                                                                                                                                   
+  }                                                                                                                                                                                                            
+                                                                                                                                                                                                                
+  isStockMatching(stock: Stock): boolean {                                                                                                                                                                     
+    const query = this.searchQuery().toLowerCase().trim();                                                                                                                                                     
+    const sector = this.selectedSector();                                                                                                                                                                      
+    const matchesSector = sector === 'All' || stock.sector === sector;                                                                                                                                         
+    const matchesQuery = !query || stock.symbol.toLowerCase().includes(query) || stock.name.toLowerCase().includes(query);                                                                                     
+    return matchesSector && matchesQuery;                                                                                                                                                                      
+  }                                                                                                                                                                                                            
+                                                                                                                                                                                                                
+  getSparklinePoints(history: number[]): string {                                                                                                                                                              
+    if (!history || history.length === 0) return '';                                                                                                                                                           
+    const min = Math.min(...history);                                                                                                                                                                          
+    const max = Math.max(...history);                                                                                                                                                                          
+    const range = max - min || 1;                                                                                                                                                                              
+    const width = 120;                                                                                                                                                                                         
+    const height = 40;                                                                                                                                                                                         
+                                                                                                                                                                                                                
+    return history.map((price, idx) => {                                                                                                                                                                       
+      const x = (idx / (history.length - 1)) * width;                                                                                                                                                          
+      const y = height - ((price - min) / range) * height;                                                                                                                                                     
+      return `${x.toFixed(1)},${y.toFixed(1)}`;                                                                                                                                                                
+    }).join(' ');                                                                                                                                                                                              
+  }                                                                                                                                                                                                            
+}                                                                                                                                                                                                              
+        

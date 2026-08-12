@@ -1,0 +1,16 @@
+<div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 xl:grid-cols-10 gap-0.5 flex-grow auto-rows-fr">                                                                                      
+  @for (stock of stocks(); track stock.symbol) {                                                                                                                                                               
+    <button                                                                                                                                                                                                    
+      class="rounded-xs p-1 text-center transition-colors duration-500 flex flex-col 
+        justify-center items-center gap-1 cursor-pointer aspect-square outline-none active:scale-95"                                                                                                                                                                                          
+      [style]="getHeatStyle(stock.change)"                                                                                                                                                                     
+      (click)="onSelectStock(stock.symbol)"                                                                                                                                                                    
+    >                                                                                                                                                                                                          
+      <span class="text-[13px] font-bold tracking-wide uppercase text-white/90">{{ stock.symbol }}</span>                                                                                                      
+      <span class="text-[10px] font-mono text-white/80">{{ stock.price | number }}</span>                                                                                                                      
+      <span class="text-[11px] font-mono font-semibold text-white">                                                                                                                                            
+        {{ stock.change >= 0 ? '+' : '' }}{{ stock.change | number:'1.2-2' }}%                                                                                                                                 
+      </span>                                                                                                                                                                                                  
+    </button>                                                                                                                                                                                                  
+  }                                                                                                                                                                                                            
+</div>  
