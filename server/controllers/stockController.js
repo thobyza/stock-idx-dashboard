@@ -1,8 +1,9 @@
 import { stockService } from '../services/stockService.js';                                                                                                                                                    
                                                                                                                                                                                                                    
 export const getStocks = async (req, res) => {                                                                                                                                                                 
-  try {                                                                                                                                                                                                        
-    const data = await stockService.getStocksData();                                                                                                                                                           
+  try {                
+    const { date } = req.query;                                                                                                                                                                                        
+    const data = await stockService.getStocksData(date);                                                                                                                                                           
     res.json(data);                                                                                                                                                                                            
   } catch (error) {                                                                                                                                                                                            
     res.status(500).json({ error: 'Failed to retrieve stock list' });                                                                                                                                          

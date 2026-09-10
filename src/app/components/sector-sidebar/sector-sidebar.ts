@@ -23,6 +23,11 @@ export class SectorSidebar {
   readonly stocks = this.stockService.stocks;
 
   ihsg = input.required<IndexData>();         
+  advancing = input.required<number>();                                                    
+  unchanged = input.required<number>();                                                    
+  declining = input.required<number>();                                                    
+  total = input.required<number>();    
+
   selectedIndex = input.required<string>();
 
   sectors = input.required<SectorPerf[]>();                                                

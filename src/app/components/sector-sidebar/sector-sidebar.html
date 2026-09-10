@@ -1,27 +1,48 @@
-<section class="flex flex-col gap-5">
-  <!-- IHSG Badge -->                                                                    
-  <div class="bg-zinc-800 rounded-md px-4 py-3 flex flex-col justify-center">                                                                             
-    <span class="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">IHSG Index</span>                                                                                 
-    <div class="flex items-baseline gap-2 mt-0.5">                                       
-      <span class="text-lg font-bold font-mono">{{ ihsg().price | number:'1.2-2' }}</span>                                                                                    
-      <span class="text-xs font-semibold font-mono" [class.text-emerald-400]="ihsg().change >= 0" [class.text-rose-400]="ihsg().change < 0">                                      
-        {{ ihsg().change >= 0 ? '▲' : '▼' }} {{ ihsg().pct | number:'1.2-2' }}%          
-      </span>                                                                            
-    </div>                                                                               
-  </div>   
+<section class="flex flex-col gap-6">
+
+  <section class="flex flex-col gap-3.5">
+    <!-- IHSG Badge -->                                                                    
+    <div class="rounded-md px-4 py-3 ring ring-zinc-300/80 flex flex-col justify-center">                                                                             
+      <span class="text-[10px] font-semibold text-zinc-800 uppercase tracking-wider">IHSG Index</span>                                                                                 
+      <div class="flex items-baseline gap-2 mt-0.5">                                       
+        <span class="text-lg font-semibold font-mono text-zinc-600">{{ ihsg().price | number:'1.2-2' }}</span>                                                                                    
+        <span class="text-xs font-normal font-mono" [class.text-emerald-400]="ihsg().change >= 0" [class.text-rose-400]="ihsg().change < 0">                                      
+          {{ ihsg().change >= 0 ? '▲' : '▼' }} {{ ihsg().pct | number:'1.2-2' }}%          
+        </span>                                                                            
+      </div>                                                                               
+    </div>   
+  
+    <!-- IDX Breath -->
+    <div class="flex flex-col">                                                            
+      <span class="text-[10px] text-zinc-500 uppercase tracking-wider">Index Breadth (Adv / Flat / Dec)</span>                                                                         
+      <div class="flex items-center gap-2 mt-1">                                           
+        <div class="flex w-full h-2 rounded overflow-hidden bg-slate-800">                   
+          <div class="bg-emerald-500 h-full" [style.width.%]="(advancing() / total()) * 100"></div>                                                                                  
+          <div class="bg-slate-400 h-full" [style.width.%]="(unchanged() / total()) * 100"></div>                                                                                  
+          <div class="bg-rose-500 h-full" [style.width.%]="(declining() / total()) * 100"></div>                                                                                  
+        </div>                                                                             
+        <span class="text-xs font-semibold font-mono text-zinc-400">                                     
+          <span class="text-emerald-400">{{ advancing() }}</span>/{{ unchanged() }}/<span class="text-rose-400">{{ declining() }}</span>                                               
+        </span>                                                                            
+      </div>                                                                               
+    </div> 
+  </section>
 
   <!-- Indices -->
   <div class="mt-2">                                                                                                                                                                                                         
-    <div class="text-[11px] font-bold text-zinc-300 uppercase tracking-wider mb-2">Indices</div>                                                                                                     
+    <div class="text-[11px] font-semibold text-zinc-800 uppercase mb-2">Indices</div>                                                                                                     
     <div class="flex flex-col gap-1">                                                                                                                                                                          
       @for (idx of ['KOMPAS100', 'LQ45', 'IDX80', 'JII', 'JII70']; track idx) {                                                                                                                                
         <button                                                                                                                                                                                                
-          class="w-full text-left px-2.5 py-1.5 text-xs rounded-md transition-all flex justify-between items-center cursor-pointer border"                                                                         
-          [class]="selectedIndex() === idx ? 'bg-slate-800/60 border-slate-800 text-blue-400 font-semibold' : 'bg-transparent border-transparent text-zinc-400 hover:bg-slate-900 hover:text-slate-100'"     
+          class="w-full text-left px-2.5 py-1.5 text-xs rounded-md transition-all flex justify-between items-center cursor-pointer"                                                                         
+          [class]="selectedIndex() === idx ? 'bg-zinc-200 text-zinc-800 ' : 'bg-transparent border-transparent text-zinc-700/70 hover:bg-zinc-200/40 hover:text-zinc-800'"     
           (click)="selectIndex(idx)"                                                                                                                                                                           
         >                                                                                                                                                                                                      
           <span>{{ idx }}</span>                                                                                                                                                                               
-          <span class="text-xs opacity-80 font-mono bg-slate-900 border border-slate-800 rounded px-1.5 py-0.5">                                                                                               
+          <span 
+          class="text-xs opacity-80 font-mono bg-zinc-50 rounded px-1.5 py-0.5"
+          [class]="selectedIndex() === idx ? 'shadow-sm' : ''"
+          >                                                                                               
             {{ getIndexCount(idx) }}                                                                                                                                                                           
           </span>                                                                                                                                                                                              
         </button>                                                                                                                                                                                              
@@ -30,26 +51,31 @@
   </div>  
 
   <!-- Sectors -->
-  <div>
-    <div class="text-[11px] font-bold text-zinc-300 uppercase tracking-wider mb-2 font-semibold">Sectors</div>                                                                      
-    <div class="flex flex-col gap-1 max-h-[300px] overflow-y-auto pr-1">                       
+  <div class="mt-2">
+    <div class="text-[11px] font-semibold text-zinc-800 uppercase mb-2 font-semibold">Sectors</div>                                                                      
+    <div class="flex flex-col gap-1 max-h-[300px] overflow-y-auto ">                       
       <button                                                                                  
-        class="w-full text-left px-2.5 py-1.5 text-xs rounded-md transition-all flex justify-between items-center cursor-pointer border"                                                  
-        [class]="selectedSector() === 'All' ? 'bg-slate-800/60 border-slate-800 text-blue-400 font-semibold' : 'bg-transparent border-transparent text-zinc-400 hover:bg-slate-900 hover:text-slate-100'"               
+        class="w-full text-left px-2.5 py-1.5 text-xs rounded-md transition-all flex justify-between items-center cursor-pointer"                                                  
+        [class]="selectedSector() === 'All' ? 'bg-zinc-200 text-zinc-800' : 'bg-transparent border-transparent text-zinc-700/70 hover:bg-zinc-200/40 hover:text-zinc-800'"               
         (click)="onSelectSector('All')"                                                        
       >                                                                                        
         <span>All Sectors</span>                                                               
-        <span class="text-[11px] font-mono px-1 rounded bg-slate-900 border border-slate-800">{{ totalStocksCount() }}</span>                                                         
+        <span 
+          class="text-xs opacity-80 font-mono bg-zinc-50 rounded px-1.5 py-0.5 "
+          [class]="selectedSector() === 'All' ? 'shadow-sm' : '' "
+        >
+          {{ totalStocksCount() }}
+        </span>                                                         
       </button>    
     
       @for (perf of sectors(); track perf.sector) {                                            
         <button                                                                                
-          class="w-full text-left px-3 py-2 text-xs rounded-lg transition-all flex justify-between items-center cursor-pointer border"                                                  
-          [class]="selectedSector() === perf.sector ? 'bg-slate-800/60 border-slate-800 text-blue-400 font-semibold' : 'bg-transparent border-transparent text-slate-400 hover:bg-slate-900 hover:text-slate-100'"      
+          class="w-full text-left px-2.5 py-2 text-xs rounded-md transition-all flex justify-between items-center cursor-pointer"                                                  
+          [class]="selectedSector() === perf.sector ? 'bg-zinc-200 text-zinc-800' : 'bg-transparent border-transparent text-zinc-700/70 hover:bg-zinc-200/40 hover:text-zinc-800'"      
           (click)="onSelectSector(perf.sector)"                                                
         >                                                                                      
           <span class="truncate pr-2">{{ perf.sector }}</span>                                 
-          <span class="font-mono text-[10px] font-semibold" [class.text-emerald-400]="perf.avgChange >= 0" [class.text-rose-400]="perf.avgChange < 0">                                  
+          <span class="font-mono text-[10px] font-semibold" [class.text-emerald-600]="perf.avgChange >= 0" [class.text-rose-600]="perf.avgChange < 0">                                  
             {{ perf.avgChange >= 0 ? '+' : '' }}{{ perf.avgChange }}%                          
           </span>                                                                              
         </button>                                                                              

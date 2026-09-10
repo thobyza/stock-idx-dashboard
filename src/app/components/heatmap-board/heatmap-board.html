@@ -1,0 +1,137 @@
+<main class="flex-grow flex flex-col gap-4">                                                                                                                                                                 
+    <!-- Toolbar controls -->                                                                                                                                                                                  
+    <div class="flex justify-between items-center gap-4">                                                                                                                                            
+      <!-- Search bar -->      
+      <div class="flex gap-3"> 
+        <div class="w-50">                                                                                                                                                                              
+          <input                                                                                                                                                                                                 
+            type="text"                                                                                                                                                                                          
+            class="input-theme"                                                                                                                                                                                  
+            placeholder="Search ticker or name..."                                                                                                                                                               
+            [value]="searchQuery()"                                                                                                                                                                              
+            (input)="onSearchInput($event)"                                                                                                                                                                      
+          >                                                                                                                                                                                                      
+        </div>                                                                                                                                                                                                   
+        <div class="w-50">
+          <input                                                                                                                                                                                                   
+          type="date"                                                                                                                                                                                            
+          class="input-theme cursor-pointer font-sans text-xs"                                                                                                                                                   
+          [value]="selectedDate()"                                                                                                                                                                               
+          [max]="maxDate"                                                                                                                                                                                        
+          (change)="onDateChange($event)"                                                                                                                                                                        
+        >         
+        </div>
+      </div>
+                                                                                                                                                                                                                
+      <div class="flex items-center gap-6 flex-wrap text-xs">                                                                                                                                                  
+        <!-- Views toggles -->                                                                                                                                                                                 
+        <div class="flex items-center gap-1.5">                                                                                                                                                                
+          <span class="text-zinc-700/80">View</span>                                                                                                                                                           
+          <div class="tab-wrapper-theme">                                                                                                                                                                      
+            <button class="tab-item-theme" [class.active]="viewMode() === 'grid'" (click)="setViewMode('grid')">Heatmap</button>                                                                               
+            <button class="tab-item-theme" [class.active]="viewMode() === 'list'" (click)="setViewMode('list')">List</button>                                                                                  
+            <button class="tab-item-theme" [class.active]="viewMode() === 'sectors'" (click)="setViewMode('sectors')">Sectors</button>                                                                         
+          </div>                                                                                                                                                                                               
+        </div>                                                                                                                                                                                                 
+                                                                                                                                                                                                                
+        <!-- Sorting triggers -->                                                                                                                                                                              
+        @if (viewMode() !== 'sectors') {                                                                                                                                                                       
+          <div class="flex items-center gap-1.5">                                                                                                                                                              
+            <span class="text-zinc-700/80">Sort</span>                                                                                                                                                         
+            <div class="tab-wrapper-theme">                                                                                                                                                                    
+              <button class="tab-item-theme" [class.active]="sortBy() === 'change'" (click)="setSortBy('change')">Change</button>                                                                              
+              <button class="tab-item-theme" [class.active]="sortBy() === 'symbol'" (click)="setSortBy('symbol')">Ticker</button>                                                                              
+              <button class="tab-item-theme" [class.active]="sortBy() === 'price'" (click)="setSortBy('price')">Price</button>                                                                                 
+              <button class="tab-item-theme" [class.active]="sortBy() === 'marketCap'" (click)="setSortBy('marketCap')">Mcap</button>                                                                          
+            </div>                                                                                                                                                                                             
+          </div>                                                                                                                                                                                               
+        }                                                                                                                                                                                                      
+      </div>                                                                                                                                                                                                   
+    </div>                                                                                                                                                                                                     
+                                                                                                                                                                                                                
+    <!-- 1. Grid Heatmap Component -->                                                                                                                                                                         
+    @if (viewMode() === 'grid') {                                                                                                                                                                              
+      <app-heatmap-grid                                                                                                                                                                                        
+        [stocks]="filteredStocks()"                                                                                                                                                                            
+      ></app-heatmap-grid>                                                                                                                                                                                     
+    }                                                                                                                                                                                                          
+                                                                                                                                                                                                                
+    <!-- 2. Table List View -->                                                                                                                                                                                
+    @if (viewMode() === 'list') {                                                                                                                                                                              
+      <div class="overflow-x-auto bg-slate-900/30 border border-slate-900 rounded-xl flex-grow max-h-[600px]">                                                                                                 
+        <table class="w-full text-left text-xs border-collapse">                                                                                                                                               
+          <thead>                                                                                                                                                                                              
+            <tr class="border-b border-slate-800 text-slate-500 font-semibold bg-slate-900/60">                                                                                                                
+              <th class="p-3.5 cursor-pointer hover:text-slate-300" (click)="setSortBy('symbol')">Ticker</th>                                                                                                  
+              <th class="p-3.5">Company Name</th>                                                                                                                                                              
+              <th class="p-3.5">Sector</th>                                                                                                                                                                    
+              <th class="p-3.5 cursor-pointer hover:text-slate-300 text-right" (click)="setSortBy('price')">Price (IDR)</th>                                                                                   
+              <th class="p-3.5 cursor-pointer hover:text-slate-300 text-right" (click)="setSortBy('change')">Change (%)</th>                                                                                   
+              <th class="p-3.5 text-right">Volume</th>                                                                                                                                                         
+              <th class="p-3.5 cursor-pointer hover:text-slate-300 text-right" (click)="setSortBy('marketCap')">Market Cap</th>                                                                                
+              <th class="p-3.5 text-center">Trend</th>                                                                                                                                                         
+            </tr>                                                                                                                                                                                              
+          </thead>                                                                                                                                                                                             
+          <tbody>                                                                                                                                                                                              
+            @for (stock of filteredStocks(); track stock.symbol) {                                                                                                                                             
+              <tr class="border-b border-slate-850 hover:bg-slate-900/40 cursor-pointer transition-all">                                                                                                       
+                <td class="p-3.5 font-bold text-slate-200 uppercase">{{ stock.symbol }}</td>                                                                                                                   
+                <td class="p-3.5 text-slate-300 max-w-[200px] truncate">{{ stock.name }}</td>                                                                                                                  
+                <td class="p-3.5 text-slate-400">{{ stock.sector }}</td>                                                                                                                                       
+                <td class="p-3.5 text-right font-mono font-medium">{{ stock.price | number }}</td>                                                                                                             
+                <td class="p-3.5 text-right font-mono font-semibold" [class.text-emerald-400]="stock.change >= 0" [class.text-rose-400]="stock.change < 0">                                                    
+                  {{ stock.change >= 0 ? '+' : '' }}{{ stock.change | number:'1.2-2' }}%                                                                                                                       
+                </td>                                                                                                                                                                                          
+                <td class="p-3.5 text-right font-mono text-slate-400">{{ stock.volume | number }}</td>                                                                                                         
+                <td class="p-3.5 text-right font-mono text-slate-400 font-medium">Rp {{ stock.marketCap / 1e12 | number:'1.1-2' }} T</td>                                                                      
+                <td class="p-3.5 flex justify-center">                                                                                                                                                         
+                  <svg width="100" height="24" viewBox="0 0 120 40" class="overflow-visible" preserveAspectRatio="none">                                                                                       
+                    <polyline                                                                                                                                                                                  
+                      fill="none"                                                                                                                                                                              
+                      [attr.stroke]="stock.change >= 0 ? '#10b981' : '#f43f5e'"                                                                                                                                
+                      stroke-width="3"                                                                                                                                                                         
+                      [attr.points]="getSparklinePoints(stock.history)"                                                                                                                                        
+                    />                                                                                                                                                                                         
+                  </svg>                                                                                                                                                                                       
+                </td>                                                                                                                                                                                          
+              </tr>                                                                                                                                                                                            
+            }                                                                                                                                                                                                  
+          </tbody>                                                                                                                                                                                             
+        </table>                                                                                                                                                                                               
+      </div>                                                                                                                                                                                                   
+    }                                                                                                                                                                                                          
+                                                                                                                                                                                                                
+    <!-- 3. Sectors Card Breakdown View -->                                                                                                                                                                    
+    @if (viewMode() === 'sectors') {                                                                                                                                                                           
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 flex-grow auto-rows-max">                                                                                                               
+        @for (sec of sectorPerformances(); track sec.sector) {                                                                                                                                                 
+          <div                                                                                                                                                                                                 
+            class="bg-slate-900/30 border border-slate-900 hover:border-slate-800 rounded-xl p-4 cursor-pointer transition-all flex flex-col gap-3"                                                            
+            (click)="onSelectSector(sec.sector); setViewMode('grid')"                                                                                                                                          
+          >                                                                                                                                                                                                    
+            <div class="flex justify-between items-center">                                                                                                                                                    
+              <h3 class="font-bold text-sm text-slate-200">{{ sec.sector }}</h3>                                                                                                                               
+              <span class="text-xs font-bold px-2 py-0.5 rounded-full font-mono" [class.bg-emerald-500/10]="sec.avgChange >= 0" [class.text-emerald-400]="sec.avgChange >= 0" [class.bg-rose-500/10]="sec.     
+avgChange < 0" [class.text-rose-400]="sec.avgChange < 0">                                                                                                                                                      
+                {{ sec.avgChange >= 0 ? '+' : '' }}{{ sec.avgChange }}%                                                                                                                                        
+              </span>                                                                                                                                                                                          
+            </div>                                                                                                                                                                                             
+            <div class="grid grid-cols-3 gap-2 text-center text-xs mt-1">                                                                                                                                      
+              <div class="flex flex-col bg-slate-950/40 p-2 rounded font-medium">                                                                                                                              
+                <span class="text-[10px] text-slate-500 uppercase tracking-wide">Stocks</span>                                                                                                                 
+                <span class="font-semibold mt-0.5">{{ sec.count }}</span>                                                                                                                                      
+              </div>                                                                                                                                                                                           
+              <div class="flex flex-col bg-slate-950/40 p-2 rounded">                                                                                                                                          
+                <span class="text-[10px] text-slate-500 uppercase tracking-wide text-emerald-400">Adv</span>                                                                                                   
+                <span class="font-semibold text-emerald-400 mt-0.5">{{ sec.advancing }}</span>                                                                                                                 
+              </div>                                                                                                                                                                                           
+              <div class="flex flex-col bg-slate-950/40 p-2 rounded">                                                                                                                                          
+                <span class="text-[10px] text-slate-500 uppercase tracking-wide text-rose-400">Dec</span>                                                                                                      
+                <span class="font-semibold text-rose-400 mt-0.5">{{ sec.declining }}</span>                                                                                                                    
+              </div>                                                                                                                                                                                           
+            </div>                                                                                                                                                                                             
+          </div>                                                                                                                                                                                               
+        }                                                                                                                                                                                                      
+      </div>                                                                                                                                                                                                   
+    }                                                                                                                                                                                                          
+  </main>                              

@@ -1,3 +1,43 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+/* color-text-default */
+:root {
+  --color-text-default: #475569;
+
+  --color-theme-1: #4c5975;
+  --color-theme-2: #13161c;
+
+  --color-border-1: #dde2eb;
+}
+
+.text-color-default {
+  color: var(--color-text-default);
+}
+
+.input-theme {
+  color: var(--color-theme-1);
+  /* @apply w-full bg-zinc-50 border border-zinc-400 placeholder-zinc-400/90 
+  text-xs rounded-md px-3 py-2 focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-600; */
+  @apply w-full bg-zinc-50 ring ring-zinc-300/80 shadow-sm 
+  placeholder-zinc-500/80 text-xs rounded-md px-3 py-2 
+  focus:outline-none focus:ring-zinc-400 text-zinc-700;
+}
+
+.tab-wrapper-theme {
+  /* @apply flex bg-zinc-50 border border-zinc-700 rounded-lg p-0.5 font-normal */
+  @apply flex bg-zinc-50 ring ring-zinc-300/80 shadow-xs rounded-lg p-0.5 font-normal;
+}
+
+.tab-item-theme {
+  @apply px-2.5 py-1 text-zinc-700/70 rounded-md transition-all cursor-pointer hover:bg-zinc-100
+}
+  .tab-item-theme.active {
+    @apply bg-zinc-200 text-zinc-800;
+  }
+
+
+  /* TEXT: zinc-700/70 and zinc-800 */
+
+/* --- sidebar --- */

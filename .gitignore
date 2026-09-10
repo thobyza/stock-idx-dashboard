@@ -39,6 +39,7 @@ testem.log
 /typings
 __screenshots__/
 project-notes.rtf
+style-template.md
 
 # System files
 .DS_Store

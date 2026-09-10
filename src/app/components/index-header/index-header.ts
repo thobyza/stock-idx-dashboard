@@ -11,11 +11,11 @@ import { IndexData } from '../../stock.service';
 })
 
 export class IndexHeader {
-  ihsg = input.required<IndexData>();                                                      
-  advancing = input.required<number>();                                                    
-  unchanged = input.required<number>();                                                    
-  declining = input.required<number>();                                                    
-  total = input.required<number>();                                                        
-  isLive = input.required<boolean>(); 
+  // ihsg = input.required<IndexData>();                                                      
+  // advancing = input.required<number>();                                                    
+  // unchanged = input.required<number>();                                                    
+  // declining = input.required<number>();                                                    
+  // total = input.required<number>();                                                        
+  // isLive = input.required<boolean>(); 
 }
 
