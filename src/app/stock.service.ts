@@ -85,7 +85,8 @@ export class StockService {
     );     
   }  
 
-  fetchStocksByDate(date: string) {                                                                                                                                                                          
+  fetchStocksByDate(date: string) {     
+    this.currentSelectedDate.set(date);                                                                                                                                                                     
     this.http.get<{ ihsg: IndexData; stocks: Stock[] }>(`${this.apiUrl}/stocks?date=${date}`)                                                                                                                
       .subscribe({                                                                                                                                                                                           
         next: (data) => {                                                                                                                                                                                    

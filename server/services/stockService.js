@@ -92,14 +92,18 @@ class StockService {
     }                                                                                                                                                                                                        
                                                                                                                                                                                                               
     // Case 2: Historical Date Query (targetDate = YYYY-MM-DD)                                                                                                                                               
-    console.log(`Fetching historical stock data for target date: ${targetDate}`);                                                                                                                            
+    //console.log(`Fetching historical stock data for target date: ${targetDate}`);                                                                                                                            
     try {                                                                                                                                                                                                    
       const selected = new Date(targetDate);                                                                                                                                                                 
       const prevDate = new Date(selected);                                                                                                                                                                   
       prevDate.setDate(selected.getDate() - 7); // 7-day lookback window for weekends/market holidays                                                                                                        
                                                                                                                                                                                                               
-      const period1 = prevDate.toISOString().split('T')[0];                                                                                                                                                  
-      const period2 = selected.toISOString().split('T')[0];                                                                                                                                                  
+      const period1 = prevDate.toISOString().split('T')[0];   
+          
+      const period2Date = new Date(selected);
+      period2Date.setDate(selected.getDate() + 1);         
+                                                                                                                                       
+      const period2 = period2Date.toISOString().split('T')[0];                                                                                                                                                  
                                                                                                                                                                                                               
       // 1. Fetch historical IHSG data for targetDate                                                                                                                                                        
       let ihsgData = { ...this.cache.ihsg };                                                                                                                                                                 

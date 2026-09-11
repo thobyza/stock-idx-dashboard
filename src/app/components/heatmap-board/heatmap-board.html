@@ -69,7 +69,7 @@
               <th class="p-3.5 cursor-pointer hover:text-slate-300 text-right" (click)="setSortBy('change')">Change (%)</th>                                                                                   
               <th class="p-3.5 text-right">Volume</th>                                                                                                                                                         
               <th class="p-3.5 cursor-pointer hover:text-slate-300 text-right" (click)="setSortBy('marketCap')">Market Cap</th>                                                                                
-              <th class="p-3.5 text-center">Trend</th>                                                                                                                                                         
+              <!-- <th class="p-3.5 text-center">Trend</th>                                                                                                                                                          -->
             </tr>                                                                                                                                                                                              
           </thead>                                                                                                                                                                                             
           <tbody>                                                                                                                                                                                              
@@ -84,7 +84,7 @@
                 </td>                                                                                                                                                                                          
                 <td class="p-3.5 text-right font-mono text-slate-400">{{ stock.volume | number }}</td>                                                                                                         
                 <td class="p-3.5 text-right font-mono text-slate-400 font-medium">Rp {{ stock.marketCap / 1e12 | number:'1.1-2' }} T</td>                                                                      
-                <td class="p-3.5 flex justify-center">                                                                                                                                                         
+                <!-- <td class="p-3.5 flex justify-center">                                                                                                                                                         
                   <svg width="100" height="24" viewBox="0 0 120 40" class="overflow-visible" preserveAspectRatio="none">                                                                                       
                     <polyline                                                                                                                                                                                  
                       fill="none"                                                                                                                                                                              
@@ -93,7 +93,7 @@
                       [attr.points]="getSparklinePoints(stock.history)"                                                                                                                                        
                     />                                                                                                                                                                                         
                   </svg>                                                                                                                                                                                       
-                </td>                                                                                                                                                                                          
+                </td>                                                                                                                                                                                           -->
               </tr>                                                                                                                                                                                            
             }                                                                                                                                                                                                  
           </tbody>                                                                                                                                                                                             
