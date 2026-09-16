@@ -58,7 +58,9 @@ class StockService {
           const change = q.regularMarketChangePercent || 0;                                                                                                                                                  
           const prevPrice = q.regularMarketPreviousClose || Math.round(currentPrice / (1 + change / 100));                                                                                                   
           const volume = q.regularMarketVolume || 0;                                                                                                                                                         
-          const marketCap = q.marketCap || (currentPrice * (volume || 10000000));                                                                                                                            
+          const marketCap = q.marketCap || (currentPrice * (volume || 10000000));    
+          const fiftyTwoWeekHigh = q.fiftyTwoWeekHigh || currentPrice;                                                                                                                                             
+          const fiftyTwoWeekLow = q.fiftyTwoWeekLow || currentPrice;  
                                                                                                                                                                                                               
           // Maintain sparkline history array                                                                                                                                                                
           const existingStock = this.cache.data.find(s => s.symbol === ticker.replace('.JK', ''));                                                                                                           
@@ -67,17 +69,24 @@ class StockService {
             history.push(currentPrice);                                                                                                                                                                      
             history.shift();                                                                                                                                                                                 
           }                                                                                                                                                                                                  
-                                                                                                                                                                                                              
+            
+          // 1W change
+          const price7d = history.length >= 7 ? history[history.length - 7] : prevPrice;                                                                                                                           
+          const change1w = price7d > 0 ? Number((((currentPrice - price7d) / price7d) * 100).toFixed(2)) : Number(change.toFixed(2));
+
           return {                                                                                                                                                                                           
             symbol: ticker.replace('.JK', ''),                                                                                                                                                               
             name: details.name,                                                                                                                                                                              
             sector: details.sector,                                                                                                                                                                          
             indices: details.indices,                                                                                                                                                                        
             price: currentPrice,                                                                                                                                                                             
-            change: Number(change.toFixed(2)),                                                                                                                                                               
+            change: Number(change.toFixed(2)),       
+            change1w,                                                                                                                                                        
             prevPrice,                                                                                                                                                                                       
             volume,                                                                                                                                                                                          
-            marketCap,                                                                                                                                                                                       
+            marketCap,         
+            fiftyTwoWeekHigh,                                                                                                                                                                  
+            fiftyTwoWeekLow,                                                                                                                                                                              
             history                                                                                                                                                                                          
           };                                                                                                                                                                                                 
         });                                                                                                                                                                                                  

@@ -23,7 +23,7 @@ export class HeatmapBoard {
   searchQuery = input<string>('');    
   selectedDate = input<string>(new Date().toISOString().split('T')[0]);                                                                                                                                                                       
   viewMode = input<'grid' | 'list' | 'sectors'>('grid');                                                                                                                                                     
-  sortBy = input<'change' | 'symbol' | 'price' | 'marketCap'>('change');                                                                                                                                     
+  sortBy = input<'change' | 'change1w' | 'symbol' | 'price' | 'marketCap'>('change');                                                                                                                                     
   filteredStocks = input.required<Stock[]>();                                                                                                                                                                
   sectorPerformances = input.required<SectorPerformance[]>();  
 
@@ -31,7 +31,7 @@ export class HeatmapBoard {
   searchQueryChange = output<string>();   
   dateChange = output<string>();                                                                                                                                               
   viewModeChange = output<'grid' | 'list' | 'sectors'>();                                                                                                                                                    
-  sortByChange = output<'change' | 'symbol' | 'price' | 'marketCap'>();                                                                                                                                      
+  sortByChange = output<'change' | 'change1w' | 'symbol' | 'price' | 'marketCap'>();                                                                                                                                      
   sectorSelected = output<string>();
 
   // ..                                                                                                                                                                         
@@ -51,7 +51,7 @@ export class HeatmapBoard {
     this.viewModeChange.emit(mode);                                                                                                                                                                          
   }                                                                                                                                                                                                          
                                                                                                                                                                                                               
-  setSortBy(field: 'change' | 'symbol' | 'price' | 'marketCap') {                                                                                                                                            
+  setSortBy(field: 'change' | 'change1w' | 'symbol' | 'price' | 'marketCap') {                                                                                                                                            
     this.sortByChange.emit(field);                                                                                                                                                                           
   }                                                                                                                                                                                                          
                                                                                                                                                                                                               
@@ -75,5 +75,13 @@ export class HeatmapBoard {
       })                                                                                                                                                                                                     
       .join(' ');                                                                                                                                                                                            
   }                
+
+  get52WeekPosition(price: number, low?: number, high?: number): number {                                                                                                                                    
+    if (!low || !high || high === low) return 50;                                                                                                                                                            
+    const pct = ((price - low) / (high - low)) * 100;                                                                                                                                                        
+    return Math.max(0, Math.min(100, Math.round(pct)));                                                                                                                                                      
+  }      
+
+
 
 }

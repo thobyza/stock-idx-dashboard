@@ -2,6 +2,10 @@
 
 @import 'tailwindcss';
 
+@theme {
+  --color-cream-50: #F3F5ED;
+}
+
 /* color-text-default */
 :root {
   --color-text-default: #475569;
@@ -40,4 +44,22 @@
 
   /* TEXT: zinc-700/70 and zinc-800 */
 
-/* --- sidebar --- */
+/* --- Helper --- */
+.abs-y-center {
+  transform: translateY(-50%);
+  top: 50%;
+}
+
+/* --- --- */
+
+.table-list {
+
+}
+
+.table-list th {
+  @apply p-3.5 text-zinc-800
+}
+
+.table-list td {
+  @apply p-3.5 
+}

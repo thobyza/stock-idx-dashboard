@@ -32,7 +32,7 @@ export class App {
   selectedIndex = signal<string>('KOMPAS100');       
 
   // selectedStockSymbol = signal<string | null>('BBCA');                                                                                                                                                         
-  sortBy = signal<'change' | 'symbol' | 'price' | 'marketCap'>('change');                                                                                                                                      
+  sortBy = signal<'change' | 'change1w' | 'symbol' | 'price' | 'marketCap'>('change');                                                                                                                                      
   sortOrder = signal<'asc' | 'desc'>('desc');                                                                                                                                                                  
   viewMode = signal<'grid' | 'list' | 'sectors'>('grid');                                                                                                                                                                                                                                                                                                           
                                                                                                                                                                                                                 
@@ -133,7 +133,7 @@ export class App {
   }                                                                                                                                                                                                            
                                                                                                                                                                                                                                                                                                                                                                                                                      
                                                                                                                                                                                                                 
-  setSortBy(field: 'change' | 'symbol' | 'price' | 'marketCap') {                                                                                                                                              
+  setSortBy(field: 'change' | 'change1w' | 'symbol' | 'price' | 'marketCap') {                                                                                                                                              
     if (this.sortBy() === field) {                                                                                                                                                                             
       this.sortOrder.update(o => o === 'asc' ? 'desc' : 'asc');                                                                                                                                                
     } else {                                                                                                                                                                                                   

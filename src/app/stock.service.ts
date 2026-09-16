@@ -9,11 +9,14 @@ export interface Stock {
   sector: string;                                                                                                                                                                                              
   indices: string[];                                                                                                                                                                                           
   price: number;                                                                                                                                                                                               
-  change: number;                                                                                                                                                                                              
+  change: number;     
+  change1w?: number;                                                                                                                                                                                        
   prevPrice: number;                                                                                                                                                                                           
   volume: number;                                                                                                                                                                                              
   marketCap: number;                                                                                                                                                                                           
-  history: number[];                                                                                                                                                                                           
+  history: number[];                   
+  fiftyTwoWeekHigh?: number;                                                                                                                                                             
+  fiftyTwoWeekLow?: number;                                                                                                                                                                        
   flashDirection?: 'up' | 'down' | null;
 }
 
