@@ -23,7 +23,7 @@ class StockService {
         return { stocks: this.cache.data, ihsg: this.cache.ihsg };                                                                                                                                           
       }                                                                                                                                                                                                      
                                                                                                                                                                                                               
-      console.log("Fetching live quotes from Yahoo Finance...");                                                                                                                                             
+      //console.log("Fetching live quotes from Yahoo");                                                                                                                                             
       try {                                                                                                                                                                                                  
         // 1. Fetch IHSG (^JKSE) index quote                                                                                                                                                                 
         try {                                                                                                                                                                                                
@@ -49,47 +49,75 @@ class StockService {
           const chunk = TICKERS.slice(i, i + chunkSize);                                                                                                                                                     
           const chunkQuotes = await yahooFinance.quote(chunk);                                                                                                                                               
           quotes = quotes.concat(chunkQuotes);                                                                                                                                                               
-        }                                                                                                                                                                                                    
-                                                                                                                                                                                                              
-        const formattedData = quotes.map(q => {                                                                                                                                                              
-          const ticker = q.symbol;                                                                                                                                                                           
-          const details = STOCK_DETAILS[ticker] || { name: ticker.split('.')[0], sector: 'Others', indices: ['KOMPAS100'] };                                                                                 
-          const currentPrice = q.regularMarketPrice || 0;                                                                                                                                                    
-          const change = q.regularMarketChangePercent || 0;                                                                                                                                                  
-          const prevPrice = q.regularMarketPreviousClose || Math.round(currentPrice / (1 + change / 100));                                                                                                   
-          const volume = q.regularMarketVolume || 0;                                                                                                                                                         
-          const marketCap = q.marketCap || (currentPrice * (volume || 10000000));    
-          const fiftyTwoWeekHigh = q.fiftyTwoWeekHigh || currentPrice;                                                                                                                                             
-          const fiftyTwoWeekLow = q.fiftyTwoWeekLow || currentPrice;  
-                                                                                                                                                                                                              
-          // Maintain sparkline history array                                                                                                                                                                
-          const existingStock = this.cache.data.find(s => s.symbol === ticker.replace('.JK', ''));                                                                                                           
-          let history = existingStock ? [...existingStock.history] : Array.from({ length: 10 }, () => currentPrice);                                                                                         
-          if (history[history.length - 1] !== currentPrice) {                                                                                                                                                
-            history.push(currentPrice);                                                                                                                                                                      
-            history.shift();                                                                                                                                                                                 
-          }                                                                                                                                                                                                  
+        }      
+        
+        // 3. Date 10 days ago for 1-Week historical chart comparison                                                                                                                                          
+        const tenDaysAgo = new Date();                                                                                                                                                                         
+        tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);                                                                                                                                                         
+                                                                                                                                                                                                                
+        // Map quotes with true 7-day historical chart data                                                                                                                                                    
+        const formattedDataPromises = quotes.map(async (q) => {                                                                                                                                                
+          const ticker = q.symbol;                                                                                                                                                                             
+          const details = STOCK_DETAILS[ticker] || { name: ticker.split('.')[0], sector: 'Others', indices: ['KOMPAS100'] };                                                                                   
+          const currentPrice = q.regularMarketPrice || 0;                                                                                                                                                      
+          const change = q.regularMarketChangePercent || 0;                                                                                                                                                    
+          const prevPrice = q.regularMarketPreviousClose || Math.round(currentPrice / (1 + change / 100));                                                                                                     
+          const volume = q.regularMarketVolume || 0;                                                                                                                                                           
+          const marketCap = q.marketCap || (currentPrice * (volume || 10000000));                                                                                                                              
+          const fiftyTwoWeekHigh = q.fiftyTwoWeekHigh || currentPrice;                                                                                                                                         
+          const fiftyTwoWeekLow = q.fiftyTwoWeekLow || currentPrice;                                                                                                                                           
+                                                                                                                                                                                                                
+          let history = [currentPrice];                                                                                                                                                                        
+          let change1w = Number(change.toFixed(2));                                                                                                                                                            
+                                                                                                                                                                                                                
+          // Fetch WTD (Week-to-date) change, from friday's closing price                                                                                                                          
+          try {                                                                                                                                                                                                
             
-          // 1W change
-          const price7d = history.length >= 7 ? history[history.length - 7] : prevPrice;                                                                                                                           
-          const change1w = price7d > 0 ? Number((((currentPrice - price7d) / price7d) * 100).toFixed(2)) : Number(change.toFixed(2));
+            const chartRes = await yahooFinance.chart(ticker, { period1: tenDaysAgo, interval: '1d' });                                                                                                                  
+            if (chartRes && chartRes.quotes && chartRes.quotes.length > 0) {                                                                                                                                             
+              const validQuotes = chartRes.quotes.filter(item => item.close !== null && item.close !== undefined);                                                                                                       
+              history = validQuotes.map(item => item.close);                                                                                                                                                             
+                                                                                                                                                                                                                        
+              // 1. Find the most recent Friday close in historical quotes (excluding today if today is Friday)                                                                                                          
+              // getDay() === 5 is Friday                                                                                                                                                                                
+              const fridayQuote = validQuotes.slice(0, -1).reverse().find(q => new Date(q.date).getDay() === 5);                                                                                                         
+                                                                                                                                                                                                                        
+              // 2. Fallback to 5 trading days ago if Friday quote isn't found                                                                                                                                           
+              const fallbackPrice = validQuotes.length >= 5 ? validQuotes[validQuotes.length - 5].close : prevPrice;                                                                                                     
+              const price1wAgo = fridayQuote ? fridayQuote.close : fallbackPrice;                                                                                                                                        
+                                                                                                                                                                                                                        
+              if (price1wAgo > 0) {                                                                                                                                                                                      
+                change1w = Number((((currentPrice - price1wAgo) / price1wAgo) * 100).toFixed(2));                                                                                                                        
+              }                                                                                                                                                                                                          
+            }            
 
-          return {                                                                                                                                                                                           
-            symbol: ticker.replace('.JK', ''),                                                                                                                                                               
-            name: details.name,                                                                                                                                                                              
-            sector: details.sector,                                                                                                                                                                          
-            indices: details.indices,                                                                                                                                                                        
-            price: currentPrice,                                                                                                                                                                             
-            change: Number(change.toFixed(2)),       
-            change1w,                                                                                                                                                        
-            prevPrice,                                                                                                                                                                                       
-            volume,                                                                                                                                                                                          
-            marketCap,         
-            fiftyTwoWeekHigh,                                                                                                                                                                  
-            fiftyTwoWeekLow,                                                                                                                                                                              
-            history                                                                                                                                                                                          
-          };                                                                                                                                                                                                 
-        });                                                                                                                                                                                                  
+          } catch (chartErr) {                                                                                                                                                                                 
+            // Fallback to cache history if chart request fails                                                                                                                                                
+            const cached = this.cache.data.find(s => s.symbol === ticker.replace('.JK', ''));                                                                                                                  
+            if (cached) {                                                                                                                                                                                      
+              history = cached.history;                                                                                                                                                                        
+              change1w = cached.change1w;                                                                                                                                                                      
+            }                                                                                                                                                                                                  
+          }                                                                                                                                                                                                    
+                                                                                                                                                                                                                
+          return {                                                                                                                                                                                             
+            symbol: ticker.replace('.JK', ''),                                                                                                                                                                 
+            name: details.name,                                                                                                                                                                                
+            sector: details.sector,                                                                                                                                                                            
+            indices: details.indices,                                                                                                                                                                          
+            price: currentPrice,                                                                                                                                                                               
+            change: Number(change.toFixed(2)),                                                                                                                                                                 
+            change1w, // 👈 True 1W Change %                                                                                                                                                                   
+            prevPrice,                                                                                                                                                                                         
+            volume,                                                                                                                                                                                            
+            marketCap,                                                                                                                                                                                         
+            fiftyTwoWeekHigh,                                                                                                                                                                                  
+            fiftyTwoWeekLow,                                                                                                                                                                                   
+            history                                                                                                                                                                                            
+          };                                                                                                                                                                                                   
+        });                                                                                                                                                                                                    
+                                                                                                                                                                                                                
+        const formattedData = await Promise.all(formattedDataPromises);                                                                                                                                                                                                
                                                                                                                                                                                                               
         this.cache.data = formattedData;                                                                                                                                                                     
         this.cache.lastUpdated = now;                                                                                                                                                                        

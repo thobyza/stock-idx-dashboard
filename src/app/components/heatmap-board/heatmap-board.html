@@ -61,7 +61,7 @@
       <div class="table-list overflow-x-auto border border-zinc-300 rounded-md flex-grow max-h-[85vh]">                                                                                                 
         <table class="w-full text-left text-xs border-collapse">                                                                                                                                               
           <thead class="sticky top-0">                                                                                                                                                                                              
-            <tr class="border-b border-zinc-300 text-slate-500 font-semibold bg-zinc-200">                                                                                                                
+            <tr class="border-b border-zinc-300 text-slate-500 font-semibold bg-zinc-200 z-30">                                                                                                                
               <th class=" cursor-pointer hover:text-slate-300" (click)="setSortBy('symbol')">Ticker</th>                                                                                                  
               <th class="">Company Name</th>                                                                                                                                                              
               <th class="">Sector</th>                                                                                                                                                                    
@@ -82,7 +82,7 @@
                 <td class="max-w-[200px] truncate">{{ stock.name }}</td>                                                                                                                  
                 <td class="text-zinc-700/70">{{ stock.sector }}</td>     
 
-                <td class="text-right font-mono font-semibold" 
+                <td class="text-right font-semibold" 
                   [class.text-emerald-500]="stock.change >= 0" 
                   [class.text-rose-500]="stock.change < 0"
                   [class.text-slate-400]="stock.change == 0"
@@ -90,15 +90,15 @@
                   {{ stock.change >= 0 ? '+' : '' }}{{ stock.change | number:'1.2-2' }}%                                                                                                                       
                 </td>    
                 
-                <td class="text-right font-mono font-semibold"                                                                                                                                                               
+                <td class="text-right font-semibold"                                                                                                                                                               
                   [class.text-emerald-500]="(stock.change1w || 0) >= 0"                                                                                                                                                      
                   [class.text-rose-500]="(stock.change1w || 0) < 0"                                                                                                                                                          
                   [class.text-slate-400]="(stock.change1w || 0) == 0">                                                                                                                                                       
                   {{ (stock.change1w || 0) >= 0 ? '+' : '' }}{{ (stock.change1w || 0) | number:'1.2-2' }}%                                                                                                                   
                 </td>   
 
-                <td class="text-right text-zinc-800 font-mono font-medium">{{ stock.price | number }}</td>                                                                                                             
-                <td class="text-center font-mono text-xs">                                                                                                                                                                   
+                <td class="text-right text-zinc-800  font-medium">{{ stock.price | number }}</td>                                                                                                             
+                <td class="text-center  text-xs">                                                                                                                                                                   
                   <div class="flex flex-col items-center gap-1 mx-auto w-32">                                                                                                                                                
                     <div class="flex justify-between w-full text-[10px] text-zinc-500 font-medium">                                                                                                                          
                       <span class="text-rose-700">{{ (stock.fiftyTwoWeekLow || stock.price) | number }}</span>                                                                                                                                     
@@ -115,7 +115,7 @@
                     </div>                                                                                                                                                                                                   
                   </div>                                                                                                                                                                                                     
                 </td> 
-                <td class="text-right font-mono text-zinc-700/70">{{ stock.volume | number }}</td>         
+                <td class="text-right text-zinc-700/70">{{ stock.volume | number }}</td>         
                 <td class="text-right font-mono text-zinc-800 font-medium">                                                                                                                                               
                   @if (stock.price * stock.volume >= 1e12) {                                                                                                                                                                 
                     Rp {{ (stock.price * stock.volume) / 1e12 | number:'1.2-2' }} T                                                                                                                                          
@@ -150,13 +150,12 @@
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 flex-grow auto-rows-max">                                                                                                               
         @for (sec of sectorPerformances(); track sec.sector) {                                                                                                                                                 
           <div                                                                                                                                                                                                 
-            class="bg-slate-900/30 border border-slate-900 hover:border-slate-800 rounded-xl p-4 cursor-pointer transition-all flex flex-col gap-3"                                                            
+            class="bg-zinc-100 border border-zinc-200 hover:border-zinc-300 rounded-xl p-4 cursor-pointer transition-all flex flex-col gap-3"                                                            
             (click)="onSelectSector(sec.sector); setViewMode('grid')"                                                                                                                                          
           >                                                                                                                                                                                                    
-            <div class="flex justify-between items-center">                                                                                                                                                    
-              <h3 class="font-bold text-sm text-slate-200">{{ sec.sector }}</h3>                                                                                                                               
-              <span class="text-xs font-bold px-2 py-0.5 rounded-full font-mono" [class.bg-emerald-500/10]="sec.avgChange >= 0" [class.text-emerald-400]="sec.avgChange >= 0" [class.bg-rose-500/10]="sec.     
-avgChange < 0" [class.text-rose-400]="sec.avgChange < 0">                                                                                                                                                      
+            <div class="flex flex-col justify-between items-center gap-4">                                                                                                                                                    
+              <h3 class="font-bold text-sm text-zinc-700">{{ sec.sector }}</h3>                                                                                                                               
+              <span class="text-xs font-bold px-2 py-0.5 rounded-full" [class.bg-emerald-500/10]="sec.avgChange >= 0" [class.text-emerald-400]="sec.avgChange >= 0" [class.bg-rose-500/10]="sec.avgChange < 0" [class.text-rose-400]="sec.avgChange < 0">                                                                                                                                                      
                 {{ sec.avgChange >= 0 ? '+' : '' }}{{ sec.avgChange }}%                                                                                                                                        
               </span>                                                                                                                                                                                          
             </div>                                                                                                                                                                                             
