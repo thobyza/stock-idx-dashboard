@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
 export interface Stock {
   symbol: string;                                                                                                                                                                                              
   name: string;                                                                                                                                                                                                
-  sector: string;                                                                                                                                                                                              
+  sector: string;   
+  sectorDesc?: string;                                                                                                                                                                                           
   indices: string[];                                                                                                                                                                                           
   price: number;                                                                                                                                                                                               
   change: number;     

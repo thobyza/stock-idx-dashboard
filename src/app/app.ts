@@ -112,8 +112,9 @@ export class App {
         ? Number((sectorStocks.reduce((sum, s) => sum + s.change, 0) / count).toFixed(2))                                                                                                                      
         : 0;                                                                                                                                                                                                   
       const advancing = sectorStocks.filter(s => s.change > 0).length;                                                                                                                                         
-      const declining = sectorStocks.filter(s => s.change < 0).length;                                                                                                                                         
-      return { sector: sec, avgChange, count, advancing, declining };                                                                                                                                          
+      const declining = sectorStocks.filter(s => s.change < 0).length;    
+      const sectorDesc = sectorStocks[0]?.sectorDesc || sec;                                                                                                                                     
+      return { sector: sec, sectorDesc, avgChange, count, advancing, declining };                                                                                                                                          
     });                                                                                                                                                                                                        
                                                                                                                                                                                                                 
     return result.sort((a, b) => b.avgChange - a.avgChange);                                                                                                                                                   

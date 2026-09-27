@@ -4,7 +4,8 @@ import { Stock } from '../../stock.service';
 import { HeatmapGrid } from '../heatmap-grid/heatmap-grid'; 
 
 export interface SectorPerformance {                                                                                                                                                                         
-  sector: string;                                                                                                                                                                                            
+  sector: string;       
+  sectorDesc: string;                                                                                                                                                                                     
   avgChange: number;                                                                                                                                                                                         
   count: number;                                                                                                                                                                                             
   advancing: number;                                                                                                                                                                                         
@@ -81,7 +82,9 @@ export class HeatmapBoard {
     const pct = ((price - low) / (high - low)) * 100;                                                                                                                                                        
     return Math.max(0, Math.min(100, Math.round(pct)));                                                                                                                                                      
   }      
-
-
+                                                                                                                                                                                 
+  getStocksForSector(sector: string): Stock[] {                                                                                                                                                                
+    return this.filteredStocks().filter(s => s.sector === sector);                                                                                                                                             
+  }  
 
 }

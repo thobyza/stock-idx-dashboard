@@ -150,29 +150,50 @@
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 flex-grow auto-rows-max">                                                                                                               
         @for (sec of sectorPerformances(); track sec.sector) {                                                                                                                                                 
           <div                                                                                                                                                                                                 
-            class="bg-zinc-100 border border-zinc-200 hover:border-zinc-300 rounded-xl p-4 cursor-pointer transition-all flex flex-col gap-3"                                                            
+            class="bg-zinc-100 border border-zinc-200 hover:border-zinc-300 rounded-lg py-3 px-3.5 cursor-pointer transition-all flex flex-col gap-3"                                                            
             (click)="onSelectSector(sec.sector); setViewMode('grid')"                                                                                                                                          
-          >                                                                                                                                                                                                    
-            <div class="flex flex-col justify-between items-center gap-4">                                                                                                                                                    
-              <h3 class="font-bold text-sm text-zinc-700">{{ sec.sector }}</h3>                                                                                                                               
-              <span class="text-xs font-bold px-2 py-0.5 rounded-full" [class.bg-emerald-500/10]="sec.avgChange >= 0" [class.text-emerald-400]="sec.avgChange >= 0" [class.bg-rose-500/10]="sec.avgChange < 0" [class.text-rose-400]="sec.avgChange < 0">                                                                                                                                                      
-                {{ sec.avgChange >= 0 ? '+' : '' }}{{ sec.avgChange }}%                                                                                                                                        
-              </span>                                                                                                                                                                                          
-            </div>                                                                                                                                                                                             
-            <div class="grid grid-cols-3 gap-2 text-center text-xs mt-1">                                                                                                                                      
-              <div class="flex flex-col bg-slate-950/40 p-2 rounded font-medium">                                                                                                                              
-                <span class="text-[10px] text-slate-500 uppercase tracking-wide">Stocks</span>                                                                                                                 
-                <span class="font-semibold mt-0.5">{{ sec.count }}</span>                                                                                                                                      
-              </div>                                                                                                                                                                                           
-              <div class="flex flex-col bg-slate-950/40 p-2 rounded">                                                                                                                                          
-                <span class="text-[10px] text-slate-500 uppercase tracking-wide text-emerald-400">Adv</span>                                                                                                   
-                <span class="font-semibold text-emerald-400 mt-0.5">{{ sec.advancing }}</span>                                                                                                                 
-              </div>                                                                                                                                                                                           
-              <div class="flex flex-col bg-slate-950/40 p-2 rounded">                                                                                                                                          
-                <span class="text-[10px] text-slate-500 uppercase tracking-wide text-rose-400">Dec</span>                                                                                                      
-                <span class="font-semibold text-rose-400 mt-0.5">{{ sec.declining }}</span>                                                                                                                    
-              </div>                                                                                                                                                                                           
-            </div>                                                                                                                                                                                             
+          >               
+            <div class="flex justify-between">
+              <div class="flex flex-col gap-0.5">
+                <h3 class="font-bold text-md text-zinc-700">{{ sec.sector }}</h3>  
+                <label class="font-normal text-sm text-zinc-500">{{ sec.sectorDesc }}</label>                                                                                                                             
+              </div>
+              <span                                                                                                                                                                                                          
+                class="text-[13px] font-medium rounded-full px-2 py-0.5 h-max"                                                                                                                                                           
+                [class]="sec.avgChange >= 0 ? 'bg-emerald-500/10 text-emerald-600' : 'bg-rose-500/10 text-rose-600'">                                                                                                        
+                {{ sec.avgChange >= 0 ? '+' : '' }}{{ sec.avgChange }}%                                                                                                                                                      
+              </span>  
+            </div>
+          
+            <div class="flex gap-1 text-xs gap-2">
+              <span class="text-zinc-600">{{ sec.count }} stocks</span>
+              <span class="text-zinc-500">•</span>
+              <div class="flex gap-2.5">
+                  <span class="text-emerald-600">↗︎ {{ sec.advancing }}</span>
+                  <span class="text-rose-600">↘︎ {{ sec.declining }}</span>
+              </div>
+            </div>
+
+            <div class="relative pt-2 border-t border-zinc-200/90">                                                                                                                                                                                                                                                                                                                                                            
+              <div class="flex flex-wrap gap-1.5 max-h-[85px] overflow-y-auto pb-4 pr-1">                                                                                                                                 
+                @for (stock of getStocksForSector(sec.sector); track stock.symbol) {                                                                                                                                       
+                  <div class="flex items-center gap-1.5 px-2 py-1 bg-white border border-zinc-200/80 rounded-md text-xs">                                                                                                  
+                    <span class="font-normal text-zinc-700">{{ stock.symbol }}</span>                                                                                                                                      
+                    <span                                                                                                                                                                                                  
+                      class="font-semibold text-[11px]"                                                                                                                                                                    
+                      [class]="stock.change >= 0 ? 'text-emerald-600' : 'text-rose-600'">                                                                                                                                  
+                      {{ stock.change >= 0 ? '+' : '' }}{{ stock.change }}%                                                                                                                                                
+                    </span>                                                                                                                                                                                                
+                  </div>                                                                                                                                                                                                   
+                }                                                                                                                                                                                                          
+              </div>                                                                                                                                                                                                       
+                                                                                                                                                                                                                            
+              <!-- Fade Gradient overlay  -->                                                                                                                                                                     
+              <div class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-zinc-100 to-transparent pointer-events-none"></div>                                                                                                                                                                                                                                                                                                    
+            </div>        
+
+            
+
           </div>                                                                                                                                                                                               
         }                                                                                                                                                                                                      
       </div>                                                                                                                                                                                                   

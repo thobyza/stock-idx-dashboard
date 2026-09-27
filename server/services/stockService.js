@@ -103,7 +103,8 @@ class StockService {
           return {                                                                                                                                                                                             
             symbol: ticker.replace('.JK', ''),                                                                                                                                                                 
             name: details.name,                                                                                                                                                                                
-            sector: details.sector,                                                                                                                                                                            
+            sector: details.sector,        
+            sectorDesc: details.sectorDesc,                                                                                                                                                                    
             indices: details.indices,                                                                                                                                                                          
             price: currentPrice,                                                                                                                                                                               
             change: Number(change.toFixed(2)),                                                                                                                                                                 
@@ -185,7 +186,8 @@ class StockService {
               return {                                                                                                                                                                                       
                 symbol,                                                                                                                                                                                      
                 name: details.name,                                                                                                                                                                          
-                sector: details.sector,                                                                                                                                                                      
+                sector: details.sector,     
+                sectorDesc: details.sectorDesc,                                                                                                                                                                 
                 indices: details.indices,                                                                                                                                                                    
                 price: Number(price.toFixed(2)),                                                                                                                                                             
                 change: Number(change.toFixed(2)),                                                                                                                                                           
