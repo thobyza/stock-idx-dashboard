@@ -57,9 +57,9 @@
 }
 
 .table-list th {
-  @apply p-3.5 text-zinc-800
+  @apply p-3.5 text-zinc-800 whitespace-nowrap
 }
 
 .table-list td {
-  @apply p-3.5 
+  @apply p-3.5 whitespace-nowrap
 }

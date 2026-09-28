@@ -49,14 +49,14 @@
       </div>                                                                                                                                                                                                   
     </div>                                                                                                                                                                                                     
                                                                                                                                                                                                                 
-    <!-- 1. Grid Heatmap Component -->                                                                                                                                                                         
+    <!-- 1. Heatmap  -->                                                                                                                                                                         
     @if (viewMode() === 'grid') {                                                                                                                                                                              
       <app-heatmap-grid                                                                                                                                                                                        
         [stocks]="filteredStocks()"                                                                                                                                                                            
       ></app-heatmap-grid>                                                                                                                                                                                     
     }                                                                                                                                                                                                          
                                                                                                                                                                                                                 
-    <!-- 2. Table List View -->                                                                                                                                                                                
+    <!-- 2. List -->                                                                                                                                                                                
     @if (viewMode() === 'list') {                                                                                                                                                                              
       <div class="table-list overflow-x-auto border border-zinc-300 rounded-md flex-grow max-h-[85vh]">                                                                                                 
         <table class="w-full text-left text-xs border-collapse">                                                                                                                                               
@@ -145,9 +145,9 @@
       </div>                                                                                                                                                                                                   
     }                                                                                                                                                                                                          
                                                                                                                                                                                                                 
-    <!-- 3. Sectors Card Breakdown View -->                                                                                                                                                                    
+    <!-- 3. Sectors Card -->                                                                                                                                                                    
     @if (viewMode() === 'sectors') {                                                                                                                                                                           
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 flex-grow auto-rows-max">                                                                                                               
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 grow auto-rows-max">                                                                                                               
         @for (sec of sectorPerformances(); track sec.sector) {                                                                                                                                                 
           <div                                                                                                                                                                                                 
             class="bg-zinc-100 border border-zinc-200 hover:border-zinc-300 rounded-lg py-3 px-3.5 cursor-pointer transition-all flex flex-col gap-3"                                                            
@@ -196,9 +196,7 @@
                                                                                                                                                                                                                             
               <!-- Fade Gradient overlay  -->                                                                                                                                                                     
               <div class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-zinc-100 to-transparent pointer-events-none"></div>                                                                                                                                                                                                                                                                                                    
-            </div>        
-
-            
+            </div>                    
 
           </div>                                                                                                                                                                                               
         }                                                                                                                                                                                                      
