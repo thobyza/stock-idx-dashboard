@@ -25,6 +25,12 @@ export interface IndexData {
   price: number;                                                                                                                                                                                               
   change: number;                                                                                                                                                                                              
   pct: number;   
+  open?: number;                                                                                                                                                                                     
+  high?: number;                                                                                                                                                                                   
+  low?: number;  
+  volume?: number;
+  value?: number;
+  history?: number[];
 }
 
 @Injectable({

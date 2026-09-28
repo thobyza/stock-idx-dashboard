@@ -50,5 +50,41 @@ export class SectorSidebar {
     return this.stocks().filter(s => s.indices.includes(index)).length;
   }
 
+  getSparklinePoints(history?: number[]): string {                                                                                                                                                               
+    if (!history || history.length < 2) return '';                                                                                                                                                               
+    const min = Math.min(...history);                                                                                                                                                                            
+    const max = Math.max(...history);                                                                                                                                                                            
+    const range = max - min || 1;                                                                                                                                                                                
+    const width = 180;                                                                                                                                                                                           
+    const height = 36;                                                                                                                                                                                           
+                                                                                                                                                                                                                  
+    return history                                                                                                                                                                                               
+      .map((price, idx) => {                                                                                                                                                                                     
+        const x = (idx / (history.length - 1)) * width;                                                                                                                                                          
+        const y = height - ((price - min) / range) * height;                                                                                                                                                     
+        return `${x.toFixed(1)},${y.toFixed(1)}`;                                                                                                                                                                
+      })                                                                                                                                                                                                         
+      .join(' ');                                                                                                                                                                                                
+  }     
+
+  formatRupiahValue(val?: number): string {
+    if (!val || val <= 0) return 'Rp 0.00 T';
+    if (val >= 1e12) {
+      return `Rp ${(val / 1e12).toFixed(2)} T`;
+    }
+    if (val >= 1e9) {
+      return `Rp ${(val / 1e9).toFixed(2)} B`;
+    }
+    return `Rp ${(val / 1e6).toFixed(2)} M`;
+  }
+
+  formatVolume(vol?: number): string {
+    if (!vol || vol <= 0) return '0 B';
+    if (vol >= 1e9) {
+      return `${(vol / 1e9).toFixed(2)} B`;
+    }
+    return `${(vol / 1e6).toFixed(2)} M`;
+  }
+
 }  
 

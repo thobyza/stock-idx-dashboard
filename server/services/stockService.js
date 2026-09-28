@@ -27,17 +27,41 @@ class StockService {
       try {                                                                                                                                                                                                  
         // 1. Fetch IHSG (^JKSE) index quote                                                                                                                                                                 
         try {                                                                                                                                                                                                
-          const ihsgQuote = await yahooFinance.quote('^JKSE');                                                                                                                                               
-          if (ihsgQuote && ihsgQuote.regularMarketPrice) {                                                                                                                                                   
-            const price = ihsgQuote.regularMarketPrice || 0;                                                                                                                                                 
-            const change = ihsgQuote.regularMarketChange || 0;                                                                                                                                               
-            const pct = ihsgQuote.regularMarketChangePercent || 0;                                                                                                                                           
-            this.cache.ihsg = {                                                                                                                                                                              
-              price: Number(price.toFixed(2)),                                                                                                                                                               
-              change: Number(change.toFixed(2)),                                                                                                                                                             
-              pct: Number(pct.toFixed(2))                                                                                                                                                                    
-            };                                                                                                                                                                                               
-          }                                                                                                                                                                                                  
+          
+          const ihsgQuote = await yahooFinance.quote('^JKSE');                                                                                                                                                         
+          if (ihsgQuote && ihsgQuote.regularMarketPrice) {                                                                                                                                                             
+            const price = ihsgQuote.regularMarketPrice || 0;                                                                                                                                                           
+            const change = ihsgQuote.regularMarketChange || 0;                                                                                                                                                         
+            const pct = ihsgQuote.regularMarketChangePercent || 0;                                                                                                                                                     
+                                                                                                                                                                                                                      
+            let history = [price];                                                                                                                                                                                     
+            try {                                                                                                                                                                                                      
+              const sevenDaysAgo = new Date();                                                                                                                                                                           
+              sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);                                                                                                                                                           
+              const ihsgChart = await yahooFinance.chart('^JKSE', { period1: sevenDaysAgo, interval: '15m' });                                                                                                            
+              if (ihsgChart && ihsgChart.quotes && ihsgChart.quotes.length > 0) {                                                                                                                                      
+                const validQuotes = ihsgChart.quotes.filter(item => item.close !== null && item.close !== undefined);                                                                                                     
+                history = validQuotes.slice(-30).map(item => item.close);                                                                                                                                            
+              }                                                                                                                                                                                                        
+            } catch (cErr) {                                                                                                                                                                                           
+              console.warn("Could not fetch IHSG intraday chart history:", cErr.message);                                                                                                                                       
+            }                                                                                                                                                                                                          
+                                                                                                                                                                                                                      
+            const openVal = ihsgQuote.regularMarketOpen || (history.length > 0 ? history[0] : price);
+            const highVal = ihsgQuote.regularMarketDayHigh || (history.length > 0 ? Math.max(...history) : price);
+            const lowVal = ihsgQuote.regularMarketDayLow || (history.length > 0 ? Math.min(...history) : price);
+
+            this.cache.ihsg = {                                                                                                                                                                                        
+              price: Number(price.toFixed(2)),                                                                                                                                                                         
+              change: Number(change.toFixed(2)),                                                                                                                                                                       
+              pct: Number(pct.toFixed(2)),                                                                                                                                                                             
+              open: Number(openVal.toFixed(2)),
+              high: Number(highVal.toFixed(2)),
+              low: Number(lowVal.toFixed(2)),
+              history
+            };                                                                                                                                                                                                         
+          }                         
+
         } catch (ihsgErr) {                                                                                                                                                                                  
           console.warn("Could not fetch IHSG quote from Yahoo Finance:", ihsgErr.message);                                                                                                                   
         }                                                                                                                                                                                                    
@@ -120,6 +144,15 @@ class StockService {
                                                                                                                                                                                                                 
         const formattedData = await Promise.all(formattedDataPromises);                                                                                                                                                                                                
                                                                                                                                                                                                               
+        // Calculate total market volume & transaction value (turnover)
+        const totalMarketVolume = formattedData.reduce((sum, s) => sum + (s.volume || 0), 0);
+        const totalMarketValue = formattedData.reduce((sum, s) => sum + ((s.price || 0) * (s.volume || 0)), 0);
+
+        if (this.cache.ihsg) {
+          this.cache.ihsg.volume = totalMarketVolume;
+          this.cache.ihsg.value = totalMarketValue;
+        }
+
         this.cache.data = formattedData;                                                                                                                                                                     
         this.cache.lastUpdated = now;                                                                                                                                                                        
         return { stocks: this.cache.data, ihsg: this.cache.ihsg };                                                                                                                                           

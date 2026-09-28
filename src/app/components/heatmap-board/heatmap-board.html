@@ -153,13 +153,19 @@
             class="bg-zinc-100 border border-zinc-200 hover:border-zinc-300 rounded-lg py-3 px-3.5 cursor-pointer transition-all flex flex-col gap-3"                                                            
             (click)="onSelectSector(sec.sector); setViewMode('grid')"                                                                                                                                          
           >               
-            <div class="flex justify-between">
-              <div class="flex flex-col gap-0.5">
+            <div class="flex gap-3 items-center">
+              <div>
+                <img 
+                  class="h-8 rounded-full object-contain opacity-90" 
+                  [src]="getSectorLogo(sec.sector)"
+                  [alt]="sec.sectorDesc">
+              </div>
+              <div class="flex flex-col gap-0">
                 <h3 class="font-bold text-md text-zinc-700">{{ sec.sector }}</h3>  
                 <label class="font-normal text-sm text-zinc-500">{{ sec.sectorDesc }}</label>                                                                                                                             
               </div>
               <span                                                                                                                                                                                                          
-                class="text-[13px] font-medium rounded-full px-2 py-0.5 h-max"                                                                                                                                                           
+                class="text-[13px] font-medium rounded-full px-2 py-0.5 h-max ml-auto mb-auto"                                                                                                                                                           
                 [class]="sec.avgChange >= 0 ? 'bg-emerald-500/10 text-emerald-600' : 'bg-rose-500/10 text-rose-600'">                                                                                                        
                 {{ sec.avgChange >= 0 ? '+' : '' }}{{ sec.avgChange }}%                                                                                                                                                      
               </span>  

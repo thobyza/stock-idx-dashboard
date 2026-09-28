@@ -35,6 +35,20 @@ export class HeatmapBoard {
   sortByChange = output<'change' | 'change1w' | 'symbol' | 'price' | 'marketCap'>();                                                                                                                                      
   sectorSelected = output<string>();
 
+  private readonly SECTOR_LOGOS: Record<string, string> = {                                                                                                                                                      
+    IDXENERGY: 'assets/logos/sector_energy.svg',                                                                                                                                                                 
+    IDXBASIC: 'assets/logos/sector_basic.svg',                                                                                                                                                                   
+    IDXFINANCE: 'assets/logos/sector_finance.svg',                                                                                                                                                               
+    IDXINFRA: 'assets/logos/sector_infra.svg',                                                                                                                                                                   
+    IDXTRANS: 'assets/logos/sector_trans.svg',                                                                                                                                                                   
+    IDXCYCLIC: 'assets/logos/sector_cyc.svg',                                                                                                                                                                    
+    IDXNONCYC: 'assets/logos/sector_noncyc.svg',                                                                                                                                                                 
+    IDXTECHNO: 'assets/logos/sector_techno.svg',                                                                                                                                                                 
+    IDXPROPERT: 'assets/logos/sector_propert.svg',                                                                                                                                                               
+    IDXINDUST: 'assets/logos/sector_industrial.svg',                                                                                                                                                             
+    IDXHEALTH: 'assets/logos/sector_health.svg',                                                                                                                                                                 
+  }; 
+
   // ..                                                                                                                                                                         
   readonly maxDate = new Date().toISOString().split('T')[0];
 
@@ -87,4 +101,7 @@ export class HeatmapBoard {
     return this.filteredStocks().filter(s => s.sector === sector);                                                                                                                                             
   }  
 
+  getSectorLogo(sector: string): string {                                                                                                                                                                        
+    return this.SECTOR_LOGOS[sector] || 'assets/logos/idx_logo.svg';                                                                                                                                             
+  }
 }
