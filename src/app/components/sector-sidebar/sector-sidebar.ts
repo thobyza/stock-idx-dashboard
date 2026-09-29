@@ -1,6 +1,6 @@
 import { Component, inject, input, output, signal } from '@angular/core';
 import { StockService, IndexData } from '../../stock.service';
-import { DecimalPipe, SlicePipe } from '@angular/common';
+import { DecimalPipe, SlicePipe, DatePipe } from '@angular/common';
 
 export interface SectorPerf {                                                              
   sector: string;                                                                          
@@ -12,7 +12,7 @@ export interface SectorPerf {
 
 @Component({
   selector: 'app-sector-sidebar',
-  imports: [ DecimalPipe, SlicePipe ],
+  imports: [ DecimalPipe, SlicePipe, DatePipe ],
   templateUrl: './sector-sidebar.html',
   styleUrl: './sector-sidebar.css',
 })
@@ -33,7 +33,8 @@ export class SectorSidebar {
   sectors = input.required<SectorPerf[]>();                                                
   selectedSector = input.required<string>();                                               
   totalStocksCount = input.required<number>();                                             
-                                                                                            
+                                        
+  selectedDate = input<string>(new Date().toISOString().split('T')[0])
   sectorSelected = output<string>();         
   indexSelected = output<string>();        
   
@@ -66,25 +67,6 @@ export class SectorSidebar {
       })                                                                                                                                                                                                         
       .join(' ');                                                                                                                                                                                                
   }     
-
-  formatRupiahValue(val?: number): string {
-    if (!val || val <= 0) return 'Rp 0.00 T';
-    if (val >= 1e12) {
-      return `Rp ${(val / 1e12).toFixed(2)} T`;
-    }
-    if (val >= 1e9) {
-      return `Rp ${(val / 1e9).toFixed(2)} B`;
-    }
-    return `Rp ${(val / 1e6).toFixed(2)} M`;
-  }
-
-  formatVolume(vol?: number): string {
-    if (!vol || vol <= 0) return '0 B';
-    if (vol >= 1e9) {
-      return `${(vol / 1e9).toFixed(2)} B`;
-    }
-    return `${(vol / 1e6).toFixed(2)} M`;
-  }
 
 }  
 

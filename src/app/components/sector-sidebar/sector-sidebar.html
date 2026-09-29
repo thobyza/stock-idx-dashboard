@@ -1,9 +1,15 @@
-<section class="flex flex-col gap-6">
+<section class="flex flex-col gap-2">
 
-  <section class="flex flex-col gap-3.5">
+  <section class="flex flex-col gap-3">
     <div class="flex justify-between">
       <label class="font-semibold text-lg">IDX-dashboard</label>
       <div>O</div>
+    </div>
+
+    <div class="flex items-center justify-between mt-1">                                                                                                                                                           
+      <span class="text-xs font-medium text-zinc-500">                                                                                                                              
+        {{ selectedDate() | date:'EEE, d MMM yyyy' }}                                                                                                                                                              
+      </span>                                                                                                                                                                                                      
     </div>
 
     <!-- IHSG Badge -->                                                                    
@@ -12,14 +18,13 @@
         <img class="h-8 rounded-full object-contain" src="assets/logos/idx_logo.svg" alt="">
         <div class="flex flex-col gap-0.5">
           <h3 class="font-semibold text-sm text-zinc-700">IDX Composite Index</h3>  
-          <div class="flex items-center gap-2.5">
+          <div class="flex items-center gap-2">
             <span class="font-normal text-sm text-zinc-600">{{ ihsg().price | number:'1.2-2' }}</span>                                                                                                                             
             <span 
               class="font-medium text-xs" 
               [class.text-emerald-500]="ihsg().change >= 0" 
               [class.text-rose-500]="ihsg().change < 0">
-                <!-- {{ ihsg().change >= 0 ? '▲' : '▼' }} {{ ihsg().pct | number:'1.2-2' }}% -->
-                {{ ihsg().change >= 0 ? '↗︎' : '↘︎' }} {{ ihsg().pct | number:'1.2-2' }}%
+                {{ ihsg().change >= 0 ? '↗︎' : '↘︎' }} {{ (ihsg().change >= 0 ? ihsg().change : -ihsg().change) | number:'1.2-2' }} ({{ ihsg().pct | number:'1.2-2' }}%)
               </span>
           </div>
         </div>
@@ -27,7 +32,7 @@
 
       <!-- SVG Sparkline Chart -->                                                                                                                                                                                 
       @if (ihsg().history && ihsg().history!.length > 1) {                                                                                                                                                         
-        <div class="w-full h-8 mt-5">                                                                                                                                                                              
+        <div class="w-full h-8 mt-5 mb-5">                                                                                                                                                                              
           <svg class="w-full h-full overflow-visible" viewBox="0 0 180 32" preserveAspectRatio="none">                                                                                                             
             <polyline                                                                                                                                                                                              
               fill="none"                                                                                                                                                                                          
@@ -42,32 +47,22 @@
       } 
 
       <!-- OHLC -->                                                                                                                                                                                   
-      <div class="flex justify-start gap-5 mt-6 text-xs">                                                                                                                     
-        <div class="flex items-center gap-0.5">                                                                                                                                                                                
-          <span class="text-zinc-400/60">O</span>                                                                                                                               
-          <span class=" text-zinc-400">{{ ihsg().open | number:'1.0-0' }}</span>                                                                                     
-        </div>                                                                                                                                                                                                     
-        <div class="flex items-center gap-0.5">                                                                                                                                                                                
-          <span class="text-zinc-400/60">H</span>                                                                                                                               
-          <span class=" text-zinc-400">{{ ihsg().high | number:'1.0-0' }}</span>                                                                      
-        </div>                                                                                                                                                                                                     
-        <div class="flex items-center gap-0.5">                                                                                                                                                                                
-          <span class="text-zinc-400/60">L</span>                                                                                                                                
-          <span class=" text-zinc-400">{{ ihsg().low | number:'1.0-0' }}</span>                                                                          
+      <div class="flex justify-center items-center gap-5 mt-6 text-xs hidden">                                                                                                                     
+        <div class="flex flex-col items-center gap-0.5">                                                                                                                                                                                
+          <span class="text-zinc-400 font-normal">Open</span>                                                                                                                               
+          <span class=" text-zinc-500">{{ ihsg().open | number:'1.0-0' }}</span>                                                                                     
+        </div>         
+        <div class="h-[16px] w-[1px] bg-zinc-300"></div>                                                                                                                                                                                            
+        <div class="flex flex-col items-center gap-0.5">                                                                                                                                                                                
+          <span class="text-zinc-400">High</span>                                                                                                                               
+          <span class=" text-zinc-500">{{ ihsg().high | number:'1.0-0' }}</span>                                                                      
+        </div>                            
+        <div class="h-[16px] w-[1px] bg-zinc-300"></div>                                                                                                                                                                         
+        <div class="flex flex-col items-center gap-0.5">                                                                                                                                                                                
+          <span class="text-zinc-400">Low</span>                                                                                                                                
+          <span class=" text-zinc-500">{{ ihsg().low | number:'1.0-0' }}</span>                                                                          
         </div>                                                                                                                                                                                                                                                                                                                                                                                                     
       </div> 
-
-      <!-- Volume & Traded Value (Turnover) -->
-      <div class="flex justify-between items-center text-xs pt-2.5 mt-3 border-t border-zinc-200/80">
-        <div class="flex items-center gap-1">
-          <span class="text-[10px] text-zinc-400 font-semibold uppercase">Vol</span>
-          <span class="font-mono text-zinc-700 font-medium">{{ formatVolume(ihsg().volume) }}</span>
-        </div>
-        <div class="flex items-center gap-1">
-          <span class="text-[10px] text-zinc-400 font-semibold uppercase">Val</span>
-          <span class="font-mono text-zinc-800 font-semibold">{{ formatRupiahValue(ihsg().value) }}</span>
-        </div>
-      </div>
       
 
     </div>   

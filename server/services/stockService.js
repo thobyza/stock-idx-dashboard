@@ -144,15 +144,6 @@ class StockService {
                                                                                                                                                                                                                 
         const formattedData = await Promise.all(formattedDataPromises);                                                                                                                                                                                                
                                                                                                                                                                                                               
-        // Calculate total market volume & transaction value (turnover)
-        const totalMarketVolume = formattedData.reduce((sum, s) => sum + (s.volume || 0), 0);
-        const totalMarketValue = formattedData.reduce((sum, s) => sum + ((s.price || 0) * (s.volume || 0)), 0);
-
-        if (this.cache.ihsg) {
-          this.cache.ihsg.volume = totalMarketVolume;
-          this.cache.ihsg.value = totalMarketValue;
-        }
-
         this.cache.data = formattedData;                                                                                                                                                                     
         this.cache.lastUpdated = now;                                                                                                                                                                        
         return { stocks: this.cache.data, ihsg: this.cache.ihsg };                                                                                                                                           

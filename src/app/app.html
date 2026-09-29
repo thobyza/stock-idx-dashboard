@@ -16,7 +16,8 @@
             (indexSelected)="selectIndex($event)"                                                                                                                                                                   
             [sectors]="sectorPerformances()"                                                                                                                                                                       
             [selectedSector]="selectedSector()"                                                                                                                                                                    
-            [totalStocksCount]="stocks().length"                                                                                                                                                                   
+            [totalStocksCount]="stocks().length"     
+            [selectedDate]="selectedDate()"                                                                                                                                                              
             (sectorSelected)="selectSector($event)"          
           ></app-sector-sidebar>                                                                                                                                                                                   
         </aside>                                                                                                                                                                                                   
