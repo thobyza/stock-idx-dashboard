@@ -1,17 +1,16 @@
-<section class="flex flex-col gap-2">
+<section class="flex flex-col gap-4">
+
+  <div class="flex justify-between">
+    <label class="font-semibold text-lg">IDX-dashboard</label>
+    <div>O</div>
+  </div>
 
   <section class="flex flex-col gap-3">
-    <div class="flex justify-between">
-      <label class="font-semibold text-lg">IDX-dashboard</label>
-      <div>O</div>
-    </div>
-
     <div class="flex items-center justify-between mt-1">                                                                                                                                                           
       <span class="text-xs font-medium text-zinc-500">                                                                                                                              
         {{ selectedDate() | date:'EEE, d MMM yyyy' }}                                                                                                                                                              
       </span>                                                                                                                                                                                                      
     </div>
-
     <!-- IHSG Badge -->                                                                    
     <div class="rounded-md px-2.5 py-2.5 ring ring-zinc-300/80 flex flex-col justify-center bg-zinc-50">       
       <div class="flex items-center gap-2.5">
@@ -29,7 +28,7 @@
           </div>
         </div>
       </div>
-
+  
       <!-- SVG Sparkline Chart -->                                                                                                                                                                                 
       @if (ihsg().history && ihsg().history!.length > 1) {                                                                                                                                                         
         <div class="w-full h-8 mt-5 mb-5">                                                                                                                                                                              
@@ -45,7 +44,7 @@
           </svg>                                                                                                                                                                                                   
         </div>                                                                                                                                                                                                     
       } 
-
+  
       <!-- OHLC -->                                                                                                                                                                                   
       <div class="flex justify-center items-center gap-5 mt-6 text-xs hidden">                                                                                                                     
         <div class="flex flex-col items-center gap-0.5">                                                                                                                                                                                
@@ -64,27 +63,25 @@
         </div>                                                                                                                                                                                                                                                                                                                                                                                                     
       </div> 
       
-
-    </div>   
   
-    <!-- IDX Breath -->
-    <!-- <div class="flex flex-col">                                                            
-      <span class="text-[10px] text-zinc-500 uppercase tracking-wider">Index Breadth (Adv / Flat / Dec)</span>                                                                         
-      <div class="flex items-center gap-2 mt-1">                                           
-        <div class="flex w-full h-2 rounded overflow-hidden bg-slate-800">                   
-          <div class="bg-emerald-500 h-full" [style.width.%]="(advancing() / total()) * 100"></div>                                                                                  
-          <div class="bg-slate-400 h-full" [style.width.%]="(unchanged() / total()) * 100"></div>                                                                                  
-          <div class="bg-rose-500 h-full" [style.width.%]="(declining() / total()) * 100"></div>                                                                                  
-        </div>                                                                             
-        <span class="text-xs font-semibold text-zinc-400">                                     
-          <span class="text-emerald-400">{{ advancing() }}</span>/{{ unchanged() }}/<span class="text-rose-400">{{ declining() }}</span>                                               
-        </span>                                                                            
-      </div>                                                                               
-    </div>  -->
+    </div>   
+  </section>
+
+
+  <!-- Menu -->
+  <section class="flex flex-col gap-2">
+    <div>
+      <!-- img -->
+      <span>Dashboard</span>
+    </div>
+    <div>
+      <!-- img -->
+      <span>Market News</span>
+    </div>
   </section>
 
   <!-- Indices -->
-  <div class="mt-2">                                                                                                                                                                                                         
+  <!-- <div class="mt-2">                                                                                                                                                                                                         
     <div class="text-xs font-semibold text-zinc-800 mb-2.5">Indices</div>                                                                                                     
     <div class="flex flex-col gap-1">                                                                                                                                                                          
       @for (idx of ['KOMPAS100', 'LQ45', 'IDX80', 'JII', 'JII70', 'ISSI']; track idx) {                                                                                                                                
@@ -103,10 +100,10 @@
         </button>                                                                                                                                                                                              
       }                                                                                                                                                                                                        
     </div>                                                                                                                                                                                                     
-  </div>  
+  </div>   -->
 
   <!-- Sectors -->
-  <div class="mt-2">
+  <!-- <div class="mt-2">
     <div class="text-xs font-semibold text-zinc-800 mb-2.5">Sectors</div>                                                                      
     <div class="flex flex-col gap-1 max-h-75 overflow-y-auto ">                       
       <button                                                                                  
@@ -136,7 +133,7 @@
         </button>                                                                              
       }      
     </div>   
-  </div>
+  </div> -->
 
 </section>
 

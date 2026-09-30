@@ -7,35 +7,32 @@
         <!-- Sidebar -->                                                                                                                                                                                 
         <aside class="w-full lg:w-60 shrink-0 flex flex-col gap-5 p-1.5">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
           <app-sector-sidebar           
-            [ihsg]="ihsg()"   
-            [advancing]="marketStats().advancing"                                                                                                                                                                      
-            [unchanged]="marketStats().unchanged"                                                                                                                                                                      
-            [declining]="marketStats().declining"                                                                                                                                                                      
-            [total]="marketStats().total"        
-            [selectedIndex]="selectedIndex()"     
-            (indexSelected)="selectIndex($event)"                                                                                                                                                                   
-            [sectors]="sectorPerformances()"                                                                                                                                                                       
-            [selectedSector]="selectedSector()"                                                                                                                                                                    
-            [totalStocksCount]="stocks().length"     
-            [selectedDate]="selectedDate()"                                                                                                                                                              
-            (sectorSelected)="selectSector($event)"          
+            [ihsg]="ihsg()"
+            [advancing]="marketStats().advancing"
+            [unchanged]="marketStats().unchanged"
+            [declining]="marketStats().declining"
+            [total]="marketStats().total"
+            [selectedDate]="selectedDate()"                                                                                                                                                 
           ></app-sector-sidebar>                                                                                                                                                                                   
         </aside>                                                                                                                                                                                                   
         
         <!-- Center Board Grid & Lists -->                                                                                                                                                                           
         <app-heatmap-board      
-          class="flex-auto"                                                                                                                                                                                      
-          [searchQuery]="searchQuery()"                                                                                                                                                                              
-          (searchQueryChange)="searchQuery.set($event)"    
+          class="flex-auto"
+          [searchQuery]="searchQuery()"
+          (searchQueryChange)="searchQuery.set($event)"
           [selectedDate]="selectedDate()"
-          (dateChange)="onDateSelect($event)"                                                                                                                                                          
-          [viewMode]="viewMode()"                                                                                                                                                                                    
-          (viewModeChange)="setViewMode($event)"                                                                                                                                                                     
-          [sortBy]="sortBy()"                                                                                                                                                                                        
-          (sortByChange)="setSortBy($event)"                                                                                                                                                                         
-          [filteredStocks]="filteredStocks()"                                                                                                                                                                        
-          [sectorPerformances]="sectorPerformances()"                                                                                                                                                                
-          (sectorSelected)="selectSector($event)"                                                                                                                                                                    
+          (dateChange)="onDateSelect($event)"
+          [viewMode]="viewMode()"
+          (viewModeChange)="setViewMode($event)"
+          [sortBy]="sortBy()"
+          (sortByChange)="setSortBy($event)"
+          [filteredStocks]="filteredStocks()"
+          [sectorPerformances]="sectorPerformances()"
+          [selectedIndex]="selectedIndex()"
+          (indexSelected)="selectIndex($event)"
+          [selectedSector]="selectedSector()"
+          (sectorSelected)="selectSector($event)"                                                                                                                                                               
         ></app-heatmap-board>
       </div>                                                                                                                                                                                                       
     </div>                                                                                                                                                                                                         

@@ -18,90 +18,104 @@ export interface SectorPerformance {
   templateUrl: './heatmap-board.html',
   styleUrl: './heatmap-board.css',
 })
-
 export class HeatmapBoard {
-  // Inputs                                                                                                                                                                                                  
-  searchQuery = input<string>('');    
-  selectedDate = input<string>(new Date().toISOString().split('T')[0]);                                                                                                                                                                       
-  viewMode = input<'grid' | 'list' | 'sectors'>('grid');                                                                                                                                                     
-  sortBy = input<'change' | 'change1w' | 'symbol' | 'price' | 'marketCap'>('change');                                                                                                                                     
-  filteredStocks = input.required<Stock[]>();                                                                                                                                                                
-  sectorPerformances = input.required<SectorPerformance[]>();  
+  // Inputs
+  searchQuery = input<string>('');
+  selectedDate = input<string>(new Date().toISOString().split('T')[0]);
+  viewMode = input<'grid' | 'list' | 'sectors'>('grid');
+  sortBy = input<'change' | 'change1w' | 'symbol' | 'price' | 'marketCap'>('change');
+  filteredStocks = input.required<Stock[]>();
+  sectorPerformances = input.required<SectorPerformance[]>();
+  selectedIndex = input<string>('KOMPAS100');
+  selectedSector = input<string>('All');
 
-  // Outputs / Event Emitters                                                                                                                                                                                
-  searchQueryChange = output<string>();   
-  dateChange = output<string>();                                                                                                                                               
-  viewModeChange = output<'grid' | 'list' | 'sectors'>();                                                                                                                                                    
-  sortByChange = output<'change' | 'change1w' | 'symbol' | 'price' | 'marketCap'>();                                                                                                                                      
+  // Outputs / Event Emitters
+  searchQueryChange = output<string>();
+  dateChange = output<string>();
+  viewModeChange = output<'grid' | 'list' | 'sectors'>();
+  sortByChange = output<'change' | 'change1w' | 'symbol' | 'price' | 'marketCap'>();
   sectorSelected = output<string>();
+  indexSelected = output<string>();
 
-  private readonly SECTOR_LOGOS: Record<string, string> = {                                                                                                                                                      
-    IDXENERGY: 'assets/logos/sector_energy.svg',                                                                                                                                                                 
-    IDXBASIC: 'assets/logos/sector_basic.svg',                                                                                                                                                                   
-    IDXFINANCE: 'assets/logos/sector_finance.svg',                                                                                                                                                               
-    IDXINFRA: 'assets/logos/sector_infra.svg',                                                                                                                                                                   
-    IDXTRANS: 'assets/logos/sector_trans.svg',                                                                                                                                                                   
-    IDXCYCLIC: 'assets/logos/sector_cyc.svg',                                                                                                                                                                    
-    IDXNONCYC: 'assets/logos/sector_noncyc.svg',                                                                                                                                                                 
-    IDXTECHNO: 'assets/logos/sector_techno.svg',                                                                                                                                                                 
-    IDXPROPERT: 'assets/logos/sector_propert.svg',                                                                                                                                                               
-    IDXINDUST: 'assets/logos/sector_industrial.svg',                                                                                                                                                             
-    IDXHEALTH: 'assets/logos/sector_health.svg',                                                                                                                                                                 
-  }; 
+  readonly indicesList: string[] = ['KOMPAS100', 'LQ45', 'IDX80', 'JII', 'JII70', 'ISSI'];
 
-  // ..                                                                                                                                                                         
+  private readonly SECTOR_LOGOS: Record<string, string> = {
+    IDXENERGY: 'assets/logos/sector_energy.svg',
+    IDXBASIC: 'assets/logos/sector_basic.svg',
+    IDXFINANCE: 'assets/logos/sector_finance.svg',
+    IDXINFRA: 'assets/logos/sector_infra.svg',
+    IDXTRANS: 'assets/logos/sector_trans.svg',
+    IDXCYCLIC: 'assets/logos/sector_cyc.svg',
+    IDXNONCYC: 'assets/logos/sector_noncyc.svg',
+    IDXTECHNO: 'assets/logos/sector_techno.svg',
+    IDXPROPERT: 'assets/logos/sector_propert.svg',
+    IDXINDUST: 'assets/logos/sector_industrial.svg',
+    IDXHEALTH: 'assets/logos/sector_health.svg',
+  };
+
+  // ..
   readonly maxDate = new Date().toISOString().split('T')[0];
 
-  onSearchInput(event: Event) {                                                                                                                                                                              
-    const target = event.target as HTMLInputElement;                                                                                                                                                         
-    this.searchQueryChange.emit(target.value);                                                                                                                                                               
-  }      
-  
+  onSearchInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.searchQueryChange.emit(target.value);
+  }
+
   onDateChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.dateChange.emit(target.value);
   }
-                                                                                                                                                                                                              
-  setViewMode(mode: 'grid' | 'list' | 'sectors') {                                                                                                                                                           
-    this.viewModeChange.emit(mode);                                                                                                                                                                          
-  }                                                                                                                                                                                                          
-                                                                                                                                                                                                              
-  setSortBy(field: 'change' | 'change1w' | 'symbol' | 'price' | 'marketCap') {                                                                                                                                            
-    this.sortByChange.emit(field);                                                                                                                                                                           
-  }                                                                                                                                                                                                          
-                                                                                                                                                                                                              
-  onSelectSector(sector: string) {                                                                                                                                                                           
-    this.sectorSelected.emit(sector);                                                                                                                                                                        
-  }                                                                                                                                                                                                          
-                                                                                                                                                                                                              
-  getSparklinePoints(history: number[]): string {                                                                                                                                                            
-    if (!history || history.length === 0) return '';                                                                                                                                                         
-    const min = Math.min(...history);                                                                                                                                                                        
-    const max = Math.max(...history);                                                                                                                                                                        
-    const range = max - min || 1;                                                                                                                                                                            
-    const width = 120;                                                                                                                                                                                       
-    const height = 40;                                                                                                                                                                                       
-                                                                                                                                                                                                              
-    return history                                                                                                                                                                                           
-      .map((price, idx) => {                                                                                                                                                                                 
-        const x = (idx / (history.length - 1)) * width;                                                                                                                                                      
-        const y = height - ((price - min) / range) * height;                                                                                                                                                 
-        return `${x.toFixed(1)},${y.toFixed(1)}`;                                                                                                                                                            
-      })                                                                                                                                                                                                     
-      .join(' ');                                                                                                                                                                                            
-  }                
 
-  get52WeekPosition(price: number, low?: number, high?: number): number {                                                                                                                                    
-    if (!low || !high || high === low) return 50;                                                                                                                                                            
-    const pct = ((price - low) / (high - low)) * 100;                                                                                                                                                        
-    return Math.max(0, Math.min(100, Math.round(pct)));                                                                                                                                                      
-  }      
-                                                                                                                                                                                 
-  getStocksForSector(sector: string): Stock[] {                                                                                                                                                                
-    return this.filteredStocks().filter(s => s.sector === sector);                                                                                                                                             
-  }  
+  setViewMode(mode: 'grid' | 'list' | 'sectors') {
+    this.viewModeChange.emit(mode);
+  }
 
-  getSectorLogo(sector: string): string {                                                                                                                                                                        
-    return this.SECTOR_LOGOS[sector] || 'assets/logos/idx_logo.svg';                                                                                                                                             
+  setSortBy(field: 'change' | 'change1w' | 'symbol' | 'price' | 'marketCap') {
+    this.sortByChange.emit(field);
+  }
+
+  onSelectSector(sector: string) {
+    this.sectorSelected.emit(sector);
+  }
+
+  onIndexSelect(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    this.indexSelected.emit(target.value);
+  }
+
+  onSectorSelect(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    this.sectorSelected.emit(target.value);
+  }
+
+  getSparklinePoints(history: number[]): string {
+    if (!history || history.length === 0) return '';
+    const min = Math.min(...history);
+    const max = Math.max(...history);
+    const range = max - min || 1;
+    const width = 120;
+    const height = 40;
+
+    return history
+      .map((price, idx) => {
+        const x = (idx / (history.length - 1)) * width;
+        const y = height - ((price - min) / range) * height;
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      })
+      .join(' ');
+  }
+
+  get52WeekPosition(price: number, low?: number, high?: number): number {
+    if (!low || !high || high === low) return 50;
+    const pct = ((price - low) / (high - low)) * 100;
+    return Math.max(0, Math.min(100, Math.round(pct)));
+  }
+
+  getStocksForSector(sector: string): Stock[] {
+    return this.filteredStocks().filter((s) => s.sector === sector);
+  }
+
+  getSectorLogo(sector: string): string {
+    return this.SECTOR_LOGOS[sector] || 'assets/logos/idx_logo.svg';
   }
 }

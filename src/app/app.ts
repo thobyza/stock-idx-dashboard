@@ -11,10 +11,7 @@ import { HeatmapBoard } from './components/heatmap-board/heatmap-board';
                                                                                                                                                                                                                 
 @Component({                                                                                                                                                                                                   
   selector: 'app-root',                                                                                                                                                                                        
-  imports: [                                                                                                                                                                                                   
-    RouterOutlet, NgClass,                                                                                                                                                                                   
-    IndexHeader, SectorSidebar, HeatmapBoard
-  ],                                                                                                                                                                                                           
+  imports: [ SectorSidebar, HeatmapBoard ],                                                                                                                                                                                                           
   templateUrl: './app.html',                                                                                                                                                                                   
   styleUrl: './app.css',                                                                                                                                                                                       
 })                                                                                                                                                                                                             
