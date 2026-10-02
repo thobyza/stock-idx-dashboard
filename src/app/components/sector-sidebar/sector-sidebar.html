@@ -51,7 +51,7 @@
         } 
     
         <!-- OHLC -->                                                                                                                                                                                   
-        <div class="flex justify-center items-center gap-5 mt-6 text-xs hidden">                                                                                                                     
+        <div class="justify-center items-center gap-5 mt-6 text-xs hidden">                                                                                                                     
           <div class="flex flex-col items-center gap-0.5">                                                                                                                                                                                
             <span class="text-zinc-400 font-normal">Open</span>                                                                                                                               
             <span class=" text-zinc-500">{{ ihsg().open | number:'1.0-0' }}</span>                                                                                     
@@ -71,19 +71,19 @@
     
       </div>   
     </section>
-  
-    <!-- Menu -->
-    <section class="flex flex-col gap-2">
-      <div class="flex items-center gap-1.5">
-        <svg lucideNewspaper class="h-4 text-zinc-500"></svg>
-        <span class="text-sm text-zinc-600">Dashboard</span>
-      </div>
-      <div>
-        <!-- img -->
-        <span>Market News</span>
-      </div>
-    </section>
   }
+  
+  <!-- Menu -->
+  <section class="flex flex-col gap-2">
+    <div class="menu-wrapper">
+      <svg lucideHouse></svg>
+      @if (!collapsed()) { <label class="">Dashboard</label> }
+    </div>
+    <div class="menu-wrapper">
+      <svg lucideBookOpenText></svg>
+      @if (!collapsed()) { <label>Market News</label> }
+    </div>
+  </section>
 
 
   <!-- Indices -->

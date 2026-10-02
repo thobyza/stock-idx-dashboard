@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+.menu-wrapper {
+   @apply flex items-center gap-1.5;
+}
+
+.menu-wrapper > svg {
+   @apply h-4 text-zinc-600;
+}
+
+.menu-wrapper > label {
+   @apply text-sm font-medium text-zinc-600;
+}

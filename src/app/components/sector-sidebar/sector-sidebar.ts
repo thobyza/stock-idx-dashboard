@@ -1,7 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { IndexData } from '../../stock.service';
 import { DecimalPipe, DatePipe } from '@angular/common';
-import { LucideNewspaper } from '@lucide/angular';
+import { LucideBookOpenText, LucideHouse } from '@lucide/angular';
 
 // export interface SectorPerf {                                                              
 //   sector: string;                                                                          
@@ -13,7 +13,7 @@ import { LucideNewspaper } from '@lucide/angular';
 
 @Component({
   selector: 'app-sector-sidebar',
-  imports: [DecimalPipe, DatePipe, LucideNewspaper],
+  imports: [DecimalPipe, DatePipe, LucideHouse, LucideBookOpenText],
   templateUrl: './sector-sidebar.html',
   styleUrl: './sector-sidebar.css',
 })
@@ -25,7 +25,7 @@ export class SectorSidebar {
   total = input.required<number>();
   selectedDate = input<string>(new Date().toISOString().split('T')[0]);
 
-  collapsed = input<boolean>(false);                                                                                                                                                                                                                                                                                                                                                                                  
+  collapsed = input<boolean>(false);
   toggleCollapse = output<void>();
 
   getSparklinePoints(history?: number[]): string {
@@ -45,8 +45,8 @@ export class SectorSidebar {
       .join(' ');
   }
 
-  onToggle() {                                                                                                                                                                                                   
-    this.toggleCollapse.emit();                                                                                                                                                                                  
-  } 
+  onToggle() {
+    this.toggleCollapse.emit();
+  }
 }  
 
