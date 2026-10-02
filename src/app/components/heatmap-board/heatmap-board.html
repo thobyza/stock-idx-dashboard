@@ -4,7 +4,7 @@
       <!-- Search bar -->      
       <div class="flex items-center gap-3"> 
         <div class="flex flex-col gap-1.5 w-40">     
-          <label class="text-zinc-700/80 text-xs">Search</label>                                                                                                                                                                         
+          <!-- <label class="text-zinc-700/80 text-xs">Search</label>                                                                                                                                                                          -->
           <input                                                                                                                                                                                                 
             type="text"                                                                                                                                                                                          
             class="input-theme"                                                                                                                                                                                  
@@ -24,13 +24,10 @@
         >         
         </div>
 
-        <div class="flex flex-col gap-1.5 w-px">
-          <label class="opacity-0 text-xs">xxx</label>
-          <div class="h-4 w-px bg-zinc-300"></div>
-        </div>
+        <div class="h-4 w-px bg-zinc-300"></div>
         
         <div class="flex flex-col gap-1.5 text-xs w-40">
-          <label class="text-zinc-700/80">Index</label>
+          <!-- <label class="text-zinc-700/80">Index</label> -->
           <select class="input-theme cursor-pointer !w-auto py-1 px-2 font-medium" [value]="selectedIndex()"
             (change)="onIndexSelect($event)">
             @for (idx of indicesList; track idx) {
@@ -40,7 +37,7 @@
         </div>
 
         <div class="flex flex-col gap-1.5 text-xs w-40">
-          <label class="text-zinc-700/80">Sector</label>
+          <!-- <label class="text-zinc-700/80">Sector</label> -->
           <select class="input-theme cursor-pointer !w-auto py-1 px-2 font-medium" [value]="selectedSector()"
             (change)="onSectorSelect($event)">
             <option value="All">All Sectors</option>
@@ -56,7 +53,7 @@
                                                                                                                                                                                                                 
       <div class="flex items-center gap-6 flex-wrap text-xs">                                                                                                                                                  
         <!-- Views toggles -->                                                                                                                                                                                 
-        <div class="flex flex-col gap-1.5">                                                                                                                                                                
+        <div class="flex items-center gap-2">                                                                                                                                                                
           <span class="text-zinc-700/80">View</span>                                                                                                                                                           
           <div class="tab-wrapper-theme">                                                                                                                                                                      
             <button class="tab-item-theme" [class.active]="viewMode() === 'grid'" (click)="setViewMode('grid')">Heatmap</button>                                                                               
@@ -67,7 +64,7 @@
                                                                                                                                                                                                                 
         <!-- Sorting triggers -->                                                                                                                                                                              
         @if (viewMode() !== 'sectors') {                                                                                                                                                                       
-          <div class="flex flex-col gap-1.5">                                                                                                                                                              
+          <div class="flex items-center gap-2">                                                                                                                                                              
             <span class="text-zinc-700/80">Sort</span>                                                                                                                                                         
             <div class="tab-wrapper-theme">                                                                                                                                                                    
               <button class="tab-item-theme" [class.active]="sortBy() === 'change'" (click)="setSortBy('change')">Change</button>                                                                              

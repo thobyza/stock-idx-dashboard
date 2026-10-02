@@ -1,6 +1,7 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { IndexData } from '../../stock.service';
 import { DecimalPipe, DatePipe } from '@angular/common';
+import { LucideNewspaper } from '@lucide/angular';
 
 // export interface SectorPerf {                                                              
 //   sector: string;                                                                          
@@ -12,7 +13,7 @@ import { DecimalPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-sector-sidebar',
-  imports: [DecimalPipe, DatePipe],
+  imports: [DecimalPipe, DatePipe, LucideNewspaper],
   templateUrl: './sector-sidebar.html',
   styleUrl: './sector-sidebar.css',
 })
@@ -23,6 +24,9 @@ export class SectorSidebar {
   declining = input.required<number>();
   total = input.required<number>();
   selectedDate = input<string>(new Date().toISOString().split('T')[0]);
+
+  collapsed = input<boolean>(false);                                                                                                                                                                                                                                                                                                                                                                                  
+  toggleCollapse = output<void>();
 
   getSparklinePoints(history?: number[]): string {
     if (!history || history.length < 2) return '';
@@ -40,5 +44,9 @@ export class SectorSidebar {
       })
       .join(' ');
   }
+
+  onToggle() {                                                                                                                                                                                                   
+    this.toggleCollapse.emit();                                                                                                                                                                                  
+  } 
 }  
 
