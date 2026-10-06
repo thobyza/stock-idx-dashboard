@@ -9,5 +9,5 @@
 }
 
 .menu-wrapper > label {
-   @apply text-sm font-medium text-zinc-600;
+   @apply text-xs font-normal text-zinc-600;
 }
