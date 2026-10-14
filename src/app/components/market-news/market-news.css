@@ -2,7 +2,7 @@
 
 /* ── Container ───────────────────────────────────────────────── */
 .market-news-container {
-  @apply w-full h-full flex flex-col gap-6 p-4;
+  @apply w-full h-full flex flex-col gap-6 p-4 bg-white rounded-lg shadow-md;
 }
 
 /* ── Header ──────────────────────────────────────────────────── */
