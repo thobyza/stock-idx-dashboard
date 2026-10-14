@@ -1,0 +1,122 @@
+@import 'tailwindcss';
+
+/* ── Container ───────────────────────────────────────────────── */
+.market-news-container {
+  @apply w-full h-full flex flex-col gap-6 p-4;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.news-header {
+  @apply flex items-start justify-between;
+}
+
+.news-title {
+  @apply text-xl font-bold text-zinc-800 leading-tight;
+}
+
+.news-subtitle {
+  @apply text-sm text-zinc-400 mt-0.5;
+}
+
+.news-badge {
+  @apply text-[10px] font-bold tracking-widest uppercase
+         bg-zinc-800 text-zinc-100 px-2.5 py-1 rounded-full;
+}
+
+/* ── Grid ────────────────────────────────────────────────────── */
+.news-grid {
+  @apply grid gap-3;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.news-card {
+  @apply flex gap-3 p-3 rounded-xl bg-white ring-1 ring-zinc-200
+         hover:ring-zinc-400 hover:shadow-md
+         transition-all duration-200 cursor-pointer no-underline;
+}
+
+/* ── Thumbnail ───────────────────────────────────────────────── */
+.news-thumb-wrapper {
+  @apply w-20 h-16 shrink-0 rounded-lg overflow-hidden;
+}
+
+.news-thumb {
+  @apply w-full h-full object-cover;
+}
+
+.news-thumb-placeholder {
+  @apply w-20 h-16 shrink-0 rounded-lg bg-zinc-100
+         flex items-center justify-center text-zinc-400;
+}
+
+/* ── Content ─────────────────────────────────────────────────── */
+.news-content {
+  @apply flex flex-col justify-between flex-1 min-w-0;
+}
+
+.news-article-title {
+  @apply text-sm font-medium text-zinc-800 leading-snug
+         line-clamp-3 mb-1;
+}
+
+.news-meta {
+  @apply flex items-center gap-1.5 text-[11px] text-zinc-400;
+}
+
+.news-publisher {
+  @apply font-semibold text-zinc-500 truncate max-w-[100px];
+}
+
+.news-dot {
+  @apply text-zinc-300;
+}
+
+.news-time {
+  @apply shrink-0;
+}
+
+/* ── States ──────────────────────────────────────────────────── */
+.news-error {
+  @apply flex flex-col items-center justify-center gap-2
+         py-20 text-zinc-400 text-sm;
+}
+
+.error-icon {
+  @apply text-3xl;
+}
+
+.news-empty {
+  @apply text-center text-zinc-400 text-sm py-20;
+}
+
+/* ── Language badge ──────────────────────────────────────────── */
+.lang-badge {
+  @apply text-[9px] font-bold tracking-wider uppercase
+         px-1.5 py-0.5 rounded-sm shrink-0;
+}
+
+.lang-id {
+  @apply bg-red-50 text-red-500;
+}
+
+.lang-en {
+  @apply bg-blue-50 text-blue-500;
+}
+
+/* ── Skeleton ────────────────────────────────────────────────── */
+.skeleton-card {
+  @apply pointer-events-none;
+}
+
+.skeleton-thumb {
+  @apply w-20 h-16 shrink-0 rounded-lg bg-zinc-200 animate-pulse;
+}
+
+.skeleton-body {
+  @apply flex flex-col gap-2 flex-1 justify-center;
+}
+
+.skeleton-line {
+  @apply h-3 rounded-full bg-zinc-200 animate-pulse;
+}

@@ -28,6 +28,9 @@ export class SectorSidebar {
   collapsed = input<boolean>(false);
   toggleCollapse = output<void>();
 
+  activePage = input<'dashboard' | 'news'>('dashboard'); 
+  pageSelected = output<'dashboard' | 'news'>();
+
   getSparklinePoints(history?: number[]): string {
     if (!history || history.length < 2) return '';
     const min = Math.min(...history);
@@ -44,6 +47,10 @@ export class SectorSidebar {
       })
       .join(' ');
   }
+
+  onSelectPage(page: 'dashboard' | 'news') {                                                                                                                                                                     
+    this.pageSelected.emit(page);                                                                                                                                                                                
+  } 
 
   onToggle() {
     this.toggleCollapse.emit();

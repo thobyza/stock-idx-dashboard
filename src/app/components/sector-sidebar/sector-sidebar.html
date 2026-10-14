@@ -74,15 +74,18 @@
   }
   
   <!-- Menu -->
-  <section class="flex flex-col gap-2">
-    <div class="menu-wrapper">
-      <svg lucideHouse></svg>
-      @if (!collapsed()) { <label class="">Dashboard</label> }
-    </div>
-    <div class="menu-wrapper">
-      <svg lucideBookOpenText></svg>
-      @if (!collapsed()) { <label>Market News</label> }
-    </div>
+  <section class="flex flex-col gap-0.5">                                                                                                                                                                        
+    <!-- @if (!collapsed()) {                                                                                                                                                                                         
+      <span class="text-[10px] font-semibold text-zinc-400 mb-1">Menu</span>                                                                                                     
+    }                                                                                                                                                                                                             -->
+    <div class="menu-wrapper" [class.active]="activePage() === 'dashboard'" (click)="onSelectPage('dashboard')">                                                                                                   
+      <svg lucideHouse></svg>                                                                                                                                                                                      
+      @if (!collapsed()) { <label>Dashboard</label> }                                                                                                                                                              
+    </div>                                                                                                                                                                                                         
+    <div class="menu-wrapper" [class.active]="activePage() === 'news'" (click)="onSelectPage('news')">                                                                                                             
+      <svg lucideBookOpenText></svg>                                                                                                                                                                               
+      @if (!collapsed()) { <label>Market News</label> }                                                                                                                                                            
+    </div>                                                                                                                                                                                                  
   </section>
 
 

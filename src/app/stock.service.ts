@@ -33,6 +33,16 @@ export interface IndexData {
   history?: number[];
 }
 
+export interface NewsArticle {
+  title: string;
+  link: string;
+  publisher: string;
+  publishedAt: string;
+  thumbnail: string | null;
+  type: string;
+  lang?: 'id' | 'en';
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -94,6 +104,12 @@ export class StockService {
       `${this.apiUrl}/stocks/${symbol}/history`                                                                                                                                                              
     );     
   }  
+
+
+  getNews(): Observable<{ articles: NewsArticle[] }> {
+    return this.http.get<{ articles: NewsArticle[] }>(`${this.apiUrl}/news`);
+  }
+
 
   fetchStocksByDate(date: string) {     
     this.currentSelectedDate.set(date);                                                                                                                                                                     
