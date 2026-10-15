@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 import { StockService, NewsArticle } from '../../stock.service';
 
@@ -15,6 +15,30 @@ export class MarketNews implements OnInit {
   isLoading = signal<boolean>(true);
   hasError = signal<boolean>(false);
 
+  // ── Pagination ────────────────────────────────────────────────
+  readonly pageSize = 12;
+  currentPage = signal<number>(1);
+
+  totalPages = computed(() => Math.max(1, Math.ceil(this.articles().length / this.pageSize)));
+
+  pagedArticles = computed<NewsArticle[]>(() => {
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return this.articles().slice(start, start + this.pageSize);
+  });
+
+  pageNumbers = computed<number[]>(() => {
+    const total = this.totalPages();
+    const current = this.currentPage();
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+
+    // Always show first, last and a window around current
+    const pages = new Set<number>([1, total, current]);
+    if (current - 1 > 1) pages.add(current - 1);
+    if (current + 1 < total) pages.add(current + 1);
+
+    return Array.from(pages).sort((a, b) => a - b);
+  });
+
   ngOnInit() {
     this.stockService.getNews().subscribe({
       next: (data) => {
@@ -27,6 +51,14 @@ export class MarketNews implements OnInit {
       }
     });
   }
+
+  goToPage(page: number): void {
+    const clamped = Math.max(1, Math.min(page, this.totalPages()));
+    this.currentPage.set(clamped);
+  }
+
+  prevPage(): void { this.goToPage(this.currentPage() - 1); }
+  nextPage(): void { this.goToPage(this.currentPage() + 1); }
 
   timeAgo(isoString: string): string {
     const now = Date.now();

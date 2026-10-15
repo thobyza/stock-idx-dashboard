@@ -1,16 +1,186 @@
-<div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 xl:grid-cols-10 gap-0.5 flex-grow auto-rows-fr">                                                                                      
-  @for (stock of stocks(); track stock.symbol) {                                                                                                                                                               
-    <button                                                                                                                                                                                                    
-      class="rounded-xs p-1 text-center transition-colors duration-500 flex flex-col 
-        justify-center items-center gap-1 cursor-pointer aspect-square outline-none active:scale-95"                                                                                                                                                                                          
-      [style]="getHeatStyle(stock.change)"                                                                                                                                                                     
-      (click)="onSelectStock(stock.symbol)"                                                                                                                                                                    
-    >                                                                                                                                                                                                          
-      <span class="text-[14px] font-bold tracking-wide uppercase">{{ stock.symbol }}</span>                                                                                                      
-      <span class="text-[11px] font-mono ">{{ stock.price | number }}</span>                                                                                                                      
-      <span class="text-[12px] font-semibold">                                                                                                                                            
-        {{ stock.change >= 0 ? '+' : '' }}{{ stock.change | number:'1.2-2' }}%                                                                                                                                 
-      </span>                                                                                                                                                                                                  
-    </button>                                                                                                                                                                                                  
-  }                                                                                                                                                                                                            
+<div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 xl:grid-cols-10 gap-0.5 flex-grow auto-rows-fr">
+  @for (stock of stocks(); track stock.symbol) {
+    <button
+      class="rounded-xs p-1 text-center transition-colors duration-500 flex flex-col
+        justify-center items-center gap-1 cursor-pointer aspect-square outline-none active:scale-95"
+      [style]="getHeatStyle(stock.change)"
+      (click)="openPopup(stock, $event)"
+    >
+      <span class="text-[14px] font-bold tracking-wide uppercase">{{ stock.symbol }}</span>
+      <span class="text-[11px] font-mono ">{{ stock.price | number }}</span>
+      <span class="text-[12px] font-semibold">
+        {{ stock.change >= 0 ? '+' : '' }}{{ stock.change | number:'1.2-2' }}%
+      </span>
+    </button>
+  }
 </div>
+
+<!-- ── Stock Detail Popup ──────────────────────────────────────────────── -->
+@if (popupStock()) {
+  <div
+    class="popup-backdrop fixed inset-0 z-50 flex items-center justify-center p-4"
+    (click)="onBackdropClick($event)"
+  >
+    <!-- Card -->
+    <div class="popup-card bg-white rounded-2xl shadow-2xl w-full max-w-md ring-1 ring-zinc-200 flex flex-col overflow-hidden">
+
+      <!-- Header band — coloured by change direction -->
+      <div
+        class="popup-header px-5 pt-5 pb-4"
+        [style]="getHeatStyle(popupStock()!.change)"
+      >
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <!-- Symbol pill -->
+            <span class="text-lg font-extrabold font-mono tracking-wider uppercase leading-none">
+              {{ popupStock()!.symbol }}
+            </span>
+            <!-- Change badge -->
+            <span class="text-sm font-bold px-2 py-0.5 rounded-full"
+              [style]="getHeatStyle(popupStock()!.change)">
+              {{ popupStock()!.change >= 0 ? '▲ +' : '▼ ' }}{{ popupStock()!.change | number:'1.2-2' }}%
+            </span>
+          </div>
+          <!-- Close button -->
+          <button
+            class="popup-close-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-full
+                   bg-black/10 hover:bg-black/20 transition-colors cursor-pointer"
+            (click)="closePopup()"
+            aria-label="Close"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Company name + sector -->
+        <div class="mt-2">
+          <p class="text-sm font-semibold leading-snug opacity-90 truncate">{{ popupStock()!.name }}</p>
+          <p class="text-[11px] font-medium opacity-60 mt-0.5">{{ popupStock()!.sector }}</p>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="popup-body px-5 py-4 flex flex-col gap-4 overflow-y-auto max-h-[70vh]">
+
+        <!-- Price row -->
+        <div class="flex items-baseline justify-between border-b border-zinc-100 pb-3">
+          <div>
+            <p class="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold mb-0.5">Current Price</p>
+            <p class="text-2xl font-bold font-mono text-zinc-900">Rp {{ popupStock()!.price | number }}</p>
+          </div>
+          <div class="text-right">
+            <p class="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold mb-0.5">Prev Close</p>
+            <p class="text-sm font-mono font-semibold text-zinc-700">Rp {{ popupStock()!.prevPrice | number }}</p>
+          </div>
+        </div>
+
+        <!-- Performance row -->
+        <div>
+          <p class="section-label">Performance</p>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="stat-card">
+              <span class="stat-label">Change (Today)</span>
+              <span class="stat-value font-mono font-bold"
+                [class.text-emerald-600]="popupStock()!.change >= 0"
+                [class.text-rose-600]="popupStock()!.change < 0">
+                {{ popupStock()!.change >= 0 ? '+' : '' }}{{ popupStock()!.change | number:'1.2-2' }}%
+              </span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Change (1 Week)</span>
+              <span class="stat-value font-mono font-bold"
+                [class.text-emerald-600]="(popupStock()!.change1w || 0) >= 0"
+                [class.text-rose-600]="(popupStock()!.change1w || 0) < 0">
+                {{ (popupStock()!.change1w || 0) >= 0 ? '+' : '' }}{{ (popupStock()!.change1w || 0) | number:'1.2-2' }}%
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 52-Week Range -->
+        <div>
+          <p class="section-label">52-Week Range</p>
+          <div class="stat-card">
+            <div class="flex justify-between text-[11px] font-medium mb-2">
+              <span class="text-rose-600 font-mono">{{ (popupStock()!.fiftyTwoWeekLow || popupStock()!.price) | number }}</span>
+              <span class="text-zinc-500 text-[10px]">Low → High</span>
+              <span class="text-emerald-600 font-mono">{{ (popupStock()!.fiftyTwoWeekHigh || popupStock()!.price) | number }}</span>
+            </div>
+            <div class="w-full h-2 bg-zinc-100 rounded-full overflow-visible relative">
+              <div
+                class="h-full bg-zinc-400 rounded-l-full transition-all duration-300 relative overflow-visible"
+                [style.width.%]="get52WeekPosition(popupStock()!.price, popupStock()!.fiftyTwoWeekLow, popupStock()!.fiftyTwoWeekHigh)"
+              >
+                <div class="absolute right-0 top-1/2 -translate-y-1/2 h-3.5 w-1 bg-zinc-600 rounded-full"></div>
+              </div>
+            </div>
+            <p class="text-[10px] text-zinc-400 mt-1.5 text-center">
+              Current: Rp {{ popupStock()!.price | number }}
+              ({{ get52WeekPosition(popupStock()!.price, popupStock()!.fiftyTwoWeekLow, popupStock()!.fiftyTwoWeekHigh) }}% of range)
+            </p>
+          </div>
+        </div>
+
+        <!-- Market Data -->
+        <div>
+          <p class="section-label">Market Data</p>
+          <div class="grid grid-cols-2 gap-2">
+            <div class="stat-card">
+              <span class="stat-label">Volume</span>
+              <span class="stat-value font-mono">{{ popupStock()!.volume | number }}</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Turnover (Price × Vol)</span>
+              <span class="stat-value font-mono">{{ turnover(popupStock()!) }}</span>
+            </div>
+            <div class="stat-card col-span-2">
+              <span class="stat-label">Market Capitalisation</span>
+              <span class="stat-value font-mono text-base">{{ marketCapFormatted(popupStock()!) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fundamentals -->
+        <div>
+          <p class="section-label">Fundamentals</p>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="stat-card">
+              <span class="stat-label">P/E Ratio</span>
+              <span class="stat-value text-zinc-400 italic">N/A</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">EPS</span>
+              <span class="stat-value text-zinc-400 italic">N/A</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Beta</span>
+              <span class="stat-value text-zinc-400 italic">N/A</span>
+            </div>
+          </div>
+          <p class="text-[10px] text-zinc-300 mt-1.5 text-center italic">
+            Fundamental data will display once provided by the API
+          </p>
+        </div>
+
+        <!-- Indices -->
+        @if (popupStock()!.indices?.length) {
+          <div>
+            <p class="section-label">Member of Indices</p>
+            <div class="flex flex-wrap gap-1.5">
+              @for (idx of popupStock()!.indices; track idx) {
+                <span class="text-[10px] font-bold uppercase tracking-wider
+                             bg-zinc-100 text-zinc-600 border border-zinc-200
+                             px-2 py-0.5 rounded-full">{{ idx }}</span>
+              }
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+}

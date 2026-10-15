@@ -26,7 +26,7 @@
 /* ── Grid ────────────────────────────────────────────────────── */
 .news-grid {
   @apply grid gap-3;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
 
 /* ── Card ────────────────────────────────────────────────────── */
@@ -119,4 +119,43 @@
 
 .skeleton-line {
   @apply h-3 rounded-full bg-zinc-200 animate-pulse;
+}
+
+/* ── Pagination ──────────────────────────────────────────────── */
+.pagination-bar {
+  @apply flex items-center justify-between pt-3
+         border-t border-zinc-100 mt-auto;
+}
+
+.pagination-info {
+  @apply text-xs text-zinc-400 font-medium;
+}
+
+.pagination-controls {
+  @apply flex items-center gap-1;
+}
+
+.page-btn {
+  @apply inline-flex items-center justify-center
+         min-w-[30px] h-[30px] px-1 rounded-lg text-xs font-medium
+         bg-white text-zinc-600 ring-1 ring-zinc-200
+         hover:ring-zinc-400 hover:text-zinc-900
+         transition-all duration-150 cursor-pointer;
+}
+
+.page-btn.active {
+  @apply bg-zinc-800 text-white ring-zinc-800
+         hover:bg-zinc-700 hover:ring-zinc-700 hover:text-white;
+}
+
+.page-btn:disabled {
+  @apply opacity-40 cursor-not-allowed pointer-events-none;
+}
+
+.nav-btn {
+  @apply px-2;
+}
+
+.page-ellipsis {
+  @apply text-xs text-zinc-400 px-1 select-none;
 }
