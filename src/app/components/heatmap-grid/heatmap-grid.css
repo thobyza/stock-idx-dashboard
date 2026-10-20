@@ -22,20 +22,42 @@
   to   { opacity: 1; transform: scale(1)    translateY(0);   }
 }
 
+/* ── Tabs Menu ─────────────────────────────────────── */
+.tabs-wrapper {
+  @apply flex rounded-full border border-zinc-200 w-max px-2.5 py-1;
+}
+
+.tabs-wrapper > span {
+  @apply text-xs leading-normal;
+}
+
 /* ── Shared stat helpers ─────────────────────────────────────── */
 .section-label {
-  @apply text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2;
+  @apply text-[10px] font-bold text-zinc-400 uppercase mb-2;
 }
 
 .stat-card {
   @apply flex flex-col gap-0.5 bg-zinc-50 border border-zinc-100
-         rounded-xl px-3 py-2.5;
+         rounded-lg px-3 py-2.5;
 }
 
 .stat-label {
-  @apply text-[10px] text-zinc-400 font-medium uppercase tracking-wide;
+  @apply text-[10px] text-zinc-400 font-medium  ;
 }
 
 .stat-value {
   @apply text-sm font-semibold text-zinc-800 mt-0.5;
 }
+
+.section-label-2 {
+  @apply text-[10px] font-bold text-zinc-400 uppercase mb-2;
+}
+
+.stat-label-2 {
+  @apply text-[10px] text-zinc-400 font-medium  ;
+}
+
+.stat-value-2 {
+  @apply text-sm font-semibold text-zinc-800 mt-0.5;
+}
+
