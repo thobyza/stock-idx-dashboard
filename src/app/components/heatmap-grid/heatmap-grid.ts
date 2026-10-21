@@ -16,10 +16,16 @@ export class HeatmapGrid {
 
   // ── Popup state ───────────────────────────────────────────────
   popupStock = signal<Stock | null>(null);
+  activeTab = signal<'performance' | 'fundamentals' | 'indices'>('performance');
 
   openPopup(stock: Stock, event: MouseEvent): void {
     event.stopPropagation();
+    this.activeTab.set('performance'); // always reset to first tab
     this.popupStock.set(stock);
+  }
+
+  setTab(tab: 'performance' | 'fundamentals' | 'indices'): void {
+    this.activeTab.set(tab);
   }
 
   closePopup(): void {
@@ -41,8 +47,8 @@ export class HeatmapGrid {
   turnover(stock: Stock): string {
     const val = stock.price * stock.volume;
     if (val >= 1e12) return `Rp ${(val / 1e12).toFixed(2)} T`;
-    if (val >= 1e9)  return `Rp ${(val / 1e9).toFixed(2)} B`;
-    if (val >= 1e6)  return `Rp ${(val / 1e6).toFixed(2)} M`;
+    if (val >= 1e9) return `Rp ${(val / 1e9).toFixed(2)} B`;
+    if (val >= 1e6) return `Rp ${(val / 1e6).toFixed(2)} M`;
     return `Rp ${val.toLocaleString()}`;
   }
 

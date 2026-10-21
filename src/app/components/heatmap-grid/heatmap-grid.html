@@ -45,12 +45,12 @@
           </div>
           <!-- Close button -->
           <button
-            class="popup-close-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-full
-                   bg-black/10 hover:bg-black/20 transition-colors cursor-pointer hidden"
+            class="popup-close-btn shrink-0flex items-center justify-center
+                  transition-colors cursor-pointer"
             (click)="closePopup()"
             aria-label="Close"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" stroke-width="2.5"
               stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -66,7 +66,7 @@
       </div>
 
       <!-- Body -->
-      <div class="popup-body px-5 py-4 flex flex-col gap-4 overflow-y-auto max-h-[70vh]">
+      <div class="popup-body px-5 py-4 flex flex-col gap-3 overflow-y-auto max-h-[70vh]">
 
         
         <!-- Price row -->
@@ -82,148 +82,144 @@
         </div>
         
         <!-- Tabs -->
-        <div class="flex gap-2">
-          <div class="tabs-wrapper"> 
+        <div class="flex gap-1.5 mb-1">
+          <div
+            class="tabs-wrapper"
+            [class.active]="activeTab() === 'performance'"
+            (click)="setTab('performance')"
+          > 
             <span>Performance</span>
           </div>
-          <div class="tabs-wrapper">
+          <div
+            class="tabs-wrapper"
+            [class.active]="activeTab() === 'fundamentals'"
+            (click)="setTab('fundamentals')"
+          >
             <span>Fundamentals</span>
           </div>
+          <div
+            class="tabs-wrapper"
+            [class.active]="activeTab() === 'indices'"
+            (click)="setTab('indices')"
+          >
+            <span>Indices</span>
+          </div>
         </div>
 
-        <!-- Performance row -->
-          <!-- <div>
-            <p class="section-label">Performance</p>
-            <div class="grid grid-cols-2 gap-2">
+        <!-- Performance -->
+        @if (activeTab() === 'performance') {
+          <div class="sub-container">    
+
+            <div>
+              <p class="section-label-2">Change</p>
+              <div class="grid grid-cols-4 gap-2">
+                  <div class="stat-box">
+                      <span class="stat-label-2">1D</span>
+                      <span class="stat-value-2">{{ popupStock()!.change >= 0 ? '+' : '' }}{{ popupStock()!.change | number:'1.2-2' }}%</span>
+                  </div>
+                  <div class="stat-box">
+                    <span class="stat-label-2">1W</span>
+                    <span class="stat-value-2">{{ (popupStock()!.change1w || 0) >= 0 ? '+' : '' }}{{ (popupStock()!.change1w || 0) | number:'1.2-2' }}%</span>
+                  </div>
+                  <div class="stat-box">
+                    <span class="stat-label-2">YTD</span>
+                    <span class="stat-value-2"></span>
+                  </div>
+                  <div class="stat-box">
+                    <span class="stat-label-2">5Y</span>
+                    <span class="stat-value-2"></span>
+                  </div>
+              </div>
+            </div>
+
+            <div class="border-t border-zinc-100"></div>
+
+            <div class="">
+              <p class="section-label-2">Market Data</p>
+              <div class="grid grid-cols-3 gap-2">
+                <div class="stat-box">
+                  <span class="stat-label-2">Volume</span>
+                  <span class="stat-value-2">{{ popupStock()!.volume | number }}</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-label-2">Turnover (Price × Vol)</span>
+                  <span class="stat-value-2">{{ turnover(popupStock()!) }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="border-t border-zinc-100"></div>
+
+            <div>
+              <p class="section-label">52-Week Range</p>
               <div class="stat-card">
-                <span class="stat-label">Change (1D)</span>
-                <span class="stat-value font-bold"
-                  [class.text-emerald-600]="popupStock()!.change >= 0"
-                  [class.text-rose-600]="popupStock()!.change < 0">
-                  {{ popupStock()!.change >= 0 ? '+' : '' }}{{ popupStock()!.change | number:'1.2-2' }}%
-                </span>
+                <div class="flex justify-between text-[11px] font-medium mb-2">
+                  <span class="text-rose-600">{{ (popupStock()!.fiftyTwoWeekLow || popupStock()!.price) | number }}</span>
+                  <span class="text-zinc-500 text-[10px]">Low → High</span>
+                  <span class="text-emerald-600">{{ (popupStock()!.fiftyTwoWeekHigh || popupStock()!.price) | number }}</span>
+                </div>
+                <div class="w-full h-2 bg-zinc-100 rounded-full overflow-visible relative">
+                  <div class="h-full bg-zinc-400 rounded-l-full transition-all duration-300 relative overflow-visible"
+                    [style.width.%]="get52WeekPosition(popupStock()!.price, popupStock()!.fiftyTwoWeekLow, popupStock()!.fiftyTwoWeekHigh)">
+                    <div class="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-zinc-400 rounded-full"></div>
+                  </div>
+                </div>
+                <p class="text-[10px] text-zinc-400 mt-1.5 text-center">
+                  Current: Rp {{ popupStock()!.price | number }}
+                  ({{ get52WeekPosition(popupStock()!.price, popupStock()!.fiftyTwoWeekLow, popupStock()!.fiftyTwoWeekHigh) }}% of
+                  range)
+                </p>
               </div>
-              <div class="stat-card">
-                <span class="stat-label">Change (1W)</span>
-                <span class="stat-value font-bold"
-                  [class.text-emerald-600]="(popupStock()!.change1w || 0) >= 0"
-                  [class.text-rose-600]="(popupStock()!.change1w || 0) < 0">
-                  {{ (popupStock()!.change1w || 0) >= 0 ? '+' : '' }}{{ (popupStock()!.change1w || 0) | number:'1.2-2' }}%
-                </span>
-              </div>
             </div>
-          </div> -->
-        <div>    
-          <p class="section-label-2">Performance</p>
-          <div class="grid grid-cols-3 gap-2">
-            <div class="flex flex-col gap-2">
-              <span class="stat-label-2">1D</span>
-              <span class="stat-value-2">{{ popupStock()!.change >= 0 ? '+' : '' }}{{ popupStock()!.change | number:'1.2-2' }}%</span>
-            </div>
-            <div class="flex flex-col gap-2">
-              <span class="stat-label-2">1W</span>
-              <span class="stat-value-2">{{ (popupStock()!.change1w || 0) >= 0 ? '+' : '' }}{{ (popupStock()!.change1w || 0) | number:'1.2-2' }}%</span>
-            </div>
-            <div class="flex flex-col gap-2">
-              <span class="stat-label-2">5Y</span>
-              <span class="stat-value-2">-</span>
-            </div>
-          </div>
-        </div>
 
-        <!-- 52-Week Range -->
-        <div>
-          <p class="section-label">52-Week Range</p>
-          <div class="stat-card">
-            <div class="flex justify-between text-[11px] font-medium mb-2">
-              <span class="text-rose-600">{{ (popupStock()!.fiftyTwoWeekLow || popupStock()!.price) | number }}</span>
-              <span class="text-zinc-500 text-[10px]">Low → High</span>
-              <span class="text-emerald-600">{{ (popupStock()!.fiftyTwoWeekHigh || popupStock()!.price) | number }}</span>
-            </div>
-            <div class="w-full h-2 bg-zinc-100 rounded-full overflow-visible relative">
-              <div
-                class="h-full bg-zinc-400 rounded-l-full transition-all duration-300 relative overflow-visible"
-                [style.width.%]="get52WeekPosition(popupStock()!.price, popupStock()!.fiftyTwoWeekLow, popupStock()!.fiftyTwoWeekHigh)"
-              >
-                <div class="absolute right-0 top-1/2 -translate-y-1/2 h-3.5 w-1 bg-zinc-600 rounded-full"></div>
-              </div>
-            </div>
-            <p class="text-[10px] text-zinc-400 mt-1.5 text-center">
-              Current: Rp {{ popupStock()!.price | number }}
-              ({{ get52WeekPosition(popupStock()!.price, popupStock()!.fiftyTwoWeekLow, popupStock()!.fiftyTwoWeekHigh) }}% of range)
-            </p>
           </div>
-        </div>
-
-        <!-- Market Data -->
-        <!-- <div>
-          <p class="section-label">Market Data</p>
-          <div class="grid grid-cols-3 gap-2">
-            <div class="stat-card">
-              <span class="stat-label">Volume</span>
-              <span class="stat-value">{{ popupStock()!.volume | number }}</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-label">Turnover (Price × Vol)</span>
-              <span class="stat-value">{{ turnover(popupStock()!) }}</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-label">Market Cap</span>
-              <span class="stat-value text-base">{{ marketCapFormatted(popupStock()!) }}</span>
-            </div>
-          </div>
-        </div> -->
-        <div class="">
-          <p class="section-label-2">Market Data</p>
-          <div class="grid grid-cols-3 gap-2">
-            <div class="flex flex-col gap-2">
-              <span class="stat-label-2">Volume</span>
-              <span class="stat-value-2">{{ popupStock()!.volume | number }}</span>
-            </div>
-            <div class="flex flex-col gap-2">
-              <span class="stat-label-2">Turnover (Price × Vol)</span>
-              <span class="stat-value-2">{{ turnover(popupStock()!) }}</span>
-            </div>
-            <div class="flex flex-col gap-2">
-              <span class="stat-label-2">Market Cap</span>
-              <span class="stat-value-2">{{ marketCapFormatted(popupStock()!) }}</span>
-            </div>
-          </div>
-        </div>
+        }
 
         <!-- Fundamentals -->
-        <div>
-          <p class="section-label">Fundamentals</p>
-          <div class="grid grid-cols-3 gap-2">
-            <div class="stat-card">
-              <span class="stat-label">P/E Ratio</span>
-              <span class="stat-value text-zinc-400 italic">N/A</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-label">EPS</span>
-              <span class="stat-value text-zinc-400 italic">N/A</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-label">Beta</span>
-              <span class="stat-value text-zinc-400 italic">N/A</span>
+        @if (activeTab() === 'fundamentals') {
+          <div class="sub-container">
+            <div>
+              <p class="section-label">Fundamentals</p>
+              <div class="grid grid-cols-4 gap-2">
+                <div class="stat-box">
+                  <span class="stat-label-2">Market Cap</span>
+                  <span class="stat-value-2">{{ marketCapFormatted(popupStock()!) }}</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-label-2">P/E Ratio</span>
+                  <span class="stat-value-2">N/A</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-label-2">EPS</span>
+                  <span class="stat-value-2">N/A</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-label-2">PBV</span>
+                  <span class="stat-value-2">N/A</span>
+                </div>
+              </div>
             </div>
           </div>
-          <p class="text-[10px] text-zinc-300 mt-1.5 text-center italic">
-            Fundamental data will display once provided by the API
-          </p>
-        </div>
+        }
 
         <!-- Indices -->
-        @if (popupStock()!.indices?.length) {
-          <div>
-            <p class="section-label">Member of Indices</p>
-            <div class="flex flex-wrap gap-1.5">
-              @for (idx of popupStock()!.indices; track idx) {
-                <span class="text-[10px] font-bold uppercase tracking-wider
-                             bg-zinc-100 text-zinc-600 border border-zinc-200
-                             px-2 py-0.5 rounded-full">{{ idx }}</span>
-              }
-            </div>
+        @if (activeTab() === 'indices') {
+          <div class="sub-container">
+            @if (popupStock()!.indices.length) {
+              <div>
+                <p class="section-label">Member of Indices</p>
+                <div class="flex flex-wrap gap-2">
+                  @for (idx of popupStock()!.indices; track idx) {
+                    <span class="text-xs font-semibold uppercase tracking-wider text-zinc-600 ">
+                      {{ idx }}
+                    </span>
+                    <div class="border-r border-zinc-300/70"></div>
+                  }
+                </div>
+              </div>
+            } @else {
+              <p class="text-xs text-zinc-400 italic">No indices found for this stock.</p>
+            }
           </div>
         }
 
