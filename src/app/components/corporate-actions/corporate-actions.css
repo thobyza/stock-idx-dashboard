@@ -1,0 +1,104 @@
+@import 'tailwindcss';
+
+/* ── Container ───────────────────────────────────────────────── */
+.calendar-container {
+  @apply w-full h-full flex flex-col gap-5 p-4 bg-white rounded-lg shadow-md;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.calendar-header {
+  @apply flex items-start justify-between;
+}
+
+.calendar-title {
+  @apply text-xl font-bold text-zinc-800 leading-tight;
+}
+
+.calendar-subtitle {
+  @apply text-sm text-zinc-400 mt-0.5;
+}
+
+.calendar-badge {
+  @apply text-[10px] font-bold tracking-widest uppercase
+         bg-zinc-800 text-zinc-100 px-2.5 py-1 rounded-full;
+}
+
+/* ── KPI Cards ───────────────────────────────────────────────── */
+.kpi-card {
+  @apply flex flex-col gap-0.5 p-3 rounded-xl bg-zinc-50/70 border border-zinc-200/80;
+}
+
+.kpi-label {
+  @apply text-[10px] font-bold text-zinc-400 uppercase tracking-wider;
+}
+
+.kpi-value {
+  @apply text-xl font-bold font-mono leading-tight mt-0.5;
+}
+
+.kpi-sub {
+  @apply text-[10px] text-zinc-400 font-medium;
+}
+
+/* ── Action Card ─────────────────────────────────────────────── */
+.action-card {
+  @apply p-3.5 rounded-xl bg-white ring-1 ring-zinc-200/90
+         hover:ring-zinc-400 hover:shadow-md
+         transition-all duration-200;
+}
+
+.symbol-pill {
+  @apply bg-zinc-800 text-zinc-100 font-mono font-bold text-xs px-2 py-1 rounded-md tracking-wider;
+}
+
+.type-badge {
+  @apply text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full shrink-0;
+}
+
+/* ── Status Indicator ────────────────────────────────────────── */
+.status-indicator {
+  @apply flex items-center font-medium;
+}
+
+.calendar-empty {
+  @apply text-center py-20;
+}
+
+/* ── Pagination ──────────────────────────────────────────────── */
+.pagination-bar {
+  @apply flex items-center justify-between pt-3
+         border-t border-zinc-100 mt-auto;
+}
+
+.pagination-info {
+  @apply text-xs text-zinc-400 font-medium;
+}
+
+.pagination-controls {
+  @apply flex items-center gap-1;
+}
+
+.page-btn {
+  @apply inline-flex items-center justify-center
+         min-w-[30px] h-[30px] px-1 rounded-lg text-xs font-medium
+         bg-white text-zinc-600 ring-1 ring-zinc-200
+         hover:ring-zinc-400 hover:text-zinc-900
+         transition-all duration-150 cursor-pointer;
+}
+
+.page-btn.active {
+  @apply bg-zinc-800 text-white ring-zinc-800
+         hover:bg-zinc-700 hover:ring-zinc-700 hover:text-white;
+}
+
+.page-btn:disabled {
+  @apply opacity-40 cursor-not-allowed pointer-events-none;
+}
+
+.nav-btn {
+  @apply px-2;
+}
+
+.page-ellipsis {
+  @apply text-xs text-zinc-400 px-1 select-none;
+}

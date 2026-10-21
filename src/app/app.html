@@ -40,8 +40,14 @@
         (sectorSelected)="selectSector($event)"
       ></app-heatmap-board>
     }
+    @if (activePage() === 'movers') {
+      <app-market-movers class="flex-auto" [stocks]="stocks()"></app-market-movers>
+    }
     @if (activePage() === 'news') {
       <app-market-news class="flex-auto"></app-market-news>
+    }
+    @if (activePage() === 'calendar') {
+      <app-corporate-actions class="flex-auto"></app-corporate-actions>
     }
 
   </div>

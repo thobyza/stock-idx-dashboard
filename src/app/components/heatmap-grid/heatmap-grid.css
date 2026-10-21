@@ -33,7 +33,7 @@
 
 .tabs-wrapper.active {
   /* @apply bg-zinc-500 text-white border-zinc-800 font-medium; */
-  @apply bg-zinc-200 text-zinc-900 border-zinc-200 font-medium;
+  @apply bg-zinc-200/80 text-zinc-900 border-zinc-200 font-medium;
 }
 
 .tabs-wrapper:not(.active):hover {

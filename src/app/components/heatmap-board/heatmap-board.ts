@@ -1,16 +1,16 @@
-import { Component, input, output } from '@angular/core';                                                                                                                                                    
-import { DecimalPipe } from '@angular/common';                                                                                                                                                               
-import { Stock } from '../../stock.service';                                                                                                                                                                 
-import { HeatmapGrid } from '../heatmap-grid/heatmap-grid'; 
+import { Component, input, output, signal, HostListener } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { Stock } from '../../stock.service';
+import { HeatmapGrid } from '../heatmap-grid/heatmap-grid';
 
-export interface SectorPerformance {                                                                                                                                                                         
-  sector: string;       
-  sectorDesc: string;                                                                                                                                                                                     
-  avgChange: number;                                                                                                                                                                                         
-  count: number;                                                                                                                                                                                             
-  advancing: number;                                                                                                                                                                                         
-  declining: number;                                                                                                                                                                                         
-}  
+export interface SectorPerformance {
+  sector: string;
+  sectorDesc: string;
+  avgChange: number;
+  count: number;
+  advancing: number;
+  declining: number;
+}
 
 @Component({
   selector: 'app-heatmap-board',
@@ -37,6 +37,10 @@ export class HeatmapBoard {
   sectorSelected = output<string>();
   indexSelected = output<string>();
 
+  // Custom Dropdown States
+  isIndexOpen = signal<boolean>(false);
+  isSectorOpen = signal<boolean>(false);
+
   readonly indicesList: string[] = ['KOMPAS100', 'LQ45', 'IDX80', 'JII', 'JII70', 'ISSI'];
 
   private readonly SECTOR_LOGOS: Record<string, string> = {
@@ -53,8 +57,44 @@ export class HeatmapBoard {
     IDXHEALTH: 'assets/logos/sector_health.svg',
   };
 
-  // ..
   readonly maxDate = new Date().toISOString().split('T')[0];
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.dropdown-container')) {
+      this.isIndexOpen.set(false);
+      this.isSectorOpen.set(false);
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.isIndexOpen.set(false);
+    this.isSectorOpen.set(false);
+  }
+
+  toggleIndexDropdown(event?: MouseEvent) {
+    event?.stopPropagation();
+    this.isSectorOpen.set(false);
+    this.isIndexOpen.update((v) => !v);
+  }
+
+  toggleSectorDropdown(event?: MouseEvent) {
+    event?.stopPropagation();
+    this.isIndexOpen.set(false);
+    this.isSectorOpen.update((v) => !v);
+  }
+
+  selectIndex(index: string) {
+    this.indexSelected.emit(index);
+    this.isIndexOpen.set(false);
+  }
+
+  selectSector(sector: string) {
+    this.sectorSelected.emit(sector);
+    this.isSectorOpen.set(false);
+  }
 
   onSearchInput(event: Event) {
     const target = event.target as HTMLInputElement;

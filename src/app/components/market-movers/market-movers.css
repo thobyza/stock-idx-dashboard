@@ -1,0 +1,46 @@
+@import 'tailwindcss';
+
+/* ── Container ───────────────────────────────────────────────── */
+.movers-container {
+  @apply w-full h-full flex flex-col gap-4 p-4 bg-white rounded-lg shadow-md;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.movers-header {
+  @apply flex items-start justify-between;
+}
+
+.movers-title {
+  @apply text-xl font-bold text-zinc-800 leading-tight;
+}
+
+.movers-subtitle {
+  @apply text-sm text-zinc-400 mt-0.5;
+}
+
+.movers-badge {
+  @apply text-[10px] font-bold tracking-widest uppercase
+         bg-zinc-800 text-zinc-100 px-2.5 py-1 rounded-full;
+}
+
+/* ── KPI Cards ───────────────────────────────────────────────── */
+.kpi-card {
+  @apply flex flex-col gap-0.5 p-3 rounded-xl bg-zinc-50 border border-zinc-200/80;
+}
+
+.kpi-label {
+  @apply text-[10px] font-bold text-zinc-400 uppercase tracking-wider;
+}
+
+.kpi-sub {
+  @apply text-[10px] text-zinc-400 font-medium mt-0.5;
+}
+
+/* ── Table List ──────────────────────────────────────────────── */
+.table-list th {
+  @apply px-3 py-2.5 text-zinc-600 font-semibold text-[11px] uppercase tracking-wider whitespace-nowrap;
+}
+
+.table-list td {
+  @apply px-3 py-2.5 whitespace-nowrap text-xs;
+}

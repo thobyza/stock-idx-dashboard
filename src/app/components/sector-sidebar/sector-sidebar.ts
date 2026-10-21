@@ -1,19 +1,11 @@
 import { Component, input, output } from '@angular/core';
 import { IndexData } from '../../stock.service';
 import { DecimalPipe, DatePipe } from '@angular/common';
-import { LucideBookOpenText, LucideHouse } from '@lucide/angular';
-
-// export interface SectorPerf {                                                              
-//   sector: string;                                                                          
-//   avgChange: number;                                                                       
-//   count: number;                                                                           
-//   advancing: number;                                                                       
-//   declining: number;                                                                       
-// }                                                                                          
+import { LucideBookOpenText, LucideHouse, LucideCalendarDays, LucideTrendingUp } from '@lucide/angular';
 
 @Component({
   selector: 'app-sector-sidebar',
-  imports: [DecimalPipe, DatePipe, LucideHouse, LucideBookOpenText],
+  imports: [DecimalPipe, DatePipe, LucideHouse, LucideBookOpenText, LucideCalendarDays, LucideTrendingUp],
   templateUrl: './sector-sidebar.html',
   styleUrl: './sector-sidebar.css',
 })
@@ -28,8 +20,8 @@ export class SectorSidebar {
   collapsed = input<boolean>(false);
   toggleCollapse = output<void>();
 
-  activePage = input<'dashboard' | 'news'>('dashboard'); 
-  pageSelected = output<'dashboard' | 'news'>();
+  activePage = input<'dashboard' | 'news' | 'calendar' | 'movers'>('dashboard'); 
+  pageSelected = output<'dashboard' | 'news' | 'calendar' | 'movers'>();
 
   getSparklinePoints(history?: number[]): string {
     if (!history || history.length < 2) return '';
@@ -48,7 +40,7 @@ export class SectorSidebar {
       .join(' ');
   }
 
-  onSelectPage(page: 'dashboard' | 'news') {                                                                                                                                                                     
+  onSelectPage(page: 'dashboard' | 'news' | 'calendar' | 'movers') {                                                                                                                                                                     
     this.pageSelected.emit(page);                                                                                                                                                                                
   } 
 
@@ -56,4 +48,3 @@ export class SectorSidebar {
     this.toggleCollapse.emit();
   }
 }  
-
