@@ -1,4 +1,14 @@
 <main class="flex flex-col grow gap-4 bg-white p-4 rounded-lg shadow-md">
+  <!-- Header -->
+  <div class="main-header">
+    <div>
+      <h2 class="main-title">Stock Heatmap</h2>
+      <p class="main-subtitle">Live rankings of top performers, high-liquidity volume leaders, and 52-week breakout
+        candidates</p>
+    </div>
+    <span class="main-badge">IDX · Heatmap</span>
+  </div>
+
     <!-- Toolbar controls -->
     <div class="flex justify-between items-center gap-4">
       <!-- Search bar & filters -->
@@ -159,7 +169,7 @@
             <div class="tab-wrapper-theme">
               <button class="tab-item-theme" [class.active]="sortBy() === 'change'" (click)="setSortBy('change')">Change</button>
               <button class="tab-item-theme" [class.active]="sortBy() === 'symbol'" (click)="setSortBy('symbol')">Ticker</button>
-              <button class="tab-item-theme" [class.active]="sortBy() === 'price'" (click)="setSortBy('price')">Price</button>
+              <!-- <button class="tab-item-theme" [class.active]="sortBy() === 'price'" (click)="setSortBy('price')">Price</button> -->
               <button class="tab-item-theme" [class.active]="sortBy() === 'marketCap'" (click)="setSortBy('marketCap')">Mcap</button>
             </div>
           </div>

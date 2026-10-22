@@ -63,3 +63,21 @@
 .table-list td {
   @apply p-3.5 whitespace-nowrap
 }
+
+/* ── Header ──────────────────────────────────────────────────── */
+.main-header {
+  @apply flex items-start justify-between;
+}
+
+.main-title {
+  @apply text-xl font-bold text-zinc-800 leading-tight;
+}
+
+.main-subtitle {
+  @apply text-sm text-zinc-400 mt-0.5;
+}
+
+.main-badge {
+  @apply text-[10px] font-bold tracking-widest uppercase
+         bg-zinc-800 text-zinc-100 px-2.5 py-1 rounded-full;
+}

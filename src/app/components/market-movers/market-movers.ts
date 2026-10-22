@@ -1,8 +1,16 @@
-import { Component, input, signal, computed } from '@angular/core';
+import { Component, input, signal, computed, HostListener } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Stock } from '../../stock.service';
 
 export type MoverCategory = 'gainers' | 'losers' | 'turnover' | 'volume' | '52w-high' | '52w-low';
+export type MoverSortColumn = 'symbol' | 'price' | 'change' | 'change1w' | '52w-range' | 'volume' | 'turnover' | 'marketCap';
+export type SortDirection = 'asc' | 'desc';
+
+export interface MoverSectorPerformance {
+  sector: string;
+  avgChange: number;
+  count: number;
+}
 
 @Component({
   selector: 'app-market-movers',
@@ -21,6 +29,14 @@ export class MarketMovers {
   marketCapTier = signal<'ALL' | 'LARGE' | 'MID' | 'SMALL'>('ALL');
   searchQuery = signal<string>('');
 
+  // Table Sorting State
+  sortColumn = signal<MoverSortColumn>('change');
+  sortDirection = signal<SortDirection>('desc');
+
+  // Custom Dropdown States
+  isIndexOpen = signal<boolean>(false);
+  isSectorOpen = signal<boolean>(false);
+
   readonly indicesList: string[] = ['All', 'KOMPAS100', 'LQ45', 'IDX80', 'JII', 'JII70', 'ISSI'];
 
   sectorsList = computed<string[]>(() => {
@@ -30,6 +46,59 @@ export class MarketMovers {
     });
     return ['All', ...Array.from(sectors).sort()];
   });
+
+  sectorPerformances = computed<MoverSectorPerformance[]>(() => {
+    const list = this.stocks();
+    const uniqueSectors = Array.from(new Set(list.map((s) => s.sector).filter(Boolean)));
+    return uniqueSectors
+      .map((sec) => {
+        const sectorStocks = list.filter((s) => s.sector === sec);
+        const count = sectorStocks.length;
+        const avgChange =
+          count > 0
+            ? Number((sectorStocks.reduce((sum, s) => sum + s.change, 0) / count).toFixed(2))
+            : 0;
+        return { sector: sec, avgChange, count };
+      })
+      .sort((a, b) => b.avgChange - a.avgChange);
+  });
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.dropdown-container')) {
+      this.isIndexOpen.set(false);
+      this.isSectorOpen.set(false);
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.isIndexOpen.set(false);
+    this.isSectorOpen.set(false);
+  }
+
+  toggleIndexDropdown(event?: MouseEvent) {
+    event?.stopPropagation();
+    this.isSectorOpen.set(false);
+    this.isIndexOpen.update((v) => !v);
+  }
+
+  toggleSectorDropdown(event?: MouseEvent) {
+    event?.stopPropagation();
+    this.isIndexOpen.set(false);
+    this.isSectorOpen.update((v) => !v);
+  }
+
+  selectIndex(index: string) {
+    this.selectedIndex.set(index);
+    this.isIndexOpen.set(false);
+  }
+
+  selectSector(sector: string) {
+    this.selectedSector.set(sector);
+    this.isSectorOpen.set(false);
+  }
 
   // KPI Highlights derived from full stock universe
   kpiStats = computed(() => {
@@ -95,69 +164,124 @@ export class MarketMovers {
     return list;
   });
 
-  // Final ranked movers list
-  rankedStocks = computed(() => {
-    const base = [...this.filteredBaseStocks()];
-    const category = this.selectedCategory();
-    const tf = this.timeframe();
-
-    switch (category) {
-      case 'gainers':
-        return base.sort((a, b) => {
-          const valA = tf === '1D' ? a.change : (a.change1w || 0);
-          const valB = tf === '1D' ? b.change : (b.change1w || 0);
-          return valB - valA;
-        });
-
-      case 'losers':
-        return base.sort((a, b) => {
-          const valA = tf === '1D' ? a.change : (a.change1w || 0);
-          const valB = tf === '1D' ? b.change : (b.change1w || 0);
-          return valA - valB;
-        });
-
-      case 'turnover':
-        return base.sort((a, b) => (b.price * b.volume) - (a.price * a.volume));
-
+  sortColumnLabel = computed<string>(() => {
+    switch (this.sortColumn()) {
+      case 'symbol':
+        return 'Ticker';
+      case 'price':
+        return 'Price';
+      case 'change':
+        return '1D Change';
+      case 'change1w':
+        return '1W Change';
+      case '52w-range':
+        return '52W Range';
       case 'volume':
-        return base.sort((a, b) => b.volume - a.volume);
-
-      case '52w-high':
-        return base
-          .filter((s) => s.fiftyTwoWeekHigh && s.fiftyTwoWeekHigh > 0)
-          .map((s) => ({
-            stock: s,
-            diffPct: ((s.fiftyTwoWeekHigh! - s.price) / s.fiftyTwoWeekHigh!) * 100,
-          }))
-          .sort((a, b) => a.diffPct - b.diffPct)
-          .map((item) => item.stock);
-
-      case '52w-low':
-        return base
-          .filter((s) => s.fiftyTwoWeekLow && s.fiftyTwoWeekLow > 0)
-          .map((s) => ({
-            stock: s,
-            diffPct: ((s.price - s.fiftyTwoWeekLow!) / s.fiftyTwoWeekLow!) * 100,
-          }))
-          .sort((a, b) => a.diffPct - b.diffPct)
-          .map((item) => item.stock);
+        return 'Volume';
+      case 'turnover':
+        return 'Turnover';
+      case 'marketCap':
+        return 'Market Cap';
+      default:
+        return 'Rank';
     }
   });
 
+  // Final ranked movers list sorted by column
+  rankedStocks = computed(() => {
+    const base = [...this.filteredBaseStocks()];
+    const col = this.sortColumn();
+    const dir = this.sortDirection();
+    const multiplier = dir === 'asc' ? 1 : -1;
+
+    return base.sort((a, b) => {
+      let comparison = 0;
+      switch (col) {
+        case 'symbol':
+          comparison = a.symbol.localeCompare(b.symbol);
+          break;
+        case 'price':
+          comparison = a.price - b.price;
+          break;
+        case 'change':
+          comparison = a.change - b.change;
+          break;
+        case 'change1w':
+          comparison = (a.change1w ?? 0) - (b.change1w ?? 0);
+          break;
+        case '52w-range': {
+          const posA = this.get52WeekPosition(a.price, a.fiftyTwoWeekLow, a.fiftyTwoWeekHigh);
+          const posB = this.get52WeekPosition(b.price, b.fiftyTwoWeekLow, b.fiftyTwoWeekHigh);
+          comparison = posA - posB;
+          break;
+        }
+        case 'volume':
+          comparison = a.volume - b.volume;
+          break;
+        case 'turnover':
+          comparison = (a.price * a.volume) - (b.price * b.volume);
+          break;
+        case 'marketCap':
+          comparison = a.marketCap - b.marketCap;
+          break;
+      }
+      return comparison * multiplier;
+    });
+  });
+
+  onSort(column: MoverSortColumn) {
+    if (this.sortColumn() === column) {
+      this.sortDirection.update((dir) => (dir === 'asc' ? 'desc' : 'asc'));
+    } else {
+      this.sortColumn.set(column);
+      // Ticker defaults to alphabetical A-Z (asc), numeric metrics default to highest first (desc)
+      this.sortDirection.set(column === 'symbol' ? 'asc' : 'desc');
+    }
+  }
+
   setCategory(category: MoverCategory) {
     this.selectedCategory.set(category);
+    switch (category) {
+      case 'gainers':
+        this.sortColumn.set(this.timeframe() === '1D' ? 'change' : 'change1w');
+        this.sortDirection.set('desc');
+        break;
+      case 'losers':
+        this.sortColumn.set(this.timeframe() === '1D' ? 'change' : 'change1w');
+        this.sortDirection.set('asc');
+        break;
+      case 'turnover':
+        this.sortColumn.set('turnover');
+        this.sortDirection.set('desc');
+        break;
+      case 'volume':
+        this.sortColumn.set('volume');
+        this.sortDirection.set('desc');
+        break;
+      case '52w-high':
+        this.sortColumn.set('52w-range');
+        this.sortDirection.set('desc');
+        break;
+      case '52w-low':
+        this.sortColumn.set('52w-range');
+        this.sortDirection.set('asc');
+        break;
+    }
   }
 
   setTimeframe(tf: '1D' | '1W') {
     this.timeframe.set(tf);
+    if (this.sortColumn() === 'change' || this.sortColumn() === 'change1w') {
+      this.sortColumn.set(tf === '1D' ? 'change' : 'change1w');
+    }
   }
 
   setIndex(idx: string) {
-    this.selectedIndex.set(idx);
+    this.selectIndex(idx);
   }
 
   setSector(sector: string) {
-    this.selectedSector.set(sector);
+    this.selectSector(sector);
   }
 
   setCapTier(tier: 'ALL' | 'LARGE' | 'MID' | 'SMALL') {

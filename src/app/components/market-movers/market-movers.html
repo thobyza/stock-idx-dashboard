@@ -1,60 +1,75 @@
 <div class="movers-container">
 
   <!-- Header -->
-  <div class="movers-header">
+  <div class="main-header">
     <div>
-      <h2 class="movers-title">Market Movers & Screener</h2>
-      <p class="movers-subtitle">Live rankings of top performers, high-liquidity volume leaders, and 52-week breakout candidates</p>
+      <h2 class="main-title">Stock Screener</h2>
+      <p class="main-subtitle">Live rankings of top performers, high-liquidity volume leaders, and 52-week breakout candidates</p>
     </div>
-    <span class="movers-badge">IDX · Screener</span>
+    <span class="main-badge">IDX · Screener</span>
   </div>
 
   <!-- KPI Highlights -->
   @if (kpiStats(); as kpi) {
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-      <!-- Top Gainer -->
-      <div class="kpi-card border-l-4 border-l-emerald-500">
+      
+      <div
+        class="kpi-card border-l-4 border-l-emerald-500 cursor-pointer hover:bg-zinc-50 transition-colors"
+        (click)="setCategory('gainers')"
+        title="Sort by Top Gainers"
+      >
         <span class="kpi-label">Top Gainer Today</span>
         <div class="flex items-baseline gap-2 mt-0.5">
-          <span class="text-base font-bold font-mono text-zinc-900">{{ kpi.topGainer.symbol }}</span>
-          <span class="text-xs font-bold text-emerald-600 font-mono">+{{ kpi.topGainer.change | number:'1.2-2' }}%</span>
+          <span class="text-base font-bold text-zinc-900">{{ kpi.topGainer.symbol }}</span>
+          <span class="text-xs font-bold text-emerald-600">+{{ kpi.topGainer.change | number:'1.2-2' }}%</span>
         </div>
         <span class="kpi-sub truncate">{{ kpi.topGainer.name }}</span>
       </div>
 
-      <!-- Top Loser -->
-      <div class="kpi-card border-l-4 border-l-rose-500">
+      <div
+        class="kpi-card border-l-4 border-l-rose-500 cursor-pointer hover:bg-zinc-50 transition-colors"
+        (click)="setCategory('losers')"
+        title="Sort by Top Losers"
+      >
         <span class="kpi-label">Top Loser Today</span>
         <div class="flex items-baseline gap-2 mt-0.5">
-          <span class="text-base font-bold font-mono text-zinc-900">{{ kpi.topLoser.symbol }}</span>
-          <span class="text-xs font-bold text-rose-600 font-mono">{{ kpi.topLoser.change | number:'1.2-2' }}%</span>
+          <span class="text-base font-bold text-zinc-900">{{ kpi.topLoser.symbol }}</span>
+          <span class="text-xs font-bold text-rose-600">{{ kpi.topLoser.change | number:'1.2-2' }}%</span>
         </div>
         <span class="kpi-sub truncate">{{ kpi.topLoser.name }}</span>
       </div>
 
-      <!-- Most Traded -->
-      <div class="kpi-card border-l-4 border-l-blue-500">
+      <div
+        class="kpi-card border-l-4 border-l-blue-500 cursor-pointer hover:bg-zinc-50 transition-colors"
+        (click)="setCategory('turnover')"
+        title="Sort by Highest Turnover"
+      >
         <span class="kpi-label">Highest Turnover</span>
         <div class="flex items-baseline gap-2 mt-0.5">
-          <span class="text-base font-bold font-mono text-zinc-900">{{ kpi.topTurnover.symbol }}</span>
-          <span class="text-xs font-semibold text-zinc-600 font-mono">{{ formatTurnover(kpi.topTurnover) }}</span>
+          <span class="text-base font-bold text-zinc-900">{{ kpi.topTurnover.symbol }}</span>
+          <span class="text-xs font-semibold text-zinc-600">{{ formatTurnover(kpi.topTurnover) }}</span>
         </div>
         <span class="kpi-sub truncate">{{ kpi.topTurnover.name }}</span>
       </div>
 
-      <!-- Near 52W High -->
-      <div class="kpi-card border-l-4 border-l-purple-500">
+      <div
+        class="kpi-card border-l-4 border-l-purple-500 cursor-pointer hover:bg-zinc-50 transition-colors"
+        (click)="setCategory('52w-high')"
+        title="Sort by 52-Week Range"
+      >
         <span class="kpi-label">Near 52W Highs</span>
         <div class="flex items-baseline gap-2 mt-0.5">
-          <span class="text-base font-bold font-mono text-purple-700">{{ kpi.near52wHighCount }} stocks</span>
+          <span class="text-base font-bold text-purple-700">{{ kpi.near52wHighCount }} stocks</span>
         </div>
         <span class="kpi-sub">Within 4% of 52W peak</span>
       </div>
     </div>
   }
 
+  <div class="border-t border-zinc-200/70 h-[1px]"></div>
+
   <!-- Main Category Tabs -->
-  <div class="flex items-center justify-between gap-3 flex-wrap border-b border-zinc-200 pb-2">
+  <!-- <div class="flex items-center justify-between gap-3 flex-wrap border-b border-zinc-200 pb-2">
     <div class="tab-wrapper-theme flex-wrap">
       <button
         class="tab-item-theme"
@@ -100,7 +115,6 @@
       </button>
     </div>
 
-    <!-- Timeframe switch for gainers / losers -->
     @if (selectedCategory() === 'gainers' || selectedCategory() === 'losers') {
       <div class="flex items-center gap-1.5 text-xs bg-zinc-100 p-0.5 rounded-lg border border-zinc-200">
         <button
@@ -125,37 +139,123 @@
         </button>
       </div>
     }
-  </div>
+  </div> -->
 
   <!-- Secondary Screener Filters -->
-  <div class="flex items-center justify-between gap-3 flex-wrap text-xs">
+  <div class="flex items-center justify-between gap-2 flex-wrap text-xs">
     <div class="flex items-center gap-2 flex-wrap">
-      <!-- Index Filter -->
-      <div class="flex items-center gap-1.5">
-        <span class="text-zinc-500 font-medium">Index:</span>
-        <select
-          class="bg-zinc-50 border border-zinc-300 rounded px-2 py-1 text-xs font-medium text-zinc-700 cursor-pointer focus:outline-none"
-          [value]="selectedIndex()"
-          (change)="setIndex($any($event.target).value)"
+      <!-- Index Custom Dropdown -->
+      <div class="dropdown-container w-36 text-xs">
+        <button
+          type="button"
+          class="custom-dropdown-btn"
+          (click)="toggleIndexDropdown($event)"
+          [attr.aria-expanded]="isIndexOpen()"
         >
-          @for (idx of indicesList; track idx) {
-            <option [value]="idx">{{ idx }}</option>
-          }
-        </select>
+          <span>{{ selectedIndex() === 'All' ? 'All Indices' : selectedIndex() }}</span>
+          <svg
+            class="w-3.5 h-3.5 text-zinc-400 transition-transform duration-200"
+            [class.rotate-180]="isIndexOpen()"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+
+        @if (isIndexOpen()) {
+          <div class="custom-dropdown-menu">
+            @for (idx of indicesList; track idx) {
+              <button
+                type="button"
+                class="custom-dropdown-item"
+                [class.active]="idx === selectedIndex()"
+                (click)="selectIndex(idx)"
+              >
+                <span>{{ idx === 'All' ? 'All Indices' : idx }}</span>
+                @if (idx === selectedIndex()) {
+                  <span class="text-zinc-800 text-[11px] font-bold">✓</span>
+                }
+              </button>
+            }
+          </div>
+        }
       </div>
 
-      <!-- Sector Filter -->
-      <div class="flex items-center gap-1.5">
-        <span class="text-zinc-500 font-medium">Sector:</span>
-        <select
-          class="bg-zinc-50 border border-zinc-300 rounded px-2 py-1 text-xs font-medium text-zinc-700 cursor-pointer focus:outline-none max-w-[150px]"
-          [value]="selectedSector()"
-          (change)="setSector($any($event.target).value)"
+      <!-- Sector Custom Dropdown -->
+      <div class="dropdown-container w-44 text-xs">
+        <button
+          type="button"
+          class="custom-dropdown-btn"
+          (click)="toggleSectorDropdown($event)"
+          [attr.aria-expanded]="isSectorOpen()"
         >
-          @for (sec of sectorsList(); track sec) {
-            <option [value]="sec">{{ sec }}</option>
-          }
-        </select>
+          <span class="truncate">
+            {{ selectedSector() === 'All' ? 'All Sectors' : selectedSector() }}
+          </span>
+          <svg
+            class="w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform duration-200 ml-1.5"
+            [class.rotate-180]="isSectorOpen()"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+
+        @if (isSectorOpen()) {
+          <div class="custom-dropdown-menu min-w-[210px]">
+            <!-- All Sectors option -->
+            <button
+              type="button"
+              class="custom-dropdown-item"
+              [class.active]="selectedSector() === 'All'"
+              (click)="selectSector('All')"
+            >
+              <span>All Sectors</span>
+              @if (selectedSector() === 'All') {
+                <span class="text-zinc-800 text-[11px] font-bold">✓</span>
+              }
+            </button>
+
+            <div class="border-t border-zinc-100 my-0.5"></div>
+
+            @for (sec of sectorPerformances(); track sec.sector) {
+              <button
+                type="button"
+                class="custom-dropdown-item"
+                [class.active]="sec.sector === selectedSector()"
+                (click)="selectSector(sec.sector)"
+              >
+                <span class="font-medium truncate">{{ sec.sector }}</span>
+                <div class="flex items-center gap-1.5 shrink-0 ml-auto">
+                  <span
+                    class="text-[10px] font-semibold px-1.5 py-0.5 rounded"
+                    [class.text-emerald-600]="sec.avgChange >= 0"
+                    [class.bg-emerald-50]="sec.avgChange >= 0"
+                    [class.text-rose-600]="sec.avgChange < 0"
+                    [class.bg-rose-50]="sec.avgChange < 0"
+                  >
+                    {{ sec.avgChange >= 0 ? '+' : '' }}{{ sec.avgChange }}%
+                  </span>
+                  @if (sec.sector === selectedSector()) {
+                    <span class="text-zinc-800 text-[11px] font-bold">✓</span>
+                  }
+                </div>
+              </button>
+            }
+          </div>
+        }
       </div>
 
       <!-- Market Cap Tier Filter -->
@@ -213,32 +313,260 @@
   <!-- Results Count Bar -->
   <div class="flex items-center justify-between text-xs text-zinc-400">
     <span>Showing <strong>{{ rankedStocks().length }}</strong> stocks</span>
-    <span class="text-[11px] italic">Ranked dynamically by {{ selectedCategory() }}</span>
+    <span class="text-[11px] italic">Sorted by <strong class="text-zinc-600">{{ sortColumnLabel() }}</strong> ({{ sortDirection() === 'asc' ? 'Ascending' : 'Descending' }})</span>
   </div>
 
   <!-- Ranked Table -->
   <div class="table-list overflow-x-auto border border-zinc-200 rounded-lg grow max-h-[65vh]">
     <table class="w-full text-left text-xs border-collapse">
       <thead class="sticky top-0 z-20">
-        <tr class="border-b border-zinc-200 text-zinc-500 font-semibold bg-zinc-100">
-          <th class="w-12 text-center">Rank</th>
-          <th>Ticker</th>
+        <tr class="border-b border-zinc-200 text-zinc-500 font-semibold bg-zinc-100 select-none">
+          <!-- <th class="w-12 text-center">Rank</th> -->
+          
+          <!-- Ticker (Sortable) -->
+          <th
+            class="cursor-pointer hover:text-zinc-800 transition-colors"
+            (click)="onSort('symbol')"
+          >
+            <div
+              class="inline-flex items-center gap-1.5"
+              [class.font-bold]="sortColumn() === 'symbol'"
+              [class.text-zinc-900]="sortColumn() === 'symbol'"
+            >
+              <span>Ticker</span>
+              @if (sortColumn() === 'symbol') {
+                <svg
+                  class="w-3.5 h-3.5 text-zinc-700 shrink-0 transition-transform duration-200"
+                  [class.rotate-180]="sortDirection() === 'asc'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              }
+            </div>
+          </th>
+
+          <!-- Company Name (Non-sortable) -->
           <th>Company Name</th>
+
+          <!-- Sector (Non-sortable) -->
           <th>Sector</th>
-          <th class="text-right">Price (IDR)</th>
-          <th class="text-right">1D Change</th>
-          <th class="text-right">1W Change</th>
-          <th class="text-center w-32">52W Range</th>
-          <th class="text-right">Volume</th>
-          <th class="text-right">Turnover</th>
-          <th class="text-right">Market Cap</th>
+
+          <!-- Price (Sortable) -->
+          <th
+            class="text-right cursor-pointer hover:text-zinc-800 transition-colors"
+            (click)="onSort('price')"
+          >
+            <div
+              class="inline-flex items-center justify-end gap-1.5 w-full"
+              [class.font-bold]="sortColumn() === 'price'"
+              [class.text-zinc-900]="sortColumn() === 'price'"
+            >
+              <span>Price (IDR)</span>
+              @if (sortColumn() === 'price') {
+                <svg
+                  class="w-3.5 h-3.5 text-zinc-700 shrink-0 transition-transform duration-200"
+                  [class.rotate-180]="sortDirection() === 'asc'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              }
+            </div>
+          </th>
+
+          <!-- 1D Change (Sortable) -->
+          <th
+            class="text-right cursor-pointer hover:text-zinc-800 transition-colors"
+            (click)="onSort('change')"
+          >
+            <div
+              class="inline-flex items-center justify-end gap-1.5 w-full"
+              [class.font-bold]="sortColumn() === 'change'"
+              [class.text-zinc-900]="sortColumn() === 'change'"
+            >
+              <span>1D Change</span>
+              @if (sortColumn() === 'change') {
+                <svg
+                  class="w-3.5 h-3.5 text-zinc-700 shrink-0 transition-transform duration-200"
+                  [class.rotate-180]="sortDirection() === 'asc'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              }
+            </div>
+          </th>
+
+          <!-- 1W Change (Sortable) -->
+          <th
+            class="text-right cursor-pointer hover:text-zinc-800 transition-colors"
+            (click)="onSort('change1w')"
+          >
+            <div
+              class="inline-flex items-center justify-end gap-1.5 w-full"
+              [class.font-bold]="sortColumn() === 'change1w'"
+              [class.text-zinc-900]="sortColumn() === 'change1w'"
+            >
+              <span>1W Change</span>
+              @if (sortColumn() === 'change1w') {
+                <svg
+                  class="w-3.5 h-3.5 text-zinc-700 shrink-0 transition-transform duration-200"
+                  [class.rotate-180]="sortDirection() === 'asc'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              }
+            </div>
+          </th>
+
+          <!-- 52W Range (Sortable) -->
+          <th
+            class="text-center w-32 cursor-pointer hover:text-zinc-800 transition-colors"
+            (click)="onSort('52w-range')"
+          >
+            <div
+              class="inline-flex items-center justify-center gap-1.5 w-full"
+              [class.font-bold]="sortColumn() === '52w-range'"
+              [class.text-zinc-900]="sortColumn() === '52w-range'"
+            >
+              <span>52W Range</span>
+              @if (sortColumn() === '52w-range') {
+                <svg
+                  class="w-3.5 h-3.5 text-zinc-700 shrink-0 transition-transform duration-200"
+                  [class.rotate-180]="sortDirection() === 'asc'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              }
+            </div>
+          </th>
+
+          <!-- Volume (Sortable) -->
+          <th
+            class="text-right cursor-pointer hover:text-zinc-800 transition-colors"
+            (click)="onSort('volume')"
+          >
+            <div
+              class="inline-flex items-center justify-end gap-1.5 w-full"
+              [class.font-bold]="sortColumn() === 'volume'"
+              [class.text-zinc-900]="sortColumn() === 'volume'"
+            >
+              <span>Volume</span>
+              @if (sortColumn() === 'volume') {
+                <svg
+                  class="w-3.5 h-3.5 text-zinc-700 shrink-0 transition-transform duration-200"
+                  [class.rotate-180]="sortDirection() === 'asc'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              }
+            </div>
+          </th>
+
+          <!-- Turnover (Sortable) -->
+          <th
+            class="text-right cursor-pointer hover:text-zinc-800 transition-colors"
+            (click)="onSort('turnover')"
+          >
+            <div
+              class="inline-flex items-center justify-end gap-1.5 w-full"
+              [class.font-bold]="sortColumn() === 'turnover'"
+              [class.text-zinc-900]="sortColumn() === 'turnover'"
+            >
+              <span>Turnover</span>
+              @if (sortColumn() === 'turnover') {
+                <svg
+                  class="w-3.5 h-3.5 text-zinc-700 shrink-0 transition-transform duration-200"
+                  [class.rotate-180]="sortDirection() === 'asc'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              }
+            </div>
+          </th>
+
+          <!-- Market Cap (Sortable) -->
+          <th
+            class="text-right cursor-pointer hover:text-zinc-800 transition-colors"
+            (click)="onSort('marketCap')"
+          >
+            <div
+              class="inline-flex items-center justify-end gap-1.5 w-full"
+              [class.font-bold]="sortColumn() === 'marketCap'"
+              [class.text-zinc-900]="sortColumn() === 'marketCap'"
+            >
+              <span>Market Cap</span>
+              @if (sortColumn() === 'marketCap') {
+                <svg
+                  class="w-3.5 h-3.5 text-zinc-700 shrink-0 transition-transform duration-200"
+                  [class.rotate-180]="sortDirection() === 'asc'"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              }
+            </div>
+          </th>
         </tr>
       </thead>
       <tbody>
         @for (stock of rankedStocks(); track stock.symbol; let idx = $index) {
           <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition-all text-zinc-800">
             <!-- Rank badge -->
-            <td class="text-center font-mono">
+            <!-- <td class="text-center font-mono">
               @if (idx === 0) {
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-100 text-amber-800 font-bold text-[11px]">1</span>
               } @else if (idx === 1) {
@@ -248,7 +576,7 @@
               } @else {
                 <span class="text-zinc-400 text-xs">#{{ idx + 1 }}</span>
               }
-            </td>
+            </td> -->
 
             <!-- Symbol -->
             <td class="font-extrabold uppercase font-mono tracking-wider">

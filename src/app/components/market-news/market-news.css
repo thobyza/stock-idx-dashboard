@@ -5,24 +5,6 @@
   @apply w-full h-full flex flex-col gap-6 p-4 bg-white rounded-lg shadow-md;
 }
 
-/* ── Header ──────────────────────────────────────────────────── */
-.news-header {
-  @apply flex items-start justify-between;
-}
-
-.news-title {
-  @apply text-xl font-bold text-zinc-800 leading-tight;
-}
-
-.news-subtitle {
-  @apply text-sm text-zinc-400 mt-0.5;
-}
-
-.news-badge {
-  @apply text-[10px] font-bold tracking-widest uppercase
-         bg-zinc-800 text-zinc-100 px-2.5 py-1 rounded-full;
-}
-
 /* ── Grid ────────────────────────────────────────────────────── */
 .news-grid {
   @apply grid gap-3;
