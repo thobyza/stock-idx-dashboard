@@ -13,14 +13,14 @@
 
 /* ── Card ────────────────────────────────────────────────────── */
 .news-card {
-  @apply flex gap-3 p-3 rounded-xl bg-white ring-1 ring-zinc-200
+  @apply flex rounded-lg bg-white ring-1 ring-zinc-200
          hover:ring-zinc-400 hover:shadow-md
          transition-all duration-200 cursor-pointer no-underline;
 }
 
 /* ── Thumbnail ───────────────────────────────────────────────── */
 .news-thumb-wrapper {
-  @apply w-20 h-16 shrink-0 rounded-lg overflow-hidden;
+  @apply w-28 h-full shrink-0 rounded-l-md overflow-hidden;
 }
 
 .news-thumb {
@@ -28,18 +28,18 @@
 }
 
 .news-thumb-placeholder {
-  @apply w-20 h-16 shrink-0 rounded-lg bg-zinc-100
+  @apply w-28 h-full shrink-0 rounded-l-md bg-zinc-100
          flex items-center justify-center text-zinc-400;
 }
 
 /* ── Content ─────────────────────────────────────────────────── */
 .news-content {
-  @apply flex flex-col justify-between flex-1 min-w-0;
+  @apply flex flex-col justify-between flex-1 min-w-0 py-3 px-4;
 }
 
 .news-article-title {
   @apply text-sm font-medium text-zinc-800 leading-snug
-         line-clamp-3 mb-1;
+         line-clamp-3 mb-2.5;
 }
 
 .news-meta {

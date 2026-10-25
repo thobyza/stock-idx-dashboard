@@ -3,8 +3,7 @@
   <div class="main-header">
     <div>
       <h2 class="main-title">Stock Heatmap</h2>
-      <p class="main-subtitle">Live rankings of top performers, high-liquidity volume leaders, and 52-week breakout
-        candidates</p>
+      <p class="main-subtitle">Visualize stock movements, daily price changes, and compare sector performance</p>
     </div>
     <span class="main-badge">IDX · Heatmap</span>
   </div>
@@ -157,7 +156,7 @@
           <span class="text-zinc-700/80">View</span>
           <div class="tab-wrapper-theme">
             <button class="tab-item-theme" [class.active]="viewMode() === 'grid'" (click)="setViewMode('grid')">Heatmap</button>
-            <button class="tab-item-theme" [class.active]="viewMode() === 'list'" (click)="setViewMode('list')">List</button>
+            <!-- <button class="tab-item-theme" [class.active]="viewMode() === 'list'" (click)="setViewMode('list')">List</button> -->
             <button class="tab-item-theme" [class.active]="viewMode() === 'sectors'" (click)="setViewMode('sectors')">Sectors</button>
           </div>
         </div>

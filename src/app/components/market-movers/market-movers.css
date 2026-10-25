@@ -57,7 +57,15 @@
 
 /* ── Table List ──────────────────────────────────────────────── */
 .table-list th {
-  @apply px-3 py-2.5 text-zinc-600 font-semibold text-[11px] uppercase tracking-wider whitespace-nowrap;
+  @apply px-3 py-2.5 text-zinc-600 bg-zinc-100 font-semibold text-[11px] uppercase tracking-wider whitespace-nowrap;
+}
+
+.table-list th.sortable {
+  @apply text-zinc-800;
+} 
+
+.table-list th.sortable:hover {
+  @apply bg-zinc-200/60;
 }
 
 .table-list td {

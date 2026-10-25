@@ -1,23 +1,47 @@
 <section class="flex flex-col gap-4">
 
-  <div class="flex justify-between">
-    @if (!collapsed()){
-      <label class="font-semibold text-lg">IDX-dashboard</label>
-    }
-    <button (click)="onToggle()" class="text-zinc-400 hover:text-zinc-700 transition-colors" title="Toggle sidebar">                                                                                             
-      {{ collapsed() ? '→' : '←' }}                                                                                                                                                                              
-    </button> 
-  </div>
+  @if (!collapsed()) {
+    <div class="flex justify-between">
+        <div class="flex items-center gap-2.5">
+          <img class="w-5 object-contain" src="assets/images/app_logo_idx2.png" alt="">
+          <label class="font-semibold text-lg text-[#27272A]">IDX Metrics</label> 
+        </div>
+        <button 
+          (click)="onToggle()" 
+          class="toggle-sidebar" 
+          title="Toggle sidebar"
+          [class.mx-auto]="collapsed()"
+        >                                                                                             
+          <svg lucideArrowLeft></svg>
+        </button> 
+      </div>
+  } @else {
+    <div class="flex flex-col gap-2 items-center">
+      <div class="h-[28px] content-center">
+        <img class="w-5 object-contain" src="assets/images/app_logo_idx2.png" alt="">
+      </div>
+      <button 
+          (click)="onToggle()" 
+          class="toggle-sidebar" 
+          title="Toggle sidebar"
+          [class.mx-auto]="collapsed()"
+        >                                                                                             
+          <svg lucideArrowRight></svg>                                                                                                                                                                              
+        </button> 
+    </div>
+    
+  }
 
   @if (!collapsed()){
     <section class="flex flex-col gap-3">
-      <div class="flex items-center justify-between mt-1">                                                                                                                                                           
+      <!-- <div class="flex items-center justify-between mt-1">                                                                                                                                                           
         <span class="text-xs font-medium text-zinc-500">                                                                                                                              
           {{ selectedDate() | date:'EEE, d MMM yyyy' }}                                                                                                                                                              
         </span>                                                                                                                                                                                                      
-      </div>
+      </div> -->
       <!-- IHSG Badge -->                                                                    
-      <div class="rounded-md px-2.5 py-2.5 ring ring-zinc-300/80 flex flex-col justify-center bg-zinc-50">       
+      <div class="rounded-md px-2.5 py-2.5 ring ring-zinc-300/80 flex flex-col justify-center bg-zinc-50">     
+        <span class="text-zinc-500/90 text-xs mb-1.5">{{ selectedDate() | date:'EEE, d MMM yyyy' }} </span>  
         <div class="flex items-center gap-2.5">
           <img class="h-8 rounded-full object-contain" src="assets/logos/idx_logo.svg" alt="">
           <div class="flex flex-col gap-0.5">
@@ -67,29 +91,32 @@
             <span class=" text-zinc-500">{{ ihsg().low | number:'1.0-0' }}</span>                                                                          
           </div>                                                                                                                                                                                                                                                                                                                                                                                                     
         </div> 
-        
     
       </div>   
     </section>
   }
   
   <!-- Menu -->
-  <section class="flex flex-col gap-0.5">                                                                                                                                                                        
+  <section 
+    class="flex flex-col gap-0.5 "
+    [class.mt-5]="collapsed()"
+    [class.mt-3]="!collapsed()"
+  >                                                                                                                                                                        
     <div class="menu-wrapper" [class.active]="activePage() === 'dashboard'" (click)="onSelectPage('dashboard')">                                                                                                   
-      <svg lucideHouse></svg>                                                                                                                                                                                      
-      @if (!collapsed()) { <label>Dashboard</label> }                                                                                                                                                              
+      <svg lucideLayoutGrid></svg>                                                                                                                                                                                      
+      @if (!collapsed()) { <label>Heatmap</label> }                                                                                                                                                              
     </div>                                                                                                                                                                                                         
     <div class="menu-wrapper" [class.active]="activePage() === 'movers'" (click)="onSelectPage('movers')">                                                                                                     
       <svg lucideTrendingUp></svg>                                                                                                                                                                                 
-      @if (!collapsed()) { <label>Market Movers</label> }                                                                                                                                                      
+      @if (!collapsed()) { <label>Screener</label> }                                                                                                                                                      
     </div>                                                                                                                                                                                                         
     <div class="menu-wrapper" [class.active]="activePage() === 'news'" (click)="onSelectPage('news')">                                                                                                             
-      <svg lucideBookOpenText></svg>                                                                                                                                                                               
-      @if (!collapsed()) { <label>Market News</label> }                                                                                                                                                            
+      <svg lucideTextAlignStart></svg>                                                                                                                                                                               
+      @if (!collapsed()) { <label>News</label> }                                                                                                                                                            
     </div>                                                                                                                                                                                                  
     <div class="menu-wrapper" [class.active]="activePage() === 'calendar'" (click)="onSelectPage('calendar')">                                                                                                     
-      <svg lucideCalendarDays></svg>                                                                                                                                                                                 
-      @if (!collapsed()) { <label>Corporate Actions</label> }                                                                                                                                                      
+      <svg lucideWorkflow></svg>                                                                                                                                                                                 
+      @if (!collapsed()) { <label>Corp Actions</label> }                                                                                                                                                      
     </div>                                                                                                                                                                                                  
   </section>
 

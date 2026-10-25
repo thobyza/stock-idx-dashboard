@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+.toggle-sidebar {
+  @apply text-zinc-500/70 hover:text-zinc-700 transition-colors cursor-pointer;
+}
+
+.toggle-sidebar > svg {
+@apply size-4.5 shrink-0; 
+}
+
 .menu-wrapper {                                                                                                                                                                                                
   @apply flex items-center gap-2.5 px-1 py-2 rounded-lg cursor-pointer                                                                                                                                       
           text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100                                                                                                                                                   

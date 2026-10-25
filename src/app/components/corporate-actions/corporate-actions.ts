@@ -1,10 +1,11 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { DecimalPipe, DatePipe, NgClass } from '@angular/common';
 import { StockService, CorporateAction, CorporateActionType } from '../../stock.service';
+import { LucideConstruction } from '@lucide/angular';
 
 @Component({
   selector: 'app-corporate-actions',
-  imports: [DecimalPipe, DatePipe, NgClass],
+  imports: [DecimalPipe, DatePipe, NgClass, LucideConstruction],
   templateUrl: './corporate-actions.html',
   styleUrl: './corporate-actions.css',
 })
