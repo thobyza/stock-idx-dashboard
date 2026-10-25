@@ -1,13 +1,11 @@
 import { Component, input, output } from '@angular/core';
 import { IndexData } from '../../stock.service';
 import { DecimalPipe, DatePipe } from '@angular/common';
-import { LucideTrendingUp, LucideTextAlignStart, LucideLayoutGrid, LucideWorkflow, 
-  LucidePanelLeftClose, LucidePanelLeftOpen, LucideChevronsRight, LucideChevronsLeft, LucideArrowRightFromLine, LucideArrowLeftFromLine, LucideArrowRight, LucideArrowLeft } from '@lucide/angular';
+import { LucideTrendingUp, LucideTextAlignStart, LucideLayoutGrid, LucideWorkflow, LucideArrowRight, LucideArrowLeft } from '@lucide/angular';
 
 @Component({
   selector: 'app-sector-sidebar',
-  imports: [DecimalPipe, DatePipe, LucideTrendingUp, LucideTextAlignStart, LucideLayoutGrid, 
-    LucideArrowRightFromLine, LucideWorkflow, LucideArrowLeftFromLine, LucideChevronsRight, LucideChevronsLeft, LucideArrowRight, LucideArrowLeft],
+  imports: [DecimalPipe, DatePipe, LucideTrendingUp, LucideTextAlignStart, LucideLayoutGrid, LucideWorkflow, LucideArrowRight, LucideArrowLeft],
   templateUrl: './sector-sidebar.html',
   styleUrl: './sector-sidebar.css',
 })
