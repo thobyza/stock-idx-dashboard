@@ -2,6 +2,7 @@ import { Injectable, signal, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { io, Socket } from 'socket.io-client';
 import { Observable, of, catchError } from 'rxjs';
+import { environment } from '../environments/environment';
 
 export interface Stock {
   symbol: string;
@@ -68,7 +69,7 @@ export interface CorporateAction {
   providedIn: 'root'
 })
 export class StockService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.apiUrl;
   private socket!: Socket;
 
   stocks = signal<Stock[]>([]);
@@ -94,7 +95,7 @@ export class StockService {
   }
 
   private connectWebSocket() {
-    this.socket = io('http://localhost:3000');
+    this.socket = io(environment.socketUrl);
 
     this.socket.on('connect', () => {
       this.ngZone.run(() => this.isLive.set(true));

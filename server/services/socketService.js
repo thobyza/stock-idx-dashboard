@@ -8,11 +8,14 @@ class SocketService {
   };
 
   initialize(httpServer) {                                                                                                                                                                                     
-    this.io = new Server(httpServer, {                                                                                                                                                                         
-      cors: {                                                                                                                                                                                                  
-        origin: "http://localhost:4200",                                                                                                                                                                       
-        methods: ["GET", "POST"]                                                                                                                                                                               
-      }                                                                                                                                                                                                        
+    this.io = new Server(httpServer, {
+      cors: {
+        // Allows localhost, Netlify preview & production domains, or any custom domain
+        origin: ['http://localhost:4200', process.env.FRONTEND_URL, /\.netlify\.app$/].filter(
+          Boolean,
+        ),
+        methods: ['GET', 'POST'],
+      },
     });                                                                                                                                                                                                        
                                                                                                                                                                                                                 
     this.io.on('connection', (socket) => {                                                                                                                                                                     

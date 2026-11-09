@@ -2,7 +2,7 @@
 
 /* ── Container ───────────────────────────────────────────────── */
 .movers-container {
-  @apply w-full h-full flex flex-col gap-4 p-4 bg-white rounded-lg shadow-md;
+  @apply w-full h-full flex flex-col gap-4 p-4 bg-white rounded-lg shadow-md min-w-0 overflow-hidden;
 }
 
 /* ── KPI Cards ───────────────────────────────────────────────── */

@@ -1,8 +1,8 @@
-<div class="min-h-screen bg-olive-100 p-3 flex flex-col gap-4 font-sans"><!-- bg-[#F3F5ED] -->
+<div class="min-h-screen bg-olive-100 p-3 flex flex-col gap-4 font-sans overflow-x-hidden"><!-- bg-[#F3F5ED] -->
   <!-- Header -->
   <!-- <app-index-header></app-index-header> -->
 
-  <div class="flex gap-2 grow flex-col lg:flex-row">
+  <div class="flex gap-2 grow flex-col lg:flex-row min-w-0">
 
     <!-- Sidebar -->
     <aside [class]="'shrink-0 flex flex-col gap-5 p-1.5 transition-all duration-300 ' + (sidebarCollapsed() ? '' : 'w-full lg:w-60')">
@@ -41,7 +41,7 @@
       ></app-heatmap-board>
     }
     @if (activePage() === 'movers') {
-      <app-market-movers class="flex-auto" [stocks]="stocks()"></app-market-movers>
+      <app-market-movers class="flex-auto min-w-0" [stocks]="stocks()"></app-market-movers>
     }
     @if (activePage() === 'news') {
       <app-market-news class="flex-auto"></app-market-news>
