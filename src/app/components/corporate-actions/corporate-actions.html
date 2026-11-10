@@ -1,7 +1,7 @@
 <div class="relative">
   <div 
-    class="absolute bg-neutral-100/55 backdrop-blur-[2px] w-full h-full rounded-lg flex flex-col items-center justify-center gap-3.5 text-zinc-600">
-    <svg class="h-18 w-18  stroke-1" lucideConstruction></svg>
+    class="absolute bg-neutral-100/55 dark:bg-neutral-900/70 backdrop-blur-[2px] w-full h-full rounded-lg flex flex-col items-center justify-center gap-3.5 text-zinc-600 dark:text-zinc-300 z-10">
+    <svg class="h-18 w-18 stroke-1" lucideConstruction></svg>
     <span class="text-[35px] font-normal">Coming Soon</span>
   </div>
 
@@ -121,8 +121,8 @@
                   <div class="flex items-center gap-2">
                     <span class="symbol-pill">{{ item.symbol }}</span>
                     <div>
-                      <h3 class="text-xs font-bold text-zinc-800 leading-tight">{{ item.symbol }}</h3>
-                      <span class="text-[10px] text-zinc-400 font-medium">{{ item.sector }}</span>
+                      <h3 class="text-xs font-bold text-zinc-800 dark:text-zinc-100 leading-tight">{{ item.symbol }}</h3>
+                      <span class="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium">{{ item.sector }}</span>
                     </div>
                   </div>
                   <span class="type-badge border" [ngClass]="getTypeBadgeClass(item.type)">
@@ -132,46 +132,46 @@
 
                 <!-- Company Full Name & Title -->
                 <div class="mb-3">
-                  <h4 class="text-xs font-semibold text-zinc-700 truncate" [title]="item.name">{{ item.name }}</h4>
-                  <p class="text-[11px] text-zinc-500 mt-0.5 line-clamp-2 leading-relaxed">{{ item.description || item.title }}</p>
+                  <h4 class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 truncate" [title]="item.name">{{ item.name }}</h4>
+                  <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mt-0.5 line-clamp-2 leading-relaxed">{{ item.description || item.title }}</p>
                 </div>
 
                 <!-- Specific Information Depending on Action Type -->
 
                 <!-- 1. DIVIDEND -->
                 @if (item.type === 'DIVIDEND') {
-                  <div class="bg-zinc-50 border border-zinc-100 rounded-lg p-2.5 mb-2 flex flex-col gap-2">
+                  <div class="bg-zinc-50 dark:bg-zinc-800/70 border border-zinc-100 dark:border-zinc-700 rounded-lg p-2.5 mb-2 flex flex-col gap-2">
                     <div class="flex items-baseline justify-between">
                       <div>
-                        <span class="text-[10px] text-zinc-400 font-medium uppercase">Cash Dividend</span>
-                        <p class="text-sm font-bold font-mono text-zinc-800">
-                          Rp {{ item.amountPerShare | number }} <span class="text-[10px] font-normal text-zinc-500">/ share</span>
+                        <span class="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium uppercase">Cash Dividend</span>
+                        <p class="text-sm font-bold font-mono text-zinc-800 dark:text-zinc-100">
+                          Rp {{ item.amountPerShare | number }} <span class="text-[10px] font-normal text-zinc-500 dark:text-zinc-400">/ share</span>
                         </p>
                       </div>
                       @if (item.dividendYield) {
                         <div class="text-right">
-                          <span class="text-[10px] text-zinc-400 font-medium uppercase">Est. Yield</span>
-                          <p class="text-sm font-bold font-mono text-emerald-600">{{ item.dividendYield }}%</p>
+                          <span class="text-[10px] text-zinc-400 dark:text-zinc-500 font-medium uppercase">Est. Yield</span>
+                          <p class="text-sm font-bold font-mono text-emerald-600 dark:text-emerald-400">{{ item.dividendYield }}%</p>
                         </div>
                       }
                     </div>
 
                     <!-- Date Breakdown -->
-                    <div class="grid grid-cols-3 gap-1 pt-2 border-t border-zinc-200/60 text-[10px]">
+                    <div class="grid grid-cols-3 gap-1 pt-2 border-t border-zinc-200/60 dark:border-zinc-700 text-[10px]">
                       <div>
-                        <span class="text-zinc-400 block font-medium">Cum Date</span>
-                        <span class="font-semibold text-zinc-700">{{ item.cumDate | date:'d MMM' }}</span>
+                        <span class="text-zinc-400 dark:text-zinc-500 block font-medium">Cum Date</span>
+                        <span class="font-semibold text-zinc-700 dark:text-zinc-300">{{ item.cumDate | date:'d MMM' }}</span>
                         @if (item.cumDate) {
-                          <span class="block text-[9px] text-emerald-600 font-medium">{{ daysUntil(item.cumDate) }}</span>
+                          <span class="block text-[9px] text-emerald-600 dark:text-emerald-400 font-medium">{{ daysUntil(item.cumDate) }}</span>
                         }
                       </div>
                       <div>
-                        <span class="text-zinc-400 block font-medium">Ex Date</span>
-                        <span class="font-semibold text-zinc-700">{{ item.exDate | date:'d MMM' }}</span>
+                        <span class="text-zinc-400 dark:text-zinc-500 block font-medium">Ex Date</span>
+                        <span class="font-semibold text-zinc-700 dark:text-zinc-300">{{ item.exDate | date:'d MMM' }}</span>
                       </div>
                       <div>
-                        <span class="text-zinc-400 block font-medium">Payment</span>
-                        <span class="font-semibold text-zinc-700">{{ item.paymentDate | date:'d MMM' }}</span>
+                        <span class="text-zinc-400 dark:text-zinc-500 block font-medium">Payment</span>
+                        <span class="font-semibold text-zinc-700 dark:text-zinc-300">{{ item.paymentDate | date:'d MMM' }}</span>
                       </div>
                     </div>
                   </div>
@@ -179,22 +179,22 @@
 
                 <!-- 2. RUPS / AGM -->
                 @if (item.type === 'RUPS') {
-                  <div class="bg-blue-50/50 border border-blue-100 rounded-lg p-2.5 mb-2 flex flex-col gap-1.5">
+                  <div class="bg-blue-50/50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40 rounded-lg p-2.5 mb-2 flex flex-col gap-1.5">
                     <div class="flex items-center justify-between">
-                      <span class="text-[10px] text-blue-500 font-medium uppercase tracking-wider">General Meeting</span>
+                      <span class="text-[10px] text-blue-500 dark:text-blue-400 font-medium uppercase tracking-wider">General Meeting</span>
                       @if (item.eventDate) {
-                        <span class="text-[10px] font-bold text-blue-700 bg-blue-100/70 px-2 py-0.5 rounded-full">
+                        <span class="text-[10px] font-bold text-blue-700 dark:text-blue-300 bg-blue-100/70 dark:bg-blue-900/50 px-2 py-0.5 rounded-full">
                           {{ daysUntil(item.eventDate) }}
                         </span>
                       }
                     </div>
                     <div class="flex items-baseline gap-2">
-                      <span class="text-xs font-semibold text-zinc-800">Event Date:</span>
-                      <span class="text-xs font-mono font-bold text-blue-800">{{ item.eventDate | date:'EEEE, d MMMM yyyy' }}</span>
+                      <span class="text-xs font-semibold text-zinc-800 dark:text-zinc-200">Event Date:</span>
+                      <span class="text-xs font-mono font-bold text-blue-800 dark:text-blue-300">{{ item.eventDate | date:'EEEE, d MMMM yyyy' }}</span>
                     </div>
                     @if (item.recordingDate) {
-                      <p class="text-[10px] text-zinc-500">
-                        Shareholder Recording Date: <span class="font-medium text-zinc-700">{{ item.recordingDate | date:'d MMM yyyy' }}</span>
+                      <p class="text-[10px] text-zinc-500 dark:text-zinc-400">
+                        Shareholder Recording Date: <span class="font-medium text-zinc-700 dark:text-zinc-300">{{ item.recordingDate | date:'d MMM yyyy' }}</span>
                       </p>
                     }
                   </div>
@@ -202,21 +202,21 @@
 
                 <!-- 3. STOCK SPLIT -->
                 @if (item.type === 'STOCK_SPLIT') {
-                  <div class="bg-purple-50/50 border border-purple-100 rounded-lg p-2.5 mb-2 flex flex-col gap-1.5">
+                  <div class="bg-purple-50/50 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-900/40 rounded-lg p-2.5 mb-2 flex flex-col gap-1.5">
                     <div class="flex items-center justify-between">
-                      <span class="text-[10px] text-purple-600 font-medium uppercase">Split Ratio</span>
-                      <span class="text-xs font-bold font-mono text-purple-700 bg-purple-100 px-2 py-0.5 rounded">
+                      <span class="text-[10px] text-purple-600 dark:text-purple-400 font-medium uppercase">Split Ratio</span>
+                      <span class="text-xs font-bold font-mono text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/50 px-2 py-0.5 rounded">
                         {{ item.ratio }}
                       </span>
                     </div>
                     <div class="grid grid-cols-2 gap-1 text-[10px] pt-1">
                       <div>
-                        <span class="text-zinc-400 block font-medium">Cum Date:</span>
-                        <span class="font-semibold text-zinc-700">{{ item.cumDate | date:'d MMM yyyy' }}</span>
+                        <span class="text-zinc-400 dark:text-zinc-500 block font-medium">Cum Date:</span>
+                        <span class="font-semibold text-zinc-700 dark:text-zinc-300">{{ item.cumDate | date:'d MMM yyyy' }}</span>
                       </div>
                       <div>
-                        <span class="text-zinc-400 block font-medium">Ex Date:</span>
-                        <span class="font-semibold text-zinc-700">{{ item.exDate | date:'d MMM yyyy' }}</span>
+                        <span class="text-zinc-400 dark:text-zinc-500 block font-medium">Ex Date:</span>
+                        <span class="font-semibold text-zinc-700 dark:text-zinc-300">{{ item.exDate | date:'d MMM yyyy' }}</span>
                       </div>
                     </div>
                   </div>
@@ -224,25 +224,25 @@
 
                 <!-- 4. RIGHTS ISSUE -->
                 @if (item.type === 'RIGHTS_ISSUE') {
-                  <div class="bg-amber-50/50 border border-amber-100 rounded-lg p-2.5 mb-2 flex flex-col gap-1.5">
+                  <div class="bg-amber-50/50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900/40 rounded-lg p-2.5 mb-2 flex flex-col gap-1.5">
                     <div class="flex items-center justify-between">
-                      <span class="text-[10px] text-amber-700 font-medium uppercase">Rights Ratio</span>
-                      <span class="text-xs font-bold font-mono text-amber-800 bg-amber-100 px-2 py-0.5 rounded">
+                      <span class="text-[10px] text-amber-700 dark:text-amber-400 font-medium uppercase">Rights Ratio</span>
+                      <span class="text-xs font-bold font-mono text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/50 px-2 py-0.5 rounded">
                         {{ item.ratio }}
                       </span>
                     </div>
                     <div class="flex items-baseline justify-between text-[11px] pt-1">
-                      <span class="text-zinc-500">Exercise Price:</span>
-                      <span class="font-mono font-bold text-zinc-800">Rp {{ item.amountPerShare | number }}</span>
+                      <span class="text-zinc-500 dark:text-zinc-400">Exercise Price:</span>
+                      <span class="font-mono font-bold text-zinc-800 dark:text-zinc-100">Rp {{ item.amountPerShare | number }}</span>
                     </div>
-                    <div class="grid grid-cols-2 gap-1 text-[10px] pt-1 border-t border-amber-200/50">
+                    <div class="grid grid-cols-2 gap-1 text-[10px] pt-1 border-t border-amber-200/50 dark:border-zinc-700">
                       <div>
-                        <span class="text-zinc-400 block font-medium">Cum Date:</span>
-                        <span class="font-semibold text-zinc-700">{{ item.cumDate | date:'d MMM' }}</span>
+                        <span class="text-zinc-400 dark:text-zinc-500 block font-medium">Cum Date:</span>
+                        <span class="font-semibold text-zinc-700 dark:text-zinc-300">{{ item.cumDate | date:'d MMM' }}</span>
                       </div>
                       <div>
-                        <span class="text-zinc-400 block font-medium">Ex Date:</span>
-                        <span class="font-semibold text-zinc-700">{{ item.exDate | date:'d MMM' }}</span>
+                        <span class="text-zinc-400 dark:text-zinc-500 block font-medium">Ex Date:</span>
+                        <span class="font-semibold text-zinc-700 dark:text-zinc-300">{{ item.exDate | date:'d MMM' }}</span>
                       </div>
                     </div>
                   </div>
@@ -251,7 +251,7 @@
               </div>
 
               <!-- Footer Meta -->
-              <div class="flex items-center justify-between pt-2 border-t border-zinc-100 text-[10px] text-zinc-400 mt-1">
+              <div class="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800 text-[10px] text-zinc-400 dark:text-zinc-500 mt-1">
                 <span>IDX Official Filing</span>
                 <span class="status-indicator">
                   <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1"></span>

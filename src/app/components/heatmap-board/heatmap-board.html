@@ -1,4 +1,4 @@
-<main class="flex flex-col grow gap-4 bg-white p-4 rounded-lg shadow-md">
+<main class="flex flex-col grow gap-4 bg-white dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800 p-4 rounded-lg shadow-md transition-colors">
   <!-- Header -->
   <div class="main-header">
     <div>
@@ -32,7 +32,7 @@
           >
         </div>
 
-        <div class="h-4 w-px bg-zinc-300"></div>
+        <div class="h-4 w-px bg-zinc-300 dark:bg-zinc-700"></div>
 
         <!-- Index Custom Dropdown -->
         <div class="dropdown-container w-36 text-xs">
@@ -69,7 +69,7 @@
                 >
                   <span>{{ idx }}</span>
                   @if (idx === selectedIndex()) {
-                    <span class="text-zinc-800 text-[11px] font-bold">✓</span>
+                    <span class="text-zinc-800 dark:text-zinc-100 text-[11px] font-bold">✓</span>
                   }
                 </button>
               }
@@ -114,11 +114,11 @@
               >
                 <span>All Sectors</span>
                 @if (selectedSector() === 'All') {
-                  <span class="text-zinc-800 text-[11px] font-bold">✓</span>
+                  <span class="text-zinc-800 dark:text-zinc-100 text-[11px] font-bold">✓</span>
                 }
               </button>
 
-              <div class="border-t border-zinc-100 my-0.5"></div>
+              <div class="border-t border-zinc-100 dark:border-zinc-700 my-0.5"></div>
 
               @for (sec of sectorPerformances(); track sec.sector) {
                 <button
@@ -133,13 +133,17 @@
                       class="text-[10px] font-semibold px-1.5 py-0.5 rounded"
                       [class.text-emerald-600]="sec.avgChange >= 0"
                       [class.bg-emerald-50]="sec.avgChange >= 0"
+                      [class.dark:bg-emerald-950/40]="sec.avgChange >= 0"
+                      [class.dark:text-emerald-400]="sec.avgChange >= 0"
                       [class.text-rose-600]="sec.avgChange < 0"
                       [class.bg-rose-50]="sec.avgChange < 0"
+                      [class.dark:bg-rose-950/40]="sec.avgChange < 0"
+                      [class.dark:text-rose-400]="sec.avgChange < 0"
                     >
                       {{ sec.avgChange >= 0 ? '+' : '' }}{{ sec.avgChange }}%
                     </span>
                     @if (sec.sector === selectedSector()) {
-                      <span class="text-zinc-800 text-[11px] font-bold">✓</span>
+                      <span class="text-zinc-800 dark:text-zinc-100 text-[11px] font-bold">✓</span>
                     }
                   </div>
                 </button>
@@ -153,7 +157,7 @@
       <div class="flex items-center gap-6 flex-wrap text-xs">
         <!-- Views toggles -->
         <div class="flex items-center gap-2">
-          <span class="text-zinc-700/80">View</span>
+          <span class="text-zinc-700/80 dark:text-zinc-400">View</span>
           <div class="tab-wrapper-theme">
             <button class="tab-item-theme" [class.active]="viewMode() === 'grid'" (click)="setViewMode('grid')">Heatmap</button>
             <!-- <button class="tab-item-theme" [class.active]="viewMode() === 'list'" (click)="setViewMode('list')">List</button> -->
@@ -164,7 +168,7 @@
         <!-- Sorting triggers -->
         @if (viewMode() !== 'sectors') {
           <div class="flex items-center gap-2">
-            <span class="text-zinc-700/80">Sort</span>
+            <span class="text-zinc-700/80 dark:text-zinc-400">Sort</span>
             <div class="tab-wrapper-theme">
               <button class="tab-item-theme" [class.active]="sortBy() === 'change'" (click)="setSortBy('change')">Change</button>
               <button class="tab-item-theme" [class.active]="sortBy() === 'symbol'" (click)="setSortBy('symbol')">Ticker</button>
@@ -185,10 +189,10 @@
 
     <!-- 2. List -->
     @if (viewMode() === 'list') {
-      <div class="table-list overflow-x-auto border border-zinc-300 rounded-md grow max-h-[85vh]">
+      <div class="table-list overflow-x-auto border border-zinc-300 dark:border-zinc-800 rounded-md grow max-h-[85vh]">
         <table class="w-full text-left text-xs border-collapse">
           <thead class="sticky top-0">
-            <tr class="border-b border-zinc-300 text-slate-500 font-semibold bg-zinc-200 z-30">
+            <tr class="border-b border-zinc-300 dark:border-zinc-800 text-slate-500 dark:text-zinc-400 font-semibold bg-zinc-200 dark:bg-zinc-800 z-30">
               <th class=" cursor-pointer hover:text-slate-300" (click)="setSortBy('symbol')">Ticker</th>
               <th class="">Company Name</th>
               <th class="">Sector</th>
@@ -203,10 +207,10 @@
           </thead>
           <tbody>
             @for (stock of filteredStocks(); track stock.symbol) {
-              <tr class="border-b border-zinc-300 hover:bg-cream-50 cursor-pointer transition-all text-zinc-800 even:bg-zinc-100/50">
+              <tr class="border-b border-zinc-300 dark:border-zinc-800 hover:bg-cream-50 dark:hover:bg-zinc-800/60 cursor-pointer transition-all text-zinc-800 dark:text-zinc-200 even:bg-zinc-100/50 dark:even:bg-zinc-800/20">
                 <td class="font-bold uppercase">{{ stock.symbol }}</td>
                 <td class="max-w-50 truncate">{{ stock.name }}</td>
-                <td class="text-zinc-700/70">{{ stock.sector }}</td>
+                <td class="text-zinc-700/70 dark:text-zinc-400">{{ stock.sector }}</td>
 
                 <td class="text-right font-semibold"
                   [class.text-emerald-500]="stock.change >= 0"
@@ -223,15 +227,15 @@
                   {{ (stock.change1w || 0) >= 0 ? '+' : '' }}{{ (stock.change1w || 0) | number:'1.2-2' }}%
                 </td>
 
-                <td class="text-right text-zinc-800 font-medium">{{ stock.price | number }}</td>
+                <td class="text-right text-zinc-800 dark:text-zinc-200 font-medium">{{ stock.price | number }}</td>
                 <td class="text-center text-xs">
                   <div class="flex flex-col items-center gap-1 mx-auto w-32">
                     <div class="flex justify-between w-full text-[10px] text-zinc-500 font-medium">
-                      <span class="text-rose-700">{{ (stock.fiftyTwoWeekLow || stock.price) | number }}</span>
-                      <span class="text-emerald-700">{{ (stock.fiftyTwoWeekHigh || stock.price) | number }}</span>
+                      <span class="text-rose-700 dark:text-rose-400">{{ (stock.fiftyTwoWeekLow || stock.price) | number }}</span>
+                      <span class="text-emerald-700 dark:text-emerald-400">{{ (stock.fiftyTwoWeekHigh || stock.price) | number }}</span>
                     </div>
                     <!-- Range Progress Bar -->
-                    <div class="w-full h-1.5 bg-zinc-200 rounded-full overflow-visible">
+                    <div class="w-full h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-visible">
                       <div
                         class="h-full bg-olive-500/60 rounded-l-full transition-all duration-300 relative overflow-visible"
                         [style.width.%]="get52WeekPosition(stock.price, stock.fiftyTwoWeekLow, stock.fiftyTwoWeekHigh)"
@@ -241,8 +245,8 @@
                     </div>
                   </div>
                 </td>
-                <td class="text-right text-zinc-700/70">{{ stock.volume | number }}</td>
-                <td class="text-right font-mono text-zinc-800 font-medium">
+                <td class="text-right text-zinc-700/70 dark:text-zinc-400">{{ stock.volume | number }}</td>
+                <td class="text-right font-mono text-zinc-800 dark:text-zinc-200 font-medium">
                   @if (stock.price * stock.volume >= 1e12) {
                     Rp {{ (stock.price * stock.volume) / 1e12 | number:'1.2-2' }} T
                   } @else if (stock.price * stock.volume >= 1e9) {
@@ -252,7 +256,7 @@
                   }
                 </td>
 
-                <td class="text-right font-mono text-zinc-700/70 font-medium">Rp {{ stock.marketCap / 1e12 | number:'1.1-2' }} T</td>
+                <td class="text-right font-mono text-zinc-700/70 dark:text-zinc-400 font-medium">Rp {{ stock.marketCap / 1e12 | number:'1.1-2' }} T</td>
               </tr>
             }
           </tbody>
@@ -265,7 +269,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 grow auto-rows-max">
         @for (sec of sectorPerformances(); track sec.sector) {
           <div
-            class="bg-zinc-100 border border-zinc-200 hover:border-zinc-300 rounded-lg py-3 px-3.5 cursor-pointer transition-all flex flex-col gap-3"
+            class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 rounded-lg py-3 px-3.5 cursor-pointer transition-all flex flex-col gap-3"
             (click)="onSelectSector(sec.sector); setViewMode('grid')"
           >
             <div class="flex gap-3 items-center">
@@ -276,33 +280,33 @@
                   [alt]="sec.sectorDesc">
               </div>
               <div class="flex flex-col gap-0">
-                <h3 class="font-bold text-md text-zinc-700">{{ sec.sector }}</h3>
-                <label class="font-normal text-sm text-zinc-500">{{ sec.sectorDesc }}</label>
+                <h3 class="font-bold text-md text-zinc-700 dark:text-zinc-200">{{ sec.sector }}</h3>
+                <label class="font-normal text-sm text-zinc-500 dark:text-zinc-400">{{ sec.sectorDesc }}</label>
               </div>
               <span
                 class="text-[13px] font-medium rounded-full px-2 py-0.5 h-max ml-auto mb-auto"
-                [class]="sec.avgChange >= 0 ? 'bg-emerald-500/10 text-emerald-600' : 'bg-rose-500/10 text-rose-600'">
+                [class]="sec.avgChange >= 0 ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-rose-500/10 text-rose-600 dark:text-rose-400'">
                 {{ sec.avgChange >= 0 ? '+' : '' }}{{ sec.avgChange }}%
               </span>
             </div>
 
             <div class="flex gap-1 text-xs gap-2">
-              <span class="text-zinc-600">{{ sec.count }} stocks</span>
+              <span class="text-zinc-600 dark:text-zinc-400">{{ sec.count }} stocks</span>
               <span class="text-zinc-500">•</span>
               <div class="flex gap-2.5">
-                  <span class="text-emerald-600">↗︎ {{ sec.advancing }}</span>
-                  <span class="text-rose-600">↘︎ {{ sec.declining }}</span>
+                  <span class="text-emerald-600 dark:text-emerald-400">↗︎ {{ sec.advancing }}</span>
+                  <span class="text-rose-600 dark:text-rose-400">↘︎ {{ sec.declining }}</span>
               </div>
             </div>
 
-            <div class="relative pt-2 border-t border-zinc-200/90">
+            <div class="relative pt-2 border-t border-zinc-200/90 dark:border-zinc-700">
               <div class="flex flex-wrap gap-1.5 max-h-[85px] overflow-y-auto pb-4 pr-1">
                 @for (stock of getStocksForSector(sec.sector); track stock.symbol) {
-                  <div class="flex items-center gap-1.5 px-2 py-1 bg-white border border-zinc-200/80 rounded-md text-xs">
-                    <span class="font-normal text-zinc-700">{{ stock.symbol }}</span>
+                  <div class="flex items-center gap-1.5 px-2 py-1 bg-white dark:bg-zinc-700/80 border border-zinc-200/80 dark:border-zinc-600 rounded-md text-xs">
+                    <span class="font-normal text-zinc-700 dark:text-zinc-200">{{ stock.symbol }}</span>
                     <span
                       class="font-semibold text-[11px]"
-                      [class]="stock.change >= 0 ? 'text-emerald-600' : 'text-rose-600'">
+                      [class]="stock.change >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'">
                       {{ stock.change >= 0 ? '+' : '' }}{{ stock.change }}%
                     </span>
                   </div>
@@ -310,7 +314,7 @@
               </div>
 
               <!-- Fade Gradient overlay  -->
-              <div class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-zinc-100 to-transparent pointer-events-none"></div>
+              <div class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-zinc-100 dark:from-zinc-800 to-transparent pointer-events-none"></div>
             </div>
 
           </div>

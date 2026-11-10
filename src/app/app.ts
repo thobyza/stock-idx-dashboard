@@ -1,7 +1,8 @@
 import { Component, signal, computed, inject } from '@angular/core';                                                                                                                                   
 import { RouterOutlet } from '@angular/router';                                                                                                                                                                
 import { DecimalPipe, PercentPipe, CurrencyPipe, SlicePipe, NgClass } from '@angular/common';                                                                                                                           
-import { StockService, Stock } from './stock.service';                                                                                                                                                         
+import { StockService, Stock } from './stock.service';
+import { ThemeService } from './theme.service';
                                                                                                                                                                                                                 
 // Import our subcomponents                                                                                                                                                                                
 import { SectorSidebar } from './components/sector-sidebar/sector-sidebar';                                                                                                                                    
@@ -18,6 +19,7 @@ import { MarketMovers } from './components/market-movers/market-movers';
 })                                                                                                                                                                                                             
 export class App {                                                                                                                                                                           
   private readonly stockService = inject(StockService);                                                                                                                                                        
+  readonly themeService = inject(ThemeService);
                                                                                                                                                                                                                 
   readonly stocks = this.stockService.stocks;                                                                                                                                                                  
   readonly ihsg = this.stockService.ihsg;                                                                                                                                                                      
