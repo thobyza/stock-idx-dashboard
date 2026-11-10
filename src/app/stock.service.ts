@@ -80,7 +80,7 @@ export class StockService {
 
   constructor(private http: HttpClient, private ngZone: NgZone) {
     this.fetchInitialData();
-    this.connectWebSocket();
+    this.setupMarketFeed();
   }
 
   private fetchInitialData() {
@@ -92,6 +92,28 @@ export class StockService {
         },
         error: (err) => console.error('Failed to load initial stock data:', err)
       });
+  }
+
+  private setupMarketFeed() {
+    if (environment.socketUrl) {
+      this.connectWebSocket();
+    } else {
+      // In serverless production mode (Vercel): auto-poll market data every 60 seconds
+      this.isLive.set(true);
+      setInterval(() => {
+        const todayStr = new Date().toISOString().split('T')[0];
+        if (this.currentSelectedDate() === todayStr) {
+          this.http.get<{ ihsg: IndexData; stocks: Stock[] }>(`${this.apiUrl}/stocks`)
+            .subscribe({
+              next: (data) => {
+                this.stocks.set(data.stocks);
+                this.ihsg.set(data.ihsg);
+              },
+              error: (err) => console.error('Failed to update live stock data:', err)
+            });
+        }
+      }, 60000);
+    }
   }
 
   private connectWebSocket() {
