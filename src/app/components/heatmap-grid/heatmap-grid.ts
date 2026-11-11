@@ -1,6 +1,7 @@
-import { Component, input, output, signal, computed, HostListener } from '@angular/core';
+import { Component, input, output, signal, computed, HostListener, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Stock } from '../../stock.service';
+import { ThemeService } from '../../theme.service';
 
 @Component({
   selector: 'app-heatmap-grid',
@@ -9,6 +10,8 @@ import { Stock } from '../../stock.service';
   styleUrl: './heatmap-grid.css',
 })
 export class HeatmapGrid {
+  private readonly themeService = inject(ThemeService);
+
   stocks = input.required<Stock[]>();
   selectedStockSymbol = input<string | null>(null);
 
@@ -72,20 +75,28 @@ export class HeatmapGrid {
   }
 
   getHeatStyle(change: number): string {
+    const isDark = this.themeService.isDark();
     const clamp = (val: number, min: number, max: number) => Math.max(min, Math.min(max, val));
     const intensity = clamp(Math.abs(change) / 5, 0, 1);
 
     if (change > 0.05) {
-      const alpha = 0.08 + intensity * 0.72;
-      const textColor = 'rgb(6, 95, 70)';
-      const borderColor = `rgba(16, 185, 129, ${0.15 + intensity * 0.35})`;
+      const alpha = isDark ? (0.18 + intensity * 0.65) : (0.08 + intensity * 0.72);
+      const textColor = isDark 
+        ? (intensity > 0.35 ? '#ffffff' : '#34d399')
+        : 'rgb(6, 95, 70)';
+      const borderColor = `rgba(16, 185, 129, ${isDark ? 0.3 + intensity * 0.4 : 0.15 + intensity * 0.35})`;
       return `background-color: rgba(16, 185, 129, ${alpha}); color: ${textColor}; border-color: ${borderColor};`;
     } else if (change < -0.05) {
-      const alpha = 0.08 + intensity * 0.72;
-      const textColor = 'rgb(185, 28, 28)';
-      const borderColor = `rgba(239, 68, 68, ${0.15 + intensity * 0.35})`;
+      const alpha = isDark ? (0.18 + intensity * 0.65) : (0.08 + intensity * 0.72);
+      const textColor = isDark 
+        ? (intensity > 0.35 ? '#ffffff' : '#f87171')
+        : 'rgb(185, 28, 28)';
+      const borderColor = `rgba(239, 68, 68, ${isDark ? 0.3 + intensity * 0.4 : 0.15 + intensity * 0.35})`;
       return `background-color: rgba(239, 68, 68, ${alpha}); color: ${textColor}; border-color: ${borderColor};`;
     } else {
+      if (isDark) {
+        return `background-color: #1e2028; color: #94a3b8; border-color: #2a2d38;`;
+      }
       return `background-color: rgb(241, 245, 249); color: rgb(71, 85, 105); border-color: rgb(226, 232, 240);`;
     }
   }

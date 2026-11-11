@@ -1,21 +1,26 @@
 @import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ── Container ───────────────────────────────────────────────── */
 .movers-container {
-  @apply w-full h-full flex flex-col gap-4 p-4 bg-white rounded-lg shadow-md min-w-0 overflow-hidden;
+  @apply w-full h-full flex flex-col gap-4 p-4 bg-white rounded-lg shadow-md min-w-0 overflow-hidden
+         dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800 dark:shadow-none transition-colors;
 }
 
 /* ── KPI Cards ───────────────────────────────────────────────── */
 .kpi-card {
-  @apply flex flex-col gap-0.5 p-3 rounded-lg bg-zinc-50 border border-zinc-200/80;
+  @apply flex flex-col gap-0.5 p-3 rounded-lg bg-zinc-50 border border-zinc-200/80
+         dark:bg-zinc-800/70 dark:border-zinc-700/80;
 }
 
 .kpi-label {
-  @apply text-[10px] font-bold text-zinc-400 uppercase tracking-wider;
+  @apply text-[10px] font-bold text-zinc-400 uppercase tracking-wider
+         dark:text-zinc-400/80;
 }
 
 .kpi-sub {
-  @apply text-[10px] text-zinc-400 font-medium mt-0.5;
+  @apply text-[10px] text-zinc-400 font-medium mt-0.5
+         dark:text-zinc-400/70;
 }
 
 /* ── Custom Dropdowns ────────────────────────────────────────── */
@@ -26,12 +31,14 @@
 .custom-dropdown-btn {
   @apply flex items-center justify-between w-full bg-zinc-50 ring-1 ring-zinc-300/80 shadow-xs 
          rounded-md px-2.5 py-1.5 font-medium text-zinc-700 hover:ring-zinc-400 hover:bg-zinc-100/40 
-         transition-all cursor-pointer select-none text-xs;
+         transition-all cursor-pointer select-none text-xs
+         dark:bg-zinc-800 dark:ring-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-700 dark:hover:ring-zinc-600;
 }
 
 .custom-dropdown-menu {
   @apply absolute left-0 mt-1.5 w-full min-w-max bg-white ring-1 ring-zinc-200 shadow-xl 
-         rounded-lg py-1 z-50 max-h-64 overflow-y-auto select-none;
+         rounded-lg py-1 z-50 max-h-64 overflow-y-auto select-none
+         dark:bg-zinc-800 dark:ring-zinc-700 dark:shadow-2xl;
   animation: dropdown-in 0.12s ease-out forwards;
 }
 
@@ -48,24 +55,32 @@
 
 .custom-dropdown-item {
   @apply flex items-center justify-between gap-3 w-full px-3 py-1.5 text-left text-zinc-700 
-         hover:bg-zinc-100 hover:text-zinc-900 transition-colors cursor-pointer text-xs;
+         hover:bg-zinc-100 hover:text-zinc-900 transition-colors cursor-pointer text-xs
+         dark:text-zinc-300 dark:hover:bg-zinc-700/50 dark:hover:text-zinc-100;
 }
 
 .custom-dropdown-item.active {
-  @apply bg-zinc-50 text-zinc-900 font-semibold;
+  @apply bg-zinc-50 text-zinc-900 font-semibold
+         dark:bg-zinc-700 dark:text-zinc-100;
 }
 
 /* ── Table List ──────────────────────────────────────────────── */
 .table-list th {
-  @apply px-3 py-2.5 text-zinc-600 bg-zinc-100 font-semibold text-[11px] uppercase tracking-wider whitespace-nowrap;
+  @apply px-3 py-2.5 text-zinc-600 bg-zinc-100 font-semibold text-[11px] uppercase tracking-wider whitespace-nowrap
+         dark:text-zinc-300 dark:bg-zinc-800;
 }
 
 .table-list th.sortable {
-  @apply text-zinc-800;
+  @apply text-zinc-800 dark:text-zinc-200;
 } 
 
 .table-list th.sortable:hover {
-  @apply bg-zinc-200/60;
+  @apply bg-zinc-200/60 dark:bg-zinc-700/60;
+}
+
+.table-list th.sortable svg {
+  @apply text-zinc-700
+          dark:text-zinc-200
 }
 
 .table-list td {

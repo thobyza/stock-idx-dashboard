@@ -1,15 +1,18 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject } from '@angular/core';
 import { IndexData } from '../../stock.service';
+import { ThemeService } from '../../theme.service';
 import { DecimalPipe, DatePipe } from '@angular/common';
-import { LucideTrendingUp, LucideTextAlignStart, LucideLayoutGrid, LucideWorkflow, LucideArrowRight, LucideArrowLeft } from '@lucide/angular';
+import { LucideTrendingUp, LucideTextAlignStart, LucideLayoutGrid, LucideWorkflow, LucideArrowRight, LucideArrowLeft, LucideSun, LucideMoon } from '@lucide/angular';
 
 @Component({
   selector: 'app-sector-sidebar',
-  imports: [DecimalPipe, DatePipe, LucideTrendingUp, LucideTextAlignStart, LucideLayoutGrid, LucideWorkflow, LucideArrowRight, LucideArrowLeft],
+  imports: [DecimalPipe, DatePipe, LucideTrendingUp, LucideTextAlignStart, LucideLayoutGrid, LucideWorkflow, LucideArrowRight, LucideArrowLeft, LucideSun, LucideMoon],
   templateUrl: './sector-sidebar.html',
   styleUrl: './sector-sidebar.css',
 })
 export class SectorSidebar {
+  readonly themeService = inject(ThemeService);
+  
   ihsg = input.required<IndexData>();
   advancing = input.required<number>();
   unchanged = input.required<number>();

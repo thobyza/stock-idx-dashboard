@@ -1,10 +1,15 @@
-<section class="flex flex-col gap-4">
+<section class="flex flex-col gap-4 h-full justify-between">
 
-  @if (!collapsed()) {
-    <div class="flex justify-between">
+  <div class="flex flex-col gap-4">
+    @if (!collapsed()) {
+      <div class="flex justify-between items-center">
         <div class="flex items-center gap-2.5">
-          <img class="w-5 object-contain" src="assets/images/app_logo_idx2.png" alt="">
-          <label class="font-semibold text-lg text-[#27272A]">IDX Metrics</label> 
+          <img 
+            class="w-5 object-contain" 
+            [src]="themeService.isDark() ? 'assets/images/app_logo_idx2-wh.png' : 'assets/images/app_logo_idx2.png'" 
+            alt=""
+          >
+          <label class="font-semibold text-lg text-[#27272A] dark:text-zinc-100">IDX Metrics</label> 
         </div>
         <button 
           (click)="onToggle()" 
@@ -15,12 +20,16 @@
           <svg lucideArrowLeft></svg>
         </button> 
       </div>
-  } @else {
-    <div class="flex flex-col gap-2 items-center">
-      <div class="h-[28px] content-center">
-        <img class="w-5 object-contain" src="assets/images/app_logo_idx2.png" alt="">
-      </div>
-      <button 
+    } @else {
+      <div class="flex flex-col gap-2 items-center">
+        <div class="h-7 content-center">
+          <img 
+            class="w-5 object-contain" 
+            [src]="themeService.isDark() ? 'assets/images/app_logo_idx2-wh.png' : 'assets/images/app_logo_idx2.png'" 
+            alt=""
+          >
+        </div>
+        <button 
           (click)="onToggle()" 
           class="toggle-sidebar" 
           title="Toggle sidebar"
@@ -28,96 +37,108 @@
         >                                                                                             
           <svg lucideArrowRight></svg>                                                                                                                                                                              
         </button> 
-    </div>
-    
-  }
+      </div>
+    }
 
-  @if (!collapsed()){
-    <section class="flex flex-col gap-3">
-      <!-- <div class="flex items-center justify-between mt-1">                                                                                                                                                           
-        <span class="text-xs font-medium text-zinc-500">                                                                                                                              
-          {{ selectedDate() | date:'EEE, d MMM yyyy' }}                                                                                                                                                              
-        </span>                                                                                                                                                                                                      
-      </div> -->
-      <!-- IHSG Badge -->                                                                    
-      <div class="rounded-md px-2.5 py-2.5 ring ring-zinc-300/80 flex flex-col justify-center bg-zinc-50">     
-        <span class="text-zinc-500/90 text-xs mb-1.5">{{ selectedDate() | date:'EEE, d MMM yyyy' }} </span>  
-        <div class="flex items-center gap-2.5">
-          <img class="h-8 rounded-full object-contain" src="assets/logos/idx_logo.svg" alt="">
-          <div class="flex flex-col gap-0.5">
-            <h3 class="font-semibold text-sm text-zinc-700">IDX Composite Index</h3>  
-            <div class="flex items-center gap-2">
-              <span class="font-normal text-sm text-zinc-600">{{ ihsg().price | number:'1.2-2' }}</span>                                                                                                                             
-              <span 
-                class="font-medium text-xs" 
-                [class.text-emerald-500]="ihsg().change >= 0" 
-                [class.text-rose-500]="ihsg().change < 0">
-                  {{ ihsg().change >= 0 ? '↗︎' : '↘︎' }} {{ (ihsg().change >= 0 ? ihsg().change : -ihsg().change) | number:'1.2-2' }} ({{ ihsg().pct | number:'1.2-2' }}%)
-                </span>
+    @if (!collapsed()){
+      <section class="flex flex-col gap-3">
+        <!-- IHSG Badge -->                                                                    
+        <div class="rounded-md px-2.5 py-2.5 ring ring-zinc-300/80 flex flex-col justify-center bg-zinc-50 dark:bg-zinc-800/80 dark:ring-zinc-700">     
+          <span class="text-zinc-500/90 dark:text-zinc-400 text-xs mb-1.5">{{ selectedDate() | date:'EEE, d MMM yyyy' }} </span>  
+          <div class="flex items-center gap-2.5">
+            <img class="h-8 rounded-full object-contain" src="assets/logos/idx_logo.svg" alt="">
+            <div class="flex flex-col gap-0.5">
+              <h3 class="font-semibold text-sm text-zinc-700 dark:text-zinc-200">IDX Composite Index</h3>  
+              <div class="flex items-center gap-2">
+                <span class="font-normal text-sm text-zinc-600 dark:text-zinc-400">{{ ihsg().price | number:'1.2-2' }}</span>                                                                                                                             
+                <span 
+                  class="font-medium text-xs" 
+                  [class.text-emerald-500]="ihsg().change >= 0" 
+                  [class.text-rose-500]="ihsg().change < 0">
+                    {{ ihsg().change >= 0 ? '↗︎' : '↘︎' }} {{ (ihsg().change >= 0 ? ihsg().change : -ihsg().change) | number:'1.2-2' }} ({{ ihsg().pct | number:'1.2-2' }}%)
+                  </span>
+              </div>
             </div>
           </div>
-        </div>
+      
+          <!-- SVG Sparkline Chart -->                                                                                                                                                                                 
+          @if (ihsg().history && ihsg().history!.length > 1) {                                                                                                                                                         
+            <div class="w-full h-8 mt-5 mb-5">                                                                                                                                                                              
+              <svg class="w-full h-full overflow-visible" viewBox="0 0 180 32" preserveAspectRatio="none">                                                                                                             
+                <polyline                                                                                                                                                                                              
+                  fill="none"                                                                                                                                                                                          
+                  [attr.stroke]="ihsg().change >= 0 ? '#10b981' : '#f43f5e'"                                                                                                                                           
+                  stroke-width="1.5"                                                                                                                                                                                   
+                  stroke-linecap="round"                                                                                                                                                                               
+                  stroke-linejoin="round"                                                                                                                                                                              
+                  [attr.points]="getSparklinePoints(ihsg().history)"                                                                                                                                                   
+                />                                                                                                                                                                                                     
+              </svg>                                                                                                                                                                                                   
+            </div>                                                                                                                                                                                                     
+          } 
+        </div>   
+      </section>
+    }
     
-        <!-- SVG Sparkline Chart -->                                                                                                                                                                                 
-        @if (ihsg().history && ihsg().history!.length > 1) {                                                                                                                                                         
-          <div class="w-full h-8 mt-5 mb-5">                                                                                                                                                                              
-            <svg class="w-full h-full overflow-visible" viewBox="0 0 180 32" preserveAspectRatio="none">                                                                                                             
-              <polyline                                                                                                                                                                                              
-                fill="none"                                                                                                                                                                                          
-                [attr.stroke]="ihsg().change >= 0 ? '#10b981' : '#f43f5e'"                                                                                                                                           
-                stroke-width="1.5"                                                                                                                                                                                   
-                stroke-linecap="round"                                                                                                                                                                               
-                stroke-linejoin="round"                                                                                                                                                                              
-                [attr.points]="getSparklinePoints(ihsg().history)"                                                                                                                                                   
-              />                                                                                                                                                                                                     
-            </svg>                                                                                                                                                                                                   
-          </div>                                                                                                                                                                                                     
-        } 
-    
-        <!-- OHLC -->                                                                                                                                                                                   
-        <div class="justify-center items-center gap-5 mt-6 text-xs hidden">                                                                                                                     
-          <div class="flex flex-col items-center gap-0.5">                                                                                                                                                                                
-            <span class="text-zinc-400 font-normal">Open</span>                                                                                                                               
-            <span class=" text-zinc-500">{{ ihsg().open | number:'1.0-0' }}</span>                                                                                     
-          </div>         
-          <div class="h-4 w-px bg-zinc-300"></div>                                                                                                                                                                                            
-          <div class="flex flex-col items-center gap-0.5">                                                                                                                                                                                
-            <span class="text-zinc-400">High</span>                                                                                                                               
-            <span class=" text-zinc-500">{{ ihsg().high | number:'1.0-0' }}</span>                                                                      
-          </div>                            
-          <div class="h-4 w-px bg-zinc-300"></div>                                                                                                                                                                         
-          <div class="flex flex-col items-center gap-0.5">                                                                                                                                                                                
-            <span class="text-zinc-400">Low</span>                                                                                                                                
-            <span class=" text-zinc-500">{{ ihsg().low | number:'1.0-0' }}</span>                                                                          
-          </div>                                                                                                                                                                                                                                                                                                                                                                                                     
-        </div> 
-    
-      </div>   
+    <!-- Menu -->
+    <section 
+      class="flex flex-col gap-0.5"
+      [class.mt-5]="collapsed()"
+      [class.mt-3]="!collapsed()"
+    >                                                                                                                                                                        
+      <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'dashboard'" (click)="onSelectPage('dashboard')">                                                                                                   
+        <svg lucideLayoutGrid></svg>                                                                                                                                                                                      
+        @if (!collapsed()) { <label>Heatmap</label> }                                                                                                                                                              
+      </div>                                                                                                                                                                                                         
+      <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'movers'" (click)="onSelectPage('movers')">                                                                                                     
+        <svg lucideTrendingUp></svg>                                                                                                                                                                                 
+        @if (!collapsed()) { <label>Screener</label> }                                                                                                                                                      
+      </div>                                                                                                                                                                                                         
+      <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'news'" (click)="onSelectPage('news')">                                                                                                             
+        <svg lucideTextAlignStart></svg>                                                                                                                                                                               
+        @if (!collapsed()) { <label>News</label> }                                                                                                                                                            
+      </div>                                                                                                                                                                                                  
+      <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'calendar'" (click)="onSelectPage('calendar')">                                                                                                     
+        <svg lucideWorkflow></svg>                                                                                                                                                                                 
+        @if (!collapsed()) { <label>Corp Actions</label> }                                                                                                                                                      
+      </div>                                                                                                                                                                                                  
     </section>
-  }
-  
-  <!-- Menu -->
-  <section 
-    class="flex flex-col gap-0.5 "
-    [class.mt-5]="collapsed()"
-    [class.mt-3]="!collapsed()"
-  >                                                                                                                                                                        
-    <div class="menu-wrapper" [class.active]="activePage() === 'dashboard'" (click)="onSelectPage('dashboard')">                                                                                                   
-      <svg lucideLayoutGrid></svg>                                                                                                                                                                                      
-      @if (!collapsed()) { <label>Heatmap</label> }                                                                                                                                                              
-    </div>                                                                                                                                                                                                         
-    <div class="menu-wrapper" [class.active]="activePage() === 'movers'" (click)="onSelectPage('movers')">                                                                                                     
-      <svg lucideTrendingUp></svg>                                                                                                                                                                                 
-      @if (!collapsed()) { <label>Screener</label> }                                                                                                                                                      
-    </div>                                                                                                                                                                                                         
-    <div class="menu-wrapper" [class.active]="activePage() === 'news'" (click)="onSelectPage('news')">                                                                                                             
-      <svg lucideTextAlignStart></svg>                                                                                                                                                                               
-      @if (!collapsed()) { <label>News</label> }                                                                                                                                                            
-    </div>                                                                                                                                                                                                  
-    <div class="menu-wrapper" [class.active]="activePage() === 'calendar'" (click)="onSelectPage('calendar')">                                                                                                     
-      <svg lucideWorkflow></svg>                                                                                                                                                                                 
-      @if (!collapsed()) { <label>Corp Actions</label> }                                                                                                                                                      
-    </div>                                                                                                                                                                                                  
+  </div>
+
+  <!-- Theme Toggle Switch -->
+  <section class="pt-3 border-t border-zinc-200 dark:border-zinc-800 mt-auto">
+    <div
+      class="flex items-center cursor-pointer select-none"
+      [class.justify-between]="!collapsed()"
+      [class.justify-center]="collapsed()"
+      [class.px-1]="!collapsed()"
+      (click)="themeService.toggleTheme()"
+      [title]="themeService.isDark() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+    >
+
+      <!-- Toggle Track -->
+      <button
+        type="button"
+        role="switch"
+        [attr.aria-checked]="themeService.isDark()"
+        class="relative inline-flex h-6 w-9 shrink-0 cursor-pointer rounded-full p-0.5 transition-colors duration-200 ease-in-out focus:outline-none"
+        [class]="!themeService.isDark() ? 'bg-[#e4e8d6]' : 'bg-zinc-700/70'"
+        [class.bg-zinc-700]="themeService.isDark()"
+      >
+        <!-- Sliding Thumb with Icon -->
+        <span
+          class="pointer-events-none flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out"
+          [class.translate-x-0]="!themeService.isDark()"
+          [class.translate-x-3]="themeService.isDark()"
+        >
+          @if (themeService.isDark()) {
+            <svg lucideMoon class="size-3 text-zinc-800 shrink-0"></svg>
+          } @else {
+            <svg lucideSun class="size-3 text-amber-500 shrink-0"></svg>
+          }
+        </span>
+      </button>
+    </div>
   </section>
 
 </section>

@@ -14,59 +14,59 @@
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
       
       <div
-        class="kpi-card border-l-4 border-l-emerald-500 cursor-pointer hover:bg-zinc-50 transition-colors"
+        class="kpi-card border-l-4 border-l-emerald-500 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
         (click)="setCategory('gainers')"
         title="Sort by Top Gainers"
       >
         <span class="kpi-label">Top Gainer Today</span>
         <div class="flex items-baseline gap-2 mt-0.5">
-          <span class="text-base font-bold text-zinc-900">{{ kpi.topGainer.symbol }}</span>
-          <span class="text-xs font-bold text-emerald-600">+{{ kpi.topGainer.change | number:'1.2-2' }}%</span>
+          <span class="text-base font-bold text-zinc-900 dark:text-zinc-100">{{ kpi.topGainer.symbol }}</span>
+          <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">+{{ kpi.topGainer.change | number:'1.2-2' }}%</span>
         </div>
         <span class="kpi-sub truncate">{{ kpi.topGainer.name }}</span>
       </div>
 
       <div
-        class="kpi-card border-l-4 border-l-rose-500 cursor-pointer hover:bg-zinc-50 transition-colors"
+        class="kpi-card border-l-4 border-l-rose-500 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
         (click)="setCategory('losers')"
         title="Sort by Top Losers"
       >
         <span class="kpi-label">Top Loser Today</span>
         <div class="flex items-baseline gap-2 mt-0.5">
-          <span class="text-base font-bold text-zinc-900">{{ kpi.topLoser.symbol }}</span>
-          <span class="text-xs font-bold text-rose-600">{{ kpi.topLoser.change | number:'1.2-2' }}%</span>
+          <span class="text-base font-bold text-zinc-900 dark:text-zinc-100">{{ kpi.topLoser.symbol }}</span>
+          <span class="text-xs font-bold text-rose-600 dark:text-rose-400">{{ kpi.topLoser.change | number:'1.2-2' }}%</span>
         </div>
         <span class="kpi-sub truncate">{{ kpi.topLoser.name }}</span>
       </div>
 
       <div
-        class="kpi-card border-l-4 border-l-blue-500 cursor-pointer hover:bg-zinc-50 transition-colors"
+        class="kpi-card border-l-4 border-l-blue-500 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
         (click)="setCategory('turnover')"
         title="Sort by Highest Turnover"
       >
         <span class="kpi-label">Highest Turnover</span>
         <div class="flex items-baseline gap-2 mt-0.5">
-          <span class="text-base font-bold text-zinc-900">{{ kpi.topTurnover.symbol }}</span>
-          <span class="text-xs font-semibold text-zinc-600">{{ formatTurnover(kpi.topTurnover) }}</span>
+          <span class="text-base font-bold text-zinc-900 dark:text-zinc-100">{{ kpi.topTurnover.symbol }}</span>
+          <span class="text-xs font-semibold text-zinc-600 dark:text-zinc-400">{{ formatTurnover(kpi.topTurnover) }}</span>
         </div>
         <span class="kpi-sub truncate">{{ kpi.topTurnover.name }}</span>
       </div>
 
       <div
-        class="kpi-card border-l-4 border-l-purple-500 cursor-pointer hover:bg-zinc-50 transition-colors"
+        class="kpi-card border-l-4 border-l-purple-500 cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
         (click)="setCategory('52w-high')"
         title="Sort by 52-Week Range"
       >
         <span class="kpi-label">Near 52W Highs</span>
         <div class="flex items-baseline gap-2 mt-0.5">
-          <span class="text-base font-bold text-purple-700">{{ kpi.near52wHighCount }} stocks</span>
+          <span class="text-base font-bold text-purple-700 dark:text-purple-400">{{ kpi.near52wHighCount }} stocks</span>
         </div>
         <span class="kpi-sub">Within 4% of 52W peak</span>
       </div>
     </div>
   }
 
-  <div class="border-t border-zinc-200/70 h-[1px]"></div>
+  <div class="border-t border-zinc-200/70 dark:border-zinc-800/80 h-px"></div>
 
   <!-- Toolbar controls -->
   <div class="flex flex-wrap justify-between items-center gap-4">
@@ -84,7 +84,7 @@
           />
         </div>
 
-        <div class="h-4 w-px bg-zinc-300"></div>
+        <div class="h-4 w-px bg-zinc-300 dark:bg-zinc-700"></div>
 
         <!-- Index Custom Dropdown -->
         <div class="dropdown-container w-36 text-xs">
@@ -156,7 +156,7 @@
           </button>
     
           @if (isSectorOpen()) {
-            <div class="custom-dropdown-menu min-w-[210px]">
+            <div class="custom-dropdown-menu min-w-52.5">
               <!-- All Sectors option -->
               <button
                 type="button"
@@ -205,29 +205,35 @@
     </div>
     <!-- MCap Filter -->
     <div class="flex items-center gap-2 text-xs">
-      <span class="text-zinc-700/80">Cap</span>
+      <span class="text-zinc-700/80 dark:text-zinc-400">Cap</span>
       <div class="tab-wrapper-theme">
         <button
-          class="px-2.5 py-1 text-zinc-700/70 rounded-md transition-all cursor-pointer hover:bg-zinc-100"
+          class="px-2.5 py-1 text-zinc-700/70 dark:text-zinc-400 rounded-md transition-all cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
           [class.bg-zinc-200]="marketCapTier() === 'ALL'"
+          [class.dark:bg-zinc-700]="marketCapTier() === 'ALL'"
           [class.text-zinc-800]="marketCapTier() === 'ALL'"
+          [class.dark:text-zinc-100]="marketCapTier() === 'ALL'"
           (click)="setCapTier('ALL')"
         >
           All
         </button>
         <button
-          class="px-2.5 py-1 text-zinc-700/70 rounded-md transition-all cursor-pointer hover:bg-zinc-100"
+          class="px-2.5 py-1 text-zinc-700/70 dark:text-zinc-400 rounded-md transition-all cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
           [class.bg-zinc-200]="marketCapTier() === 'LARGE'"
+          [class.dark:bg-zinc-700]="marketCapTier() === 'LARGE'"
           [class.text-zinc-800]="marketCapTier() === 'LARGE'"
+          [class.dark:text-zinc-100]="marketCapTier() === 'LARGE'"
           (click)="setCapTier('LARGE')"
           title="Market Cap > Rp 50 Trillion"
         >
           Big Cap (>50T)
         </button>
         <button
-          class="px-2.5 py-1 text-zinc-700/70 rounded-md transition-all cursor-pointer hover:bg-zinc-100"
+          class="px-2.5 py-1 text-zinc-700/70 dark:text-zinc-400 rounded-md transition-all cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
           [class.bg-zinc-200]="marketCapTier() === 'MID'"
+          [class.dark:bg-zinc-700]="marketCapTier() === 'MID'"
           [class.text-zinc-800]="marketCapTier() === 'MID'"
+          [class.dark:text-zinc-100]="marketCapTier() === 'MID'"
           (click)="setCapTier('MID')"
           title="Market Cap Rp 10T - Rp 50T"
         >
@@ -239,17 +245,17 @@
   </div>
 
   <!-- Results Count Bar -->
-  <div class="flex items-center gap-2 text-xs text-zinc-400">
-    <span>Showing <span class="font-semibold text-zinc-500">{{ rankedStocks().length }}</span> stocks</span>
+  <div class="flex items-center gap-2 text-xs text-zinc-400 dark:text-zinc-500">
+    <span>Showing <span class="font-semibold text-zinc-500 dark:text-zinc-400">{{ rankedStocks().length }}</span> stocks</span>
     <span>•</span>
-    <span class="">Sorted by <span class="font-semibold text-zinc-500">{{ sortColumnLabel() }}</span> ({{ sortDirection() === 'asc' ? 'Ascending' : 'Descending' }})</span>
+    <span class="">Sorted by <span class="font-semibold text-zinc-500 dark:text-zinc-400">{{ sortColumnLabel() }}</span> ({{ sortDirection() === 'asc' ? 'Ascending' : 'Descending' }})</span>
   </div>
 
   <!-- Ranked Table -->
-  <div class="table-list overflow-x-auto border border-zinc-200 rounded-lg grow max-h-[65vh]">
+  <div class="table-list overflow-x-auto border border-zinc-200 dark:border-zinc-700 rounded-lg grow max-h-[65vh]">
     <table class="w-full text-left text-xs border-collapse">
       <thead class="sticky top-0 z-20">
-        <tr class="border-b border-zinc-200 text-zinc-500 font-semibold bg-zinc-100 select-none">
+        <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-semibold bg-zinc-100 dark:bg-zinc-800 select-none">
           <!-- <th class="w-12 text-center">Rank</th> -->
           
           <!-- Ticker (Sortable) -->
@@ -260,7 +266,6 @@
             <div
               class="inline-flex items-center gap-1.5"
               [class.font-bold]="sortColumn() === 'symbol'"
-              [class.text-zinc-900]="sortColumn() === 'symbol'"
             >
               <span>Ticker</span>
               @if (sortColumn() === 'symbol') {
@@ -295,7 +300,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'price'"
-              [class.text-zinc-900]="sortColumn() === 'price'"
             >
               <span>Price (IDR)</span>
               @if (sortColumn() === 'price') {
@@ -324,7 +328,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'change'"
-              [class.text-zinc-900]="sortColumn() === 'change'"
             >
               <span>1D Change</span>
               @if (sortColumn() === 'change') {
@@ -353,7 +356,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'change1w'"
-              [class.text-zinc-900]="sortColumn() === 'change1w'"
             >
               <span>1W Change</span>
               @if (sortColumn() === 'change1w') {
@@ -382,7 +384,6 @@
             <div
               class="inline-flex items-center justify-center gap-1.5 w-full"
               [class.font-bold]="sortColumn() === '52w-range'"
-              [class.text-zinc-900]="sortColumn() === '52w-range'"
             >
               <span>52W Range</span>
               @if (sortColumn() === '52w-range') {
@@ -411,7 +412,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'volume'"
-              [class.text-zinc-900]="sortColumn() === 'volume'"
             >
               <span>Volume</span>
               @if (sortColumn() === 'volume') {
@@ -440,7 +440,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'turnover'"
-              [class.text-zinc-900]="sortColumn() === 'turnover'"
             >
               <span>Turnover</span>
               @if (sortColumn() === 'turnover') {
@@ -469,7 +468,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'marketCap'"
-              [class.text-zinc-900]="sortColumn() === 'marketCap'"
             >
               <span>Market Cap</span>
               @if (sortColumn() === 'marketCap') {
@@ -493,43 +491,32 @@
       </thead>
       <tbody>
         @for (stock of rankedStocks(); track stock.symbol; let idx = $index) {
-          <tr class="border-b border-zinc-100 hover:bg-zinc-50 transition-all text-zinc-800">
-            <!-- Rank badge -->
-            <!-- <td class="text-center font-mono">
-              @if (idx === 0) {
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-100 text-amber-800 font-bold text-[11px]">1</span>
-              } @else if (idx === 1) {
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 text-slate-700 font-bold text-[11px]">2</span>
-              } @else if (idx === 2) {
-                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-50 text-amber-900/70 border border-amber-200 font-bold text-[11px]">3</span>
-              } @else {
-                <span class="text-zinc-400 text-xs">#{{ idx + 1 }}</span>
-              }
-            </td> -->
-
+          <tr class="border-b border-zinc-100 dark:border-zinc-700/80 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-all text-zinc-800 dark:text-zinc-200">
             <!-- Symbol -->
             <td class="font-bold uppercase">
-              <span class="bg-zinc-100 px-1.5 py-0.5 rounded text-zinc-800 border border-zinc-200/60">{{ stock.symbol }}</span>
+              <span class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700">{{ stock.symbol }}</span>
             </td>
 
             <!-- Name -->
-            <td class="max-w-[180px] truncate text-zinc-700 font-medium" [title]="stock.name">
+            <td class="max-w-45 truncate text-zinc-700 dark:text-zinc-300 font-medium" [title]="stock.name">
               {{ stock.name }}
             </td>
 
             <!-- Sector -->
-            <td class="text-zinc-400 text-[11px]">{{ stock.sector }}</td>
+            <td class="text-zinc-400 dark:text-zinc-400 text-[11px]">{{ stock.sector }}</td>
 
             <!-- Price -->
-            <td class="text-right font-medium text-zinc-500">
+            <td class="text-right font-medium text-zinc-500 dark:text-zinc-400">
               {{ stock.price | number }}
             </td>
 
             <!-- 1D Change -->
             <td
-              class="text-right font-semibold "
+              class="text-right font-semibold"
               [class.text-emerald-600]="stock.change > 0"
+              [class.dark:text-emerald-400]="stock.change > 0"
               [class.text-rose-600]="stock.change < 0"
+              [class.dark:text-rose-400]="stock.change < 0"
               [class.text-zinc-400]="stock.change === 0"
             >
               {{ stock.change > 0 ? '+' : '' }}{{ stock.change | number:'1.2-2' }}%
@@ -539,7 +526,9 @@
             <td
               class="text-right font-semibold"
               [class.text-emerald-600]="(stock.change1w || 0) > 0"
+              [class.dark:text-emerald-400]="(stock.change1w || 0) > 0"
               [class.text-rose-600]="(stock.change1w || 0) < 0"
+              [class.dark:text-rose-400]="(stock.change1w || 0) < 0"
               [class.text-zinc-400]="(stock.change1w || 0) === 0"
             >
               {{ (stock.change1w || 0) > 0 ? '+' : '' }}{{ (stock.change1w || 0) | number:'1.2-2' }}%
@@ -548,13 +537,13 @@
             <!-- 52W Range -->
             <td class="text-center">
               <div class="flex flex-col items-center gap-1 mx-auto w-28">
-                <div class="w-full h-1.5 bg-zinc-200 rounded-full overflow-hidden">
+                <div class="w-full h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                   <div
-                    class="h-full bg-zinc-400 rounded-full transition-all"
+                    class="h-full bg-zinc-400 dark:bg-zinc-500 rounded-full transition-all"
                     [style.width.%]="get52WeekPosition(stock.price, stock.fiftyTwoWeekLow, stock.fiftyTwoWeekHigh)"
                   ></div>
                 </div>
-                <div class="flex justify-between w-full text-[9px] text-zinc-500/80">
+                <div class="flex justify-between w-full text-[9px] text-zinc-500/80 dark:text-zinc-400">
                   <span>{{ stock.fiftyTwoWeekLow | number }}</span>
                   <span>{{ stock.fiftyTwoWeekHigh | number }}</span>
                 </div>
@@ -562,17 +551,17 @@
             </td>
 
             <!-- Volume -->
-            <td class="text-right text-zinc-600 ">
+            <td class="text-right text-zinc-600 dark:text-zinc-400">
               {{ stock.volume | number }}
             </td>
 
             <!-- Turnover -->
-            <td class="text-right font-mono font-medium text-zinc-800">
+            <td class="text-right font-mono font-medium text-zinc-800 dark:text-zinc-200">
               {{ formatTurnover(stock) }}
             </td>
 
             <!-- Market Cap -->
-            <td class="text-right font-mono text-zinc-500">
+            <td class="text-right font-mono text-zinc-500 dark:text-zinc-400">
               {{ formatMarketCap(stock.marketCap) }}
             </td>
           </tr>

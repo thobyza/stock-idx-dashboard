@@ -2,8 +2,28 @@
 
 @import 'tailwindcss';
 
+/* ── Tailwind v4: enable dark mode via .dark class ─────────── */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-cream-50: #F3F5ED;
+  --color-olive-100: #F3F5ED;
+  --color-olive-500: #848c74;
+  --color-dark-bg: #0f1117;
+  --color-dark-surface: #181a20;
+  --color-dark-card: #1e2028;
+  --color-dark-border: #2a2d38;
+  --color-dark-border-subtle: #23262f;
+}
+
+html {
+  color-scheme: light;
+  background-color: #F3F5ED;
+}
+
+html.dark {
+  color-scheme: dark;
+  background-color: #0f1117;
 }
 
 /* color-text-default */
@@ -22,23 +42,25 @@
 
 .input-theme {
   color: var(--color-theme-1);
-  /* @apply w-full bg-zinc-50 border border-zinc-400 placeholder-zinc-400/90 
-  text-xs rounded-md px-3 py-2 focus:outline-none focus:border-zinc-500 focus:ring-1 focus:ring-zinc-600; */
   @apply w-full bg-zinc-50 ring ring-zinc-300/80 shadow-sm 
   placeholder-zinc-500/80 text-xs rounded-md px-3 py-1.5 
-  focus:outline-none focus:ring-zinc-400 text-zinc-700;
+  focus:outline-none focus:ring-zinc-400 text-zinc-700
+  dark:bg-zinc-800 dark:ring-zinc-700 dark:text-zinc-200 
+  dark:placeholder-zinc-500 dark:focus:ring-zinc-600;
 }
 
 .tab-wrapper-theme {
-  /* @apply flex bg-zinc-50 border border-zinc-700 rounded-lg p-0.5 font-normal */
-  @apply flex bg-zinc-50 ring ring-zinc-300/80 shadow-xs rounded-lg p-0.5 font-normal;
+  @apply flex bg-zinc-50 ring ring-zinc-300/80 shadow-xs rounded-lg p-0.5 font-normal
+  dark:bg-zinc-800 dark:ring-zinc-700;
 }
 
 .tab-item-theme {
   @apply px-2.5 py-1 text-zinc-700/70 rounded-md transition-all cursor-pointer hover:bg-zinc-100
+  dark:text-zinc-400 dark:hover:bg-zinc-700/50 dark:hover:text-zinc-200;
 }
   .tab-item-theme.active {
-    @apply bg-zinc-200 text-zinc-800;
+    @apply bg-zinc-200 text-zinc-800
+    dark:bg-zinc-700 dark:text-zinc-100;
   }
 
 
@@ -58,10 +80,11 @@
 
 .table-list th {
   @apply p-3.5 text-zinc-800 whitespace-nowrap
+  dark:text-zinc-300;
 }
 
 .table-list td {
-  @apply p-3.5 whitespace-nowrap
+  @apply p-3.5 whitespace-nowrap;
 }
 
 /* ── Header ──────────────────────────────────────────────────── */
@@ -70,14 +93,17 @@
 }
 
 .main-title {
-  @apply text-xl font-bold text-zinc-800 leading-tight;
+  @apply text-xl font-bold text-zinc-800 leading-tight
+  dark:text-zinc-100;
 }
 
 .main-subtitle {
-  @apply text-sm text-zinc-400 mt-0.5;
+  @apply text-sm text-zinc-400 mt-0.5
+  dark:text-zinc-500;
 }
 
 .main-badge {
   @apply text-[10px] font-bold tracking-widest uppercase
-         bg-zinc-800 text-zinc-100 px-2.5 py-1 rounded-full;
+         bg-zinc-800 text-zinc-100 px-2.5 py-1 rounded-full
+         dark:bg-zinc-700 dark:text-zinc-200;
 }
