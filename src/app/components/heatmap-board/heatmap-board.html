@@ -266,7 +266,7 @@
 
     <!-- 3. Sectors Card -->
     @if (viewMode() === 'sectors') {
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 grow auto-rows-max">
+      <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 grow auto-rows-max">
         @for (sec of sectorPerformances(); track sec.sector) {
           <div
             class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600 rounded-lg py-3 px-3.5 cursor-pointer transition-all flex flex-col gap-3"
@@ -300,12 +300,12 @@
             </div>
 
             <div class="relative pt-2 border-t border-zinc-200/90 dark:border-zinc-700">
-              <div class="flex flex-wrap gap-1.5 max-h-[85px] overflow-y-auto pb-4 pr-1">
+              <div class="flex flex-wrap gap-1.5 max-h-[50px] md:max-h-[80px] lg:max-h-[100px] overflow-y-auto pb-4 pr-1">
                 @for (stock of getStocksForSector(sec.sector); track stock.symbol) {
-                  <div class="flex items-center gap-1.5 px-2 py-1 bg-white dark:bg-zinc-700/80 border border-zinc-200/80 dark:border-zinc-600 rounded-md text-xs">
-                    <span class="font-normal text-zinc-700 dark:text-zinc-200">{{ stock.symbol }}</span>
+                  <div class="flex items-center gap-1.5 px-2 py-1 bg-white dark:bg-zinc-700/80 border border-zinc-200/80 dark:border-zinc-600 rounded-md">
+                    <span class="font-normal text-zinc-700 dark:text-zinc-200 text-[11px]">{{ stock.symbol }}</span>
                     <span
-                      class="font-semibold text-[11px]"
+                      class="font-semibold text-[10px]"
                       [class]="stock.change >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'">
                       {{ stock.change >= 0 ? '+' : '' }}{{ stock.change }}%
                     </span>
