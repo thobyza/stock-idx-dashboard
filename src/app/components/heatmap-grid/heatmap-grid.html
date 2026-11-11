@@ -1,8 +1,9 @@
 <div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 xl:grid-cols-10 gap-0.5 flex-grow auto-rows-fr">
   @for (stock of stocks(); track stock.symbol) {
     <button
-      class="rounded-xs p-1 text-center transition-colors duration-500 flex flex-col
-        justify-center items-center gap-1 cursor-pointer aspect-square outline-none active:scale-95"
+      class="rounded-xs p-1 text-center transition-all duration-200 flex flex-col
+        justify-center items-center gap-1 cursor-pointer aspect-square outline-none active:scale-95
+        hover:scale-102 hover:brightness-93 dark:hover:brightness-80"
       [style]="getHeatStyle(stock.change)"
       (click)="openPopup(stock, $event)"
     >
