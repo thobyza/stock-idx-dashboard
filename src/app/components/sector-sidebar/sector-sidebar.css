@@ -11,10 +11,10 @@
 }
 
 .menu-wrapper {                                                                                                                                                                                                
-  @apply flex items-center gap-2.5 px-2 py-2 rounded-lg cursor-pointer                                                                                                                                       
-          text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100                                                                                                                                                   
+  @apply flex items-center gap-2.5 px-2 py-2 rounded-md cursor-pointer                                                                                                                                       
+          text-zinc-500 hover:text-zinc-800 hover:bg-[#ecf0e3]
           transition-all duration-150
-          dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800;                                                                                                                                                                          
+          dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-900;                                                                                                                                                                          
 }                                                                                                                                                                                                              
                                                                                                                                                                                                                 
 .menu-wrapper > svg {                                                                                                                                                                                          
@@ -26,21 +26,6 @@
 }     
 
 .menu-wrapper.active {                                                                                                                                                                                         
-  @apply text-zinc-900 bg-zinc-100 font-medium
+  @apply text-zinc-900 bg-[#e8ecdd] font-medium
          dark:text-zinc-100 dark:bg-zinc-800;                                                                                                                                                                
-} 
-
-.theme-btn {
-  @apply flex items-center gap-2.5 px-2 py-2 rounded-lg cursor-pointer
-         text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100
-         dark:text-zinc-400 dark:hover:text-zinc-100 dark:hover:bg-zinc-800
-         transition-all duration-150 w-full;
-}
-
-.theme-btn > svg {
-  @apply size-4 shrink-0;
-}
-
-.theme-btn > label {
-  @apply text-sm font-medium cursor-pointer;
 }

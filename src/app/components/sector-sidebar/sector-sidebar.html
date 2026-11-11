@@ -4,7 +4,11 @@
     @if (!collapsed()) {
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-2.5">
-          <img class="w-5 object-contain" src="assets/images/app_logo_idx2.png" alt="">
+          <img 
+            class="w-5 object-contain" 
+            [src]="themeService.isDark() ? 'assets/images/app_logo_idx2-wh.png' : 'assets/images/app_logo_idx2.png'" 
+            alt=""
+          >
           <label class="font-semibold text-lg text-[#27272A] dark:text-zinc-100">IDX Metrics</label> 
         </div>
         <button 
@@ -18,8 +22,12 @@
       </div>
     } @else {
       <div class="flex flex-col gap-2 items-center">
-        <div class="h-[28px] content-center">
-          <img class="w-5 object-contain" src="assets/images/app_logo_idx2.png" alt="">
+        <div class="h-7 content-center">
+          <img 
+            class="w-5 object-contain" 
+            [src]="themeService.isDark() ? 'assets/images/app_logo_idx2-wh.png' : 'assets/images/app_logo_idx2.png'" 
+            alt=""
+          >
         </div>
         <button 
           (click)="onToggle()" 
@@ -78,40 +86,59 @@
       [class.mt-5]="collapsed()"
       [class.mt-3]="!collapsed()"
     >                                                                                                                                                                        
-      <div class="menu-wrapper" [class.active]="activePage() === 'dashboard'" (click)="onSelectPage('dashboard')">                                                                                                   
+      <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'dashboard'" (click)="onSelectPage('dashboard')">                                                                                                   
         <svg lucideLayoutGrid></svg>                                                                                                                                                                                      
         @if (!collapsed()) { <label>Heatmap</label> }                                                                                                                                                              
       </div>                                                                                                                                                                                                         
-      <div class="menu-wrapper" [class.active]="activePage() === 'movers'" (click)="onSelectPage('movers')">                                                                                                     
+      <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'movers'" (click)="onSelectPage('movers')">                                                                                                     
         <svg lucideTrendingUp></svg>                                                                                                                                                                                 
         @if (!collapsed()) { <label>Screener</label> }                                                                                                                                                      
       </div>                                                                                                                                                                                                         
-      <div class="menu-wrapper" [class.active]="activePage() === 'news'" (click)="onSelectPage('news')">                                                                                                             
+      <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'news'" (click)="onSelectPage('news')">                                                                                                             
         <svg lucideTextAlignStart></svg>                                                                                                                                                                               
         @if (!collapsed()) { <label>News</label> }                                                                                                                                                            
       </div>                                                                                                                                                                                                  
-      <div class="menu-wrapper" [class.active]="activePage() === 'calendar'" (click)="onSelectPage('calendar')">                                                                                                     
+      <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'calendar'" (click)="onSelectPage('calendar')">                                                                                                     
         <svg lucideWorkflow></svg>                                                                                                                                                                                 
         @if (!collapsed()) { <label>Corp Actions</label> }                                                                                                                                                      
       </div>                                                                                                                                                                                                  
     </section>
   </div>
 
-  <!-- Theme Toggle -->
+  <!-- Theme Toggle Switch -->
   <section class="pt-3 border-t border-zinc-200 dark:border-zinc-800 mt-auto">
-    <button
+    <div
+      class="flex items-center cursor-pointer select-none"
+      [class.justify-between]="!collapsed()"
+      [class.justify-center]="collapsed()"
+      [class.px-1]="!collapsed()"
       (click)="themeService.toggleTheme()"
-      class="theme-btn"
       [title]="themeService.isDark() ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
     >
-      @if (themeService.isDark()) {
-        <svg lucideSun class="text-amber-400"></svg>
-        @if (!collapsed()) { <label>Light Mode</label> }
-      } @else {
-        <svg lucideMoon class="text-zinc-600 dark:text-zinc-300"></svg>
-        @if (!collapsed()) { <label>Dark Mode</label> }
-      }
-    </button>
+
+      <!-- Toggle Track -->
+      <button
+        type="button"
+        role="switch"
+        [attr.aria-checked]="themeService.isDark()"
+        class="relative inline-flex h-6 w-9 shrink-0 cursor-pointer rounded-full p-0.5 transition-colors duration-200 ease-in-out focus:outline-none"
+        [class]="!themeService.isDark() ? 'bg-[#e4e8d6]' : 'bg-zinc-700/70'"
+        [class.bg-zinc-700]="themeService.isDark()"
+      >
+        <!-- Sliding Thumb with Icon -->
+        <span
+          class="pointer-events-none flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-sm ring-0 transition-transform duration-200 ease-in-out"
+          [class.translate-x-0]="!themeService.isDark()"
+          [class.translate-x-3]="themeService.isDark()"
+        >
+          @if (themeService.isDark()) {
+            <svg lucideMoon class="size-3 text-zinc-800 shrink-0"></svg>
+          } @else {
+            <svg lucideSun class="size-3 text-amber-500 shrink-0"></svg>
+          }
+        </span>
+      </button>
+    </div>
   </section>
 
 </section>

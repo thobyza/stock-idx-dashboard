@@ -66,7 +66,7 @@
     </div>
   }
 
-  <div class="border-t border-zinc-200/70 dark:border-dark-border h-[1px]"></div>
+  <div class="border-t border-zinc-200/70 dark:border-zinc-800/80 h-px"></div>
 
   <!-- Toolbar controls -->
   <div class="flex flex-wrap justify-between items-center gap-4">
@@ -156,7 +156,7 @@
           </button>
     
           @if (isSectorOpen()) {
-            <div class="custom-dropdown-menu min-w-[210px]">
+            <div class="custom-dropdown-menu min-w-52.5">
               <!-- All Sectors option -->
               <button
                 type="button"
@@ -252,10 +252,10 @@
   </div>
 
   <!-- Ranked Table -->
-  <div class="table-list overflow-x-auto border border-zinc-200 dark:border-dark-border rounded-lg grow max-h-[65vh]">
+  <div class="table-list overflow-x-auto border border-zinc-200 dark:border-zinc-700 rounded-lg grow max-h-[65vh]">
     <table class="w-full text-left text-xs border-collapse">
       <thead class="sticky top-0 z-20">
-        <tr class="border-b border-zinc-200 dark:border-dark-border text-zinc-500 dark:text-zinc-400 font-semibold bg-zinc-100 dark:bg-zinc-800 select-none">
+        <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-semibold bg-zinc-100 dark:bg-zinc-800 select-none">
           <!-- <th class="w-12 text-center">Rank</th> -->
           
           <!-- Ticker (Sortable) -->
@@ -266,7 +266,6 @@
             <div
               class="inline-flex items-center gap-1.5"
               [class.font-bold]="sortColumn() === 'symbol'"
-              [class.text-zinc-900]="sortColumn() === 'symbol'"
             >
               <span>Ticker</span>
               @if (sortColumn() === 'symbol') {
@@ -301,7 +300,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'price'"
-              [class.text-zinc-900]="sortColumn() === 'price'"
             >
               <span>Price (IDR)</span>
               @if (sortColumn() === 'price') {
@@ -330,7 +328,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'change'"
-              [class.text-zinc-900]="sortColumn() === 'change'"
             >
               <span>1D Change</span>
               @if (sortColumn() === 'change') {
@@ -359,7 +356,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'change1w'"
-              [class.text-zinc-900]="sortColumn() === 'change1w'"
             >
               <span>1W Change</span>
               @if (sortColumn() === 'change1w') {
@@ -388,7 +384,6 @@
             <div
               class="inline-flex items-center justify-center gap-1.5 w-full"
               [class.font-bold]="sortColumn() === '52w-range'"
-              [class.text-zinc-900]="sortColumn() === '52w-range'"
             >
               <span>52W Range</span>
               @if (sortColumn() === '52w-range') {
@@ -417,7 +412,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'volume'"
-              [class.text-zinc-900]="sortColumn() === 'volume'"
             >
               <span>Volume</span>
               @if (sortColumn() === 'volume') {
@@ -446,7 +440,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'turnover'"
-              [class.text-zinc-900]="sortColumn() === 'turnover'"
             >
               <span>Turnover</span>
               @if (sortColumn() === 'turnover') {
@@ -475,7 +468,6 @@
             <div
               class="inline-flex items-center justify-end gap-1.5 w-full"
               [class.font-bold]="sortColumn() === 'marketCap'"
-              [class.text-zinc-900]="sortColumn() === 'marketCap'"
             >
               <span>Market Cap</span>
               @if (sortColumn() === 'marketCap') {
@@ -499,19 +491,19 @@
       </thead>
       <tbody>
         @for (stock of rankedStocks(); track stock.symbol; let idx = $index) {
-          <tr class="border-b border-zinc-100 dark:border-dark-border hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-all text-zinc-800 dark:text-zinc-200">
+          <tr class="border-b border-zinc-100 dark:border-zinc-700/80 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-all text-zinc-800 dark:text-zinc-200">
             <!-- Symbol -->
             <td class="font-bold uppercase">
               <span class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700">{{ stock.symbol }}</span>
             </td>
 
             <!-- Name -->
-            <td class="max-w-[180px] truncate text-zinc-700 dark:text-zinc-300 font-medium" [title]="stock.name">
+            <td class="max-w-45 truncate text-zinc-700 dark:text-zinc-300 font-medium" [title]="stock.name">
               {{ stock.name }}
             </td>
 
             <!-- Sector -->
-            <td class="text-zinc-400 dark:text-zinc-500 text-[11px]">{{ stock.sector }}</td>
+            <td class="text-zinc-400 dark:text-zinc-400 text-[11px]">{{ stock.sector }}</td>
 
             <!-- Price -->
             <td class="text-right font-medium text-zinc-500 dark:text-zinc-400">

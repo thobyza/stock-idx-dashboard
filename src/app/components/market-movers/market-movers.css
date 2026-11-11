@@ -15,12 +15,12 @@
 
 .kpi-label {
   @apply text-[10px] font-bold text-zinc-400 uppercase tracking-wider
-         dark:text-zinc-500;
+         dark:text-zinc-400/80;
 }
 
 .kpi-sub {
   @apply text-[10px] text-zinc-400 font-medium mt-0.5
-         dark:text-zinc-500;
+         dark:text-zinc-400/70;
 }
 
 /* ── Custom Dropdowns ────────────────────────────────────────── */
@@ -67,7 +67,7 @@
 /* ── Table List ──────────────────────────────────────────────── */
 .table-list th {
   @apply px-3 py-2.5 text-zinc-600 bg-zinc-100 font-semibold text-[11px] uppercase tracking-wider whitespace-nowrap
-         dark:text-zinc-400 dark:bg-zinc-800;
+         dark:text-zinc-300 dark:bg-zinc-800;
 }
 
 .table-list th.sortable {
@@ -76,6 +76,11 @@
 
 .table-list th.sortable:hover {
   @apply bg-zinc-200/60 dark:bg-zinc-700/60;
+}
+
+.table-list th.sortable svg {
+  @apply text-zinc-700
+          dark:text-zinc-200
 }
 
 .table-list td {
