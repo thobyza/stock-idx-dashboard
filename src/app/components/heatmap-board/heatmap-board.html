@@ -1,184 +1,199 @@
-<main class="flex flex-col grow gap-4 bg-white dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800 p-4 rounded-lg shadow-md transition-colors">
+<main class="flex flex-col grow gap-3 bg-white dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800 p-4 rounded-lg shadow-md transition-colors">
   <!-- Header -->
   <div class="main-header">
     <div>
       <h2 class="main-title">Stock Heatmap</h2>
-      <p class="main-subtitle">Visualize stock movements, daily price changes, and compare sector performance</p>
+      <!-- <p class="main-subtitle">Visualize stock movements, daily price changes, and compare sector performance</p> -->
     </div>
     <span class="main-badge">IDX · Heatmap</span>
   </div>
 
     <!-- Toolbar controls -->
-    <div class="flex justify-between items-center gap-4">
-      <!-- Search bar & filters -->
-      <div class="flex items-center gap-3">
-        <div class="flex flex-col gap-1.5 w-40">
-          <input
-            type="text"
-            class="input-theme"
-            placeholder="Search ticker or name..."
-            [value]="searchQuery()"
-            (input)="onSearchInput($event)"
-          >
-        </div>
-
-        <div class="w-40 hidden">
-          <input
-            type="date"
-            class="input-theme cursor-pointer font-sans text-xs"
-            [value]="selectedDate()"
-            [max]="maxDate"
-            (change)="onDateChange($event)"
-          >
-        </div>
-
-        <div class="h-4 w-px bg-zinc-300 dark:bg-zinc-700"></div>
-
-        <!-- Index Custom Dropdown -->
-        <div class="dropdown-container w-36 text-xs">
-          <button
-            type="button"
-            class="custom-dropdown-btn"
-            (click)="toggleIndexDropdown($event)"
-            [attr.aria-expanded]="isIndexOpen()"
-          >
-            <span>{{ selectedIndex() }}</span>
-            <svg
-              class="w-3.5 h-3.5 text-zinc-400 transition-transform duration-200"
-              [class.rotate-180]="isIndexOpen()"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
+    <div class="flex flex-col gap-3">
+      <div class="flex justify-between items-center gap-4">
+        <!-- Search bar & filters -->
+        <div class="flex items-center gap-3">
+          <div class="flex flex-col gap-1.5 w-40">
+            <input
+              type="text"
+              class="input-theme"
+              placeholder="Search ticker or name..."
+              [value]="searchQuery()"
+              (input)="onSearchInput($event)"
             >
-              <path
-                fill-rule="evenodd"
-                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-
-          @if (isIndexOpen()) {
-            <div class="custom-dropdown-menu">
-              @for (idx of indicesList; track idx) {
+          </div>
+  
+          <div class="w-40 hidden">
+            <input
+              type="date"
+              class="input-theme cursor-pointer font-sans text-xs"
+              [value]="selectedDate()"
+              [max]="maxDate"
+              (change)="onDateChange($event)"
+            >
+          </div>
+  
+          <div class="h-4 w-px bg-zinc-300 dark:bg-zinc-700"></div>
+  
+          <!-- Index Custom Dropdown -->
+          <div class="dropdown-container w-36 text-xs">
+            <button
+              type="button"
+              class="custom-dropdown-btn"
+              (click)="toggleIndexDropdown($event)"
+              [attr.aria-expanded]="isIndexOpen()"
+            >
+              <span>{{ selectedIndex() }}</span>
+              <svg
+                class="w-3.5 h-3.5 text-zinc-400 transition-transform duration-200"
+                [class.rotate-180]="isIndexOpen()"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+  
+            @if (isIndexOpen()) {
+              <div class="custom-dropdown-menu">
+                @for (idx of indicesList; track idx) {
+                  <button
+                    type="button"
+                    class="custom-dropdown-item"
+                    [class.active]="idx === selectedIndex()"
+                    (click)="selectIndex(idx)"
+                  >
+                    <span>{{ idx }}</span>
+                    @if (idx === selectedIndex()) {
+                      <span class="text-zinc-800 dark:text-zinc-100 text-[11px] font-bold">✓</span>
+                    }
+                  </button>
+                }
+              </div>
+            }
+          </div>
+  
+          <!-- Sector Custom Dropdown -->
+          <div class="dropdown-container w-44 text-xs">
+            <button
+              type="button"
+              class="custom-dropdown-btn"
+              (click)="toggleSectorDropdown($event)"
+              [attr.aria-expanded]="isSectorOpen()"
+            >
+              <span class="truncate">
+                {{ selectedSector() === 'All' ? 'All Sectors' : selectedSector() }}
+              </span>
+              <svg
+                class="w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform duration-200 ml-1.5"
+                [class.rotate-180]="isSectorOpen()"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+  
+            @if (isSectorOpen()) {
+              <div class="custom-dropdown-menu min-w-[210px]">
+                <!-- All Sectors option -->
                 <button
                   type="button"
                   class="custom-dropdown-item"
-                  [class.active]="idx === selectedIndex()"
-                  (click)="selectIndex(idx)"
+                  [class.active]="selectedSector() === 'All'"
+                  (click)="selectSector('All')"
                 >
-                  <span>{{ idx }}</span>
-                  @if (idx === selectedIndex()) {
+                  <span>All Sectors</span>
+                  @if (selectedSector() === 'All') {
                     <span class="text-zinc-800 dark:text-zinc-100 text-[11px] font-bold">✓</span>
                   }
                 </button>
-              }
-            </div>
-          }
-        </div>
-
-        <!-- Sector Custom Dropdown -->
-        <div class="dropdown-container w-44 text-xs">
-          <button
-            type="button"
-            class="custom-dropdown-btn"
-            (click)="toggleSectorDropdown($event)"
-            [attr.aria-expanded]="isSectorOpen()"
-          >
-            <span class="truncate">
-              {{ selectedSector() === 'All' ? 'All Sectors' : selectedSector() }}
-            </span>
-            <svg
-              class="w-3.5 h-3.5 text-zinc-400 shrink-0 transition-transform duration-200 ml-1.5"
-              [class.rotate-180]="isSectorOpen()"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </button>
-
-          @if (isSectorOpen()) {
-            <div class="custom-dropdown-menu min-w-[210px]">
-              <!-- All Sectors option -->
-              <button
-                type="button"
-                class="custom-dropdown-item"
-                [class.active]="selectedSector() === 'All'"
-                (click)="selectSector('All')"
-              >
-                <span>All Sectors</span>
-                @if (selectedSector() === 'All') {
-                  <span class="text-zinc-800 dark:text-zinc-100 text-[11px] font-bold">✓</span>
+  
+                <div class="border-t border-zinc-100 dark:border-zinc-700 my-0.5"></div>
+  
+                @for (sec of sectorPerformances(); track sec.sector) {
+                  <button
+                    type="button"
+                    class="custom-dropdown-item"
+                    [class.active]="sec.sector === selectedSector()"
+                    (click)="selectSector(sec.sector)"
+                  >
+                    <span class="font-medium truncate">{{ sec.sector }}</span>
+                    <div class="flex items-center gap-1.5 shrink-0 ml-auto">
+                      <span
+                        class="text-[10px] font-semibold px-1.5 py-0.5 rounded"
+                        [class.text-emerald-600]="sec.avgChange >= 0"
+                        [class.bg-emerald-50]="sec.avgChange >= 0"
+                        [class.dark:bg-emerald-950/40]="sec.avgChange >= 0"
+                        [class.dark:text-emerald-400]="sec.avgChange >= 0"
+                        [class.text-rose-600]="sec.avgChange < 0"
+                        [class.bg-rose-50]="sec.avgChange < 0"
+                        [class.dark:bg-rose-950/40]="sec.avgChange < 0"
+                        [class.dark:text-rose-400]="sec.avgChange < 0"
+                      >
+                        {{ sec.avgChange >= 0 ? '+' : '' }}{{ sec.avgChange }}%
+                      </span>
+                      @if (sec.sector === selectedSector()) {
+                        <span class="text-zinc-800 dark:text-zinc-100 text-[11px] font-bold">✓</span>
+                      }
+                    </div>
+                  </button>
                 }
-              </button>
-
-              <div class="border-t border-zinc-100 dark:border-zinc-700 my-0.5"></div>
-
-              @for (sec of sectorPerformances(); track sec.sector) {
-                <button
-                  type="button"
-                  class="custom-dropdown-item"
-                  [class.active]="sec.sector === selectedSector()"
-                  (click)="selectSector(sec.sector)"
-                >
-                  <span class="font-medium truncate">{{ sec.sector }}</span>
-                  <div class="flex items-center gap-1.5 shrink-0 ml-auto">
-                    <span
-                      class="text-[10px] font-semibold px-1.5 py-0.5 rounded"
-                      [class.text-emerald-600]="sec.avgChange >= 0"
-                      [class.bg-emerald-50]="sec.avgChange >= 0"
-                      [class.dark:bg-emerald-950/40]="sec.avgChange >= 0"
-                      [class.dark:text-emerald-400]="sec.avgChange >= 0"
-                      [class.text-rose-600]="sec.avgChange < 0"
-                      [class.bg-rose-50]="sec.avgChange < 0"
-                      [class.dark:bg-rose-950/40]="sec.avgChange < 0"
-                      [class.dark:text-rose-400]="sec.avgChange < 0"
-                    >
-                      {{ sec.avgChange >= 0 ? '+' : '' }}{{ sec.avgChange }}%
-                    </span>
-                    @if (sec.sector === selectedSector()) {
-                      <span class="text-zinc-800 dark:text-zinc-100 text-[11px] font-bold">✓</span>
-                    }
-                  </div>
-                </button>
-              }
+              </div>
+            }
+          </div>
+  
+        </div>
+  
+        <div class="flex items-center gap-6 flex-wrap text-xs">
+          <!-- Views toggles -->
+          <div class="flex items-center gap-2">
+            <span class="text-zinc-700/80 dark:text-zinc-400">View</span>
+            <div class="tab-wrapper-theme">
+              <button class="tab-item-theme" [class.active]="viewMode() === 'grid'" (click)="setViewMode('grid')">Heatmap</button>
+              <!-- <button class="tab-item-theme" [class.active]="viewMode() === 'list'" (click)="setViewMode('list')">List</button> -->
+              <button class="tab-item-theme" [class.active]="viewMode() === 'sectors'" (click)="setViewMode('sectors')">Sectors</button>
+            </div>
+          </div>
+  
+          <!-- Sorting triggers -->
+          @if (viewMode() !== 'sectors') {
+            <div class="flex items-center gap-2">
+              <span class="text-zinc-700/80 dark:text-zinc-400">Sort</span>
+              <div class="tab-wrapper-theme">
+                <button class="tab-item-theme" [class.active]="sortBy() === 'change'" (click)="setSortBy('change')">Change</button>
+                <button class="tab-item-theme" [class.active]="sortBy() === 'symbol'" (click)="setSortBy('symbol')">Ticker</button>
+                <!-- <button class="tab-item-theme" [class.active]="sortBy() === 'price'" (click)="setSortBy('price')">Price</button> -->
+                <button class="tab-item-theme" [class.active]="sortBy() === 'marketCap'" (click)="setSortBy('marketCap')">Mcap</button>
+              </div>
             </div>
           }
         </div>
-
       </div>
-
-      <div class="flex items-center gap-6 flex-wrap text-xs">
-        <!-- Views toggles -->
-        <div class="flex items-center gap-2">
-          <span class="text-zinc-700/80 dark:text-zinc-400">View</span>
-          <div class="tab-wrapper-theme">
-            <button class="tab-item-theme" [class.active]="viewMode() === 'grid'" (click)="setViewMode('grid')">Heatmap</button>
-            <!-- <button class="tab-item-theme" [class.active]="viewMode() === 'list'" (click)="setViewMode('list')">List</button> -->
-            <button class="tab-item-theme" [class.active]="viewMode() === 'sectors'" (click)="setViewMode('sectors')">Sectors</button>
-          </div>
+  
+      <div class="flex gap-2 text-xs text-zinc-400 dark:text-zinc-400/80">
+        <div class="flex gap-1">
+          <span class="font-medium text-zinc-700 dark:text-zinc-300">{{ filteredStocks().length }}</span>
+          <span>stocks</span>
         </div>
-
-        <!-- Sorting triggers -->
-        @if (viewMode() !== 'sectors') {
-          <div class="flex items-center gap-2">
-            <span class="text-zinc-700/80 dark:text-zinc-400">Sort</span>
-            <div class="tab-wrapper-theme">
-              <button class="tab-item-theme" [class.active]="sortBy() === 'change'" (click)="setSortBy('change')">Change</button>
-              <button class="tab-item-theme" [class.active]="sortBy() === 'symbol'" (click)="setSortBy('symbol')">Ticker</button>
-              <!-- <button class="tab-item-theme" [class.active]="sortBy() === 'price'" (click)="setSortBy('price')">Price</button> -->
-              <button class="tab-item-theme" [class.active]="sortBy() === 'marketCap'" (click)="setSortBy('marketCap')">Mcap</button>
-            </div>
-          </div>
-        }
+        <span>•</span>
+        <div class="flex items-center gap-1.5">
+          <span>{{ selectedIndexDescription() }}</span>
+          <svg class="index-desc" lucideInfo></svg>
+        </div>
       </div>
     </div>
+    
 
     <!-- 1. Heatmap  -->
     @if (viewMode() === 'grid') {

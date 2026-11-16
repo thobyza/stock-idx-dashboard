@@ -1,6 +1,7 @@
 import { Component, input, signal, computed, HostListener } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Stock } from '../../stock.service';
+import { INDICES_LIST } from '../../constants/indices.constants';
 
 export type MoverCategory = 'gainers' | 'losers' | 'turnover' | 'volume' | '52w-high' | '52w-low';
 export type MoverSortColumn = 'symbol' | 'price' | 'change' | 'change1w' | '52w-range' | 'volume' | 'turnover' | 'marketCap';
@@ -37,7 +38,7 @@ export class MarketMovers {
   isIndexOpen = signal<boolean>(false);
   isSectorOpen = signal<boolean>(false);
 
-  readonly indicesList: string[] = ['All', 'KOMPAS100', 'LQ45', 'IDX80', 'JII', 'JII70', 'ISSI'];
+  readonly indicesList: readonly string[] = ['All', ...INDICES_LIST];
 
   sectorsList = computed<string[]>(() => {
     const sectors = new Set<string>();

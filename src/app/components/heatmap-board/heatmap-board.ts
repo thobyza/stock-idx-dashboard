@@ -1,7 +1,9 @@
-import { Component, input, output, signal, HostListener } from '@angular/core';
+import { Component, input, output, signal, computed, HostListener } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Stock } from '../../stock.service';
 import { HeatmapGrid } from '../heatmap-grid/heatmap-grid';
+import { INDICES_LIST, INDEX_DESCRIPTIONS } from '../../constants/indices.constants';
+import { LucideCircleQuestionMark, LucideMessageCircleQuestionMark, LucideInfo } from '@lucide/angular'
 
 export interface SectorPerformance {
   sector: string;
@@ -14,7 +16,13 @@ export interface SectorPerformance {
 
 @Component({
   selector: 'app-heatmap-board',
-  imports: [HeatmapGrid, DecimalPipe],
+  imports: [
+    HeatmapGrid,
+    DecimalPipe,
+    LucideCircleQuestionMark,
+    LucideMessageCircleQuestionMark,
+    LucideInfo,
+  ],
   templateUrl: './heatmap-board.html',
   styleUrl: './heatmap-board.css',
 })
@@ -41,7 +49,12 @@ export class HeatmapBoard {
   isIndexOpen = signal<boolean>(false);
   isSectorOpen = signal<boolean>(false);
 
-  readonly indicesList: string[] = ['KOMPAS100', 'LQ45', 'IDX80', 'JII', 'JII70', 'ISSI'];
+  readonly indicesList = INDICES_LIST;
+  readonly indexDescriptions = INDEX_DESCRIPTIONS;
+
+  readonly selectedIndexDescription = computed(() => {
+    return this.indexDescriptions[this.selectedIndex()] || this.selectedIndex();
+  });
 
   private readonly SECTOR_LOGOS: Record<string, string> = {
     IDXENERGY: 'assets/logos/sector_energy.svg',
