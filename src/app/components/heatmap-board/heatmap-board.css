@@ -41,3 +41,8 @@
   @apply bg-zinc-50 text-zinc-900 font-semibold
          dark:bg-zinc-700 dark:text-zinc-100;
 }
+
+.index-desc {
+  @apply size-3.5 shrink-0 transition-all duration-150 cursor-pointer 
+         text-zinc-400/90 dark:text-zinc-500;
+}
