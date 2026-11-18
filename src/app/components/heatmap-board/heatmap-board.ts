@@ -2,8 +2,8 @@ import { Component, input, output, signal, computed, HostListener } from '@angul
 import { DecimalPipe } from '@angular/common';
 import { Stock } from '../../stock.service';
 import { HeatmapGrid } from '../heatmap-grid/heatmap-grid';
-import { INDICES_LIST, INDEX_DESCRIPTIONS } from '../../constants/indices.constants';
-import { LucideCircleQuestionMark, LucideMessageCircleQuestionMark, LucideInfo } from '@lucide/angular'
+import { INDICES_LIST, INDICES_METADATA, IndexCode } from '../../constants/indices.constants';
+import { LucideInfo } from '@lucide/angular';
 
 export interface SectorPerformance {
   sector: string;
@@ -19,8 +19,6 @@ export interface SectorPerformance {
   imports: [
     HeatmapGrid,
     DecimalPipe,
-    LucideCircleQuestionMark,
-    LucideMessageCircleQuestionMark,
     LucideInfo,
   ],
   templateUrl: './heatmap-board.html',
@@ -50,10 +48,14 @@ export class HeatmapBoard {
   isSectorOpen = signal<boolean>(false);
 
   readonly indicesList = INDICES_LIST;
-  readonly indexDescriptions = INDEX_DESCRIPTIONS;
+  readonly indicesMetadata = INDICES_METADATA;
+
+  readonly selectedIndexInfo = computed(() => {
+    return this.indicesMetadata[this.selectedIndex() as IndexCode];
+  });
 
   readonly selectedIndexDescription = computed(() => {
-    return this.indexDescriptions[this.selectedIndex()] || this.selectedIndex();
+    return this.selectedIndexInfo()?.name || this.selectedIndex();
   });
 
   private readonly SECTOR_LOGOS: Record<string, string> = {

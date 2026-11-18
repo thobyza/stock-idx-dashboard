@@ -189,7 +189,32 @@
         <span>•</span>
         <div class="flex items-center gap-1.5">
           <span>{{ selectedIndexDescription() }}</span>
-          <svg class="index-desc" lucideInfo></svg>
+          <div class="relative flex items-center group">
+            <svg class="index-desc hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors" lucideInfo></svg>
+            @if (selectedIndexInfo() && selectedIndexInfo().description) {
+              <div
+                class="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2.5 w-72 p-3 
+                       rounded-lg bg-white/95 dark:bg-zinc-850 dark:bg-zinc-800/95 backdrop-blur-sm
+                       text-xs leading-relaxed text-zinc-600 dark:text-zinc-300 shadow-xl 
+                       border border-zinc-200/90 dark:border-zinc-700/80
+                       opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 
+                       transition-all duration-200 ease-out z-50 select-none"
+              >
+                <div class="font-semibold text-zinc-900 dark:text-zinc-100 mb-1 flex items-center justify-between">
+                  <span>{{ selectedIndex() }}</span>
+                </div>
+                <p class="font-normal text-zinc-600 dark:text-zinc-300">
+                  {{ selectedIndexInfo().description }}
+                </p>
+                <!-- Left-pointing arrow -->
+                <div
+                  class="absolute right-full top-1/2 -translate-y-1/2 -mr-[1px]
+                         border-solid border-r-white/95 dark:border-r-zinc-800/95 border-r-4 
+                         border-y-transparent border-y-4 border-l-0"
+                ></div>
+              </div>
+            }
+          </div>
         </div>
       </div>
     </div>
