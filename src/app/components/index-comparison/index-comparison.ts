@@ -70,9 +70,16 @@ export class IndexComparison implements OnInit {
     JII70: '#6366f1', // Indigo
   };
 
+  private readonly FIVE_YEAR_INDICES = new Set(['IHSG', 'JII', 'LQ45']);
+
   // Sorted list for the Grid view
   sortedIndices = computed(() => {
-    const list = [...this.indices()];
+    let list = [...this.indices()];
+
+    if (this.selectedTimeframe() === '5Y') {
+      list = list.filter((idx) => this.FIVE_YEAR_INDICES.has(idx.code));
+    }
+
     switch (this.sortBy()) {
       case 'performance-desc':
         return list.sort((a, b) => b.changePercent - a.changePercent);
@@ -89,7 +96,12 @@ export class IndexComparison implements OnInit {
   // Active indices selected for the chart
   activeChartIndices = computed(() => {
     const selected = new Set(this.selectedIndices());
-    return this.indices().filter((i) => selected.has(i.code));
+    return this.indices().filter((i) => {
+      if (this.selectedTimeframe() === '5Y' && !this.FIVE_YEAR_INDICES.has(i.code)) {
+        return false;
+      }
+      return selected.has(i.code);
+    });
   });
 
   // Chart Scale & Bounds

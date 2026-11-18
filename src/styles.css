@@ -63,7 +63,11 @@ html.dark {
     dark:bg-zinc-700 dark:text-zinc-100;
   }
 
-
+  .v-two .tab-item-theme.active {
+    @apply bg-zinc-800 dark:bg-[#F2F2F2] 
+    text-zinc-100 dark:text-zinc-800
+    font-medium;
+  }
   /* TEXT: zinc-700/70 and zinc-800 */
 
 /* --- Helper --- */
@@ -107,3 +111,28 @@ html.dark {
          bg-zinc-800 text-zinc-100 px-2.5 py-1 rounded-full
          dark:bg-zinc-700 dark:text-zinc-200;
 }
+
+/* ── Page Tab ──────────────────────────────────────────────────── */
+.full-tab {
+  @apply flex;
+}
+
+.full-tab .item {
+  @apply text-sm font-medium py-1.5 px-3 border-b cursor-pointer
+    text-zinc-500/65 dark:text-zinc-400/80 
+    border-zinc-300 dark:border-[#464646]/90;
+}
+
+.full-tab .item.active {
+  @apply border-b-2 
+    text-zinc-600 dark:text-zinc-200 
+    border-zinc-600 dark:border-[#F2F2F2];
+}
+
+.full-tab .item:first-child {
+  @apply pl-0.5 pr-1.5;
+}
+
+.full-tab .item:last-child {
+  @apply w-full;
+} 
