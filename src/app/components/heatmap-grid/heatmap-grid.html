@@ -162,13 +162,15 @@
                 <div class="w-full h-2 bg-zinc-200/80 dark:bg-zinc-700 rounded-full overflow-visible relative">
                   <div class="h-full bg-zinc-400 dark:bg-zinc-500 rounded-l-full transition-all duration-300 relative overflow-visible"
                     [style.width.%]="get52WeekPosition(popupStock()!.price, popupStock()!.fiftyTwoWeekLow, popupStock()!.fiftyTwoWeekHigh)">
-                    <div class="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-[2px] bg-zinc-400 dark:bg-zinc-300 rounded-full"></div>
+                    <div class="absolute right-0 top-1/2 -translate-y-1/2 h-4 w-0.5 bg-zinc-400 dark:bg-zinc-300 rounded-full"></div>
                   </div>
                 </div>
                 <p class="text-[10px] text-zinc-500/80 dark:text-zinc-400 mt-1.5 text-center">
-                  Current: Rp {{ popupStock()!.price | number }}
-                  ({{ get52WeekPosition(popupStock()!.price, popupStock()!.fiftyTwoWeekLow, popupStock()!.fiftyTwoWeekHigh) }}% of
-                  range)
+                  Current: Rp {{ popupStock()!.price | number }} (
+                  <span class="text-zinc-600/80 dark:text-zinc-300 font-medium">
+                    {{ get52WeekPosition(popupStock()!.price, popupStock()!.fiftyTwoWeekLow, popupStock()!.fiftyTwoWeekHigh) }}% 
+                  </span>
+                  of range )
                 </p>
               </div>
             </div>

@@ -94,14 +94,18 @@
         <svg lucideTrendingUp></svg>                                                                                                                                                                                 
         @if (!collapsed()) { <label>Screener</label> }                                                                                                                                                      
       </div>                                                                                                                                                                                                         
+      <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'index'" (click)="onSelectPage('index')">
+        <svg lucideWorkflow></svg>
+        @if (!collapsed()) { <label>Index Comparison</label> }
+      </div>
       <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'news'" (click)="onSelectPage('news')">                                                                                                             
         <svg lucideTextAlignStart></svg>                                                                                                                                                                               
-        @if (!collapsed()) { <label>News</label> }                                                                                                                                                            
+        @if (!collapsed()) { <label>Market News</label> }                                                                                                                                                            
       </div>                                                                                                                                                                                                  
       <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'calendar'" (click)="onSelectPage('calendar')">                                                                                                     
         <svg lucideWorkflow></svg>                                                                                                                                                                                 
         @if (!collapsed()) { <label>Corp Actions</label> }                                                                                                                                                      
-      </div>                                                                                                                                                                                                  
+      </div>              
     </section>
   </div>
 

@@ -89,7 +89,7 @@ html.dark {
 
 /* ── Header ──────────────────────────────────────────────────── */
 .main-header {
-  @apply flex items-start justify-between;
+  @apply flex items-start justify-between mb-1;
 }
 
 .main-title {

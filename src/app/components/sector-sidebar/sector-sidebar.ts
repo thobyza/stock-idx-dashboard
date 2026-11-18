@@ -7,14 +7,25 @@ import { LucideTrendingUp, LucideTextAlignStart, LucideLayoutGrid, LucideWorkflo
 
 @Component({
   selector: 'app-sector-sidebar',
-  imports: [ NgClass ,DecimalPipe, DatePipe, LucideTrendingUp, LucideTextAlignStart, LucideLayoutGrid, 
-    LucideWorkflow, LucideSun, LucideMoon, LucideChevronLeft, LucideChevronRight],
+  imports: [
+    NgClass,
+    DecimalPipe,
+    DatePipe,
+    LucideTrendingUp,
+    LucideTextAlignStart,
+    LucideLayoutGrid,
+    LucideWorkflow,
+    LucideSun,
+    LucideMoon,
+    LucideChevronLeft,
+    LucideChevronRight,
+  ],
   templateUrl: './sector-sidebar.html',
   styleUrl: './sector-sidebar.css',
 })
 export class SectorSidebar {
   readonly themeService = inject(ThemeService);
-  
+
   ihsg = input.required<IndexData>();
   advancing = input.required<number>();
   unchanged = input.required<number>();
@@ -25,8 +36,8 @@ export class SectorSidebar {
   collapsed = input<boolean>(false);
   toggleCollapse = output<void>();
 
-  activePage = input<'dashboard' | 'news' | 'calendar' | 'movers'>('dashboard'); 
-  pageSelected = output<'dashboard' | 'news' | 'calendar' | 'movers'>();
+  activePage = input<'dashboard' | 'news' | 'calendar' | 'movers' | 'index'>('dashboard');
+  pageSelected = output<'dashboard' | 'news' | 'calendar' | 'movers' | 'index'>();
 
   getSparklinePoints(history?: number[]): string {
     if (!history || history.length < 2) return '';
@@ -45,9 +56,9 @@ export class SectorSidebar {
       .join(' ');
   }
 
-  onSelectPage(page: 'dashboard' | 'news' | 'calendar' | 'movers') {                                                                                                                                                                     
-    this.pageSelected.emit(page);                                                                                                                                                                                
-  } 
+  onSelectPage(page: 'dashboard' | 'news' | 'calendar' | 'movers' | 'index') {
+    this.pageSelected.emit(page);
+  }
 
   onToggle() {
     this.toggleCollapse.emit();

@@ -1,0 +1,206 @@
+<main class="flex flex-col grow gap-3 bg-white dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800 p-4 rounded-lg shadow-md transition-colors min-w-0">
+  <!-- Header -->
+  <div class="main-header">
+    <div>
+      <h2 class="main-title">Index Comparison</h2>
+      <!-- <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+        Cross-index benchmark and performance comparison across market timeframes
+      </p> -->
+    </div>
+    <span class="main-badge">IDX · Indices</span>
+  </div>
+
+  <!-- Toolbar Controls -->
+  <div class="flex flex-wrap items-center justify-between gap-3 pb-1">
+    <!-- Timeframe Selector -->
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Timeframe</span>
+      <div class="tab-wrapper-theme text-xs">
+        @for (tf of timeframes; track tf) {
+          <button
+            type="button"
+            class="tab-item-theme"
+            [class.active]="selectedTimeframe() === tf"
+            (click)="setTimeframe(tf)"
+            [disabled]="isLoading()"
+          >
+            {{ tf }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Sorting & Filters -->
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Sort</span>
+      <div class="tab-wrapper-theme text-xs">
+        <button
+          type="button"
+          class="tab-item-theme"
+          [class.active]="sortBy() === 'performance-desc'"
+          (click)="setSortBy('performance-desc')"
+        >
+          Highest Return
+        </button>
+        <button
+          type="button"
+          class="tab-item-theme"
+          [class.active]="sortBy() === 'performance-asc'"
+          (click)="setSortBy('performance-asc')"
+        >
+          Lowest Return
+        </button>
+        <button
+          type="button"
+          class="tab-item-theme"
+          [class.active]="sortBy() === 'name'"
+          (click)="setSortBy('name')"
+        >
+          Name
+        </button>
+      </div>
+
+      <!-- Refresh / Loading spinner -->
+      @if (isLoading()) {
+        <div class="flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500 ml-2 animate-pulse">
+          <svg class="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+          </svg>
+          <span>Updating...</span>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  @if (errorMessage()) {
+    <div class="p-4 rounded-lg bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-400 text-xs flex items-center justify-between">
+      <span>{{ errorMessage() }}</span>
+      <button
+        type="button"
+        class="px-2.5 py-1 rounded bg-rose-600 text-white font-medium hover:bg-rose-700 transition"
+        (click)="loadData(selectedTimeframe())"
+      >
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Loading Skeletons -->
+  @if (isLoading() && !indices().length) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5">
+      @for (n of [1,2,3,4,5,6,7,8,9,10]; track n) {
+        <div class="h-44 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800/40 animate-pulse p-3.5 flex flex-col justify-between">
+          <div class="flex justify-between items-center">
+            <div class="h-4 w-20 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
+            <div class="h-3 w-12 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
+          </div>
+          <div class="h-8 w-28 bg-zinc-200 dark:bg-zinc-700 rounded my-2"></div>
+          <div class="h-8 w-full bg-zinc-200 dark:bg-zinc-700 rounded"></div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- 1. Grid Cards View (Reference: Image (6).jfif) -->
+  @if (sortedIndices().length) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      @for (idx of sortedIndices(); track idx.code) {
+        <div
+          class="group relative flex flex-col justify-between p-4 rounded-lg border transition-all duration-200 cursor-default"
+          [class.bg-emerald-500/5]="idx.changePercent >= 0"
+          [class.dark:bg-emerald-950/20]="idx.changePercent >= 0"
+          [class.border-emerald-300/60]="idx.changePercent >= 0"
+          [class.dark:border-emerald-500/30]="idx.changePercent >= 0"
+          [class.hover:border-emerald-500/60]="idx.changePercent >= 0"
+          [class.bg-rose-500/5]="idx.changePercent < 0"
+          [class.dark:bg-rose-950/20]="idx.changePercent < 0"
+          [class.border-rose-300/60]="idx.changePercent < 0"
+          [class.dark:border-rose-500/30]="idx.changePercent < 0"
+          [class.hover:border-rose-500/60]="idx.changePercent < 0"
+        >
+          <!-- Top Row: Code + Name -->
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex flex-col min-w-0">
+              <span class="font-semibold text-sm tracking-tight text-zinc-900 dark:text-zinc-100">
+                {{ idx.code }}
+              </span>
+              <span class="text-[11px] text-zinc-500 dark:text-zinc-400 truncate mt-0.5" [title]="idx.name">
+                {{ idx.name }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Hero Metric: Big Bold Percentage Change (Just like Image (6).jfif) -->
+          <div class="my-2.5">
+            <div
+              class="text-3xl font-bold tracking-tight"
+              [class.text-emerald-600]="idx.changePercent >= 0"
+              [class.dark:text-emerald-400]="idx.changePercent >= 0"
+              [class.text-rose-600]="idx.changePercent < 0"
+              [class.dark:text-rose-400]="idx.changePercent < 0"
+            >
+              {{ idx.changePercent >= 0 ? '+' : '' }}{{ idx.changePercent | number:'1.2-2' }}%
+            </div>
+            <div class="flex items-center gap-1.5 text-xs mt-1">
+              <span class="font-bold text-zinc-500 dark:text-zinc-400">{{ idx.price | number:'1.2-2' }}</span>
+              <span
+                class="font-medium"
+                [class.text-emerald-600]="idx.change >= 0"
+                [class.dark:text-emerald-400]="idx.change >= 0"
+                [class.text-rose-600]="idx.change < 0"
+                [class.dark:text-rose-400]="idx.change < 0"
+              >
+                {{ idx.change >= 0 ? '+' : '' }}{{ idx.change | number:'1.2-2' }} pts
+              </span>
+            </div>
+          </div>
+
+          <!-- Sparkline Chart -->
+          @if (idx.sparkline && idx.sparkline.length > 1) {
+            <div class="w-full h-9 my-1 overflow-hidden">
+              <svg class="w-full h-full overflow-visible" viewBox="0 0 120 34" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient [id]="'grad-' + idx.code" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop
+                      offset="0%"
+                      [attr.stop-color]="idx.changePercent >= 0 ? '#10b981' : '#f43f5e'"
+                      stop-opacity="0.25"
+                    />
+                    <stop
+                      offset="100%"
+                      [attr.stop-color]="idx.changePercent >= 0 ? '#10b981' : '#f43f5e'"
+                      stop-opacity="0.0"
+                    />
+                  </linearGradient>
+                </defs>
+                <!-- Filled area -->
+                <path
+                  [attr.d]="getSparklineArea(idx.sparkline, 120, 34)"
+                  [attr.fill]="'url(#grad-' + idx.code + ')'"
+                />
+                <!-- Line -->
+                <path
+                  [attr.d]="getSparklineLine(idx.sparkline, 120, 34)"
+                  fill="none"
+                  [attr.stroke]="idx.changePercent >= 0 ? '#10b981' : '#f43f5e'"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          }
+
+          <!-- Bottom Row: Range / Period Low-High -->
+          <div class="flex items-center justify-between text-[10px] text-zinc-500 dark:text-zinc-400 pt-2 border-t border-zinc-200/50 dark:border-zinc-800/80 mt-1">
+            <span>Low: {{ idx.low | number:'1.1-1' }}</span>
+            <!-- <span class="text-zinc-400">•</span> -->
+            <span>High: {{ idx.high | number:'1.1-1' }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</main>

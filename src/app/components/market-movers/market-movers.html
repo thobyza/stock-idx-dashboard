@@ -205,35 +205,26 @@
     </div>
     <!-- MCap Filter -->
     <div class="flex items-center gap-2 text-xs">
-      <span class="text-zinc-700/80 dark:text-zinc-400">Cap</span>
+      <span class="text-zinc-700/80 dark:text-zinc-400">MCap</span>
       <div class="tab-wrapper-theme">
         <button
-          class="px-2.5 py-1 text-zinc-700/70 dark:text-zinc-400 rounded-md transition-all cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
-          [class.bg-zinc-200]="marketCapTier() === 'ALL'"
-          [class.dark:bg-zinc-700]="marketCapTier() === 'ALL'"
-          [class.text-zinc-800]="marketCapTier() === 'ALL'"
-          [class.dark:text-zinc-100]="marketCapTier() === 'ALL'"
+          class="tab-item-theme"
+          [class.active]="marketCapTier() === 'ALL'"
           (click)="setCapTier('ALL')"
         >
           All
         </button>
         <button
-          class="px-2.5 py-1 text-zinc-700/70 dark:text-zinc-400 rounded-md transition-all cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
-          [class.bg-zinc-200]="marketCapTier() === 'LARGE'"
-          [class.dark:bg-zinc-700]="marketCapTier() === 'LARGE'"
-          [class.text-zinc-800]="marketCapTier() === 'LARGE'"
-          [class.dark:text-zinc-100]="marketCapTier() === 'LARGE'"
+          class="tab-item-theme"
+          [class.active]="marketCapTier() === 'LARGE'"
           (click)="setCapTier('LARGE')"
           title="Market Cap > Rp 50 Trillion"
         >
           Big Cap (>50T)
         </button>
         <button
-          class="px-2.5 py-1 text-zinc-700/70 dark:text-zinc-400 rounded-md transition-all cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
-          [class.bg-zinc-200]="marketCapTier() === 'MID'"
-          [class.dark:bg-zinc-700]="marketCapTier() === 'MID'"
-          [class.text-zinc-800]="marketCapTier() === 'MID'"
-          [class.dark:text-zinc-100]="marketCapTier() === 'MID'"
+          class="tab-item-theme"
+          [class.active]="marketCapTier() === 'MID'"
           (click)="setCapTier('MID')"
           title="Market Cap Rp 10T - Rp 50T"
         >
