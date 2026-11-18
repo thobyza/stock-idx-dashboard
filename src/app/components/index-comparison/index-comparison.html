@@ -1,17 +1,39 @@
-<main class="flex flex-col grow gap-3 bg-white dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800 p-4 rounded-lg shadow-md transition-colors min-w-0">
+<main class="flex flex-col grow gap-4 bg-white dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800 p-4 rounded-lg shadow-md transition-colors min-w-0">
   <!-- Header -->
   <div class="main-header">
     <div>
       <h2 class="main-title">Index Comparison</h2>
-      <!-- <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
-        Cross-index benchmark and performance comparison across market timeframes
-      </p> -->
+      <!-- <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">Cross-index benchmark and performance comparison across market timeframes</p> -->
     </div>
-    <span class="main-badge">IDX · Indices</span>
+    <div class="flex items-center gap-3">
+      <!-- View Mode Toggle: Grid vs Chart -->
+      <div class="flex items-center gap-2 text-xs">
+        <span class="text-zinc-500 dark:text-zinc-400">View</span>
+        <div class="tab-wrapper-theme">
+          <button
+            type="button"
+            class="tab-item-theme"
+            [class.active]="viewMode() === 'grid'"
+            (click)="setViewMode('grid')"
+          >
+            Grid
+          </button>
+          <button
+            type="button"
+            class="tab-item-theme"
+            [class.active]="viewMode() === 'chart'"
+            (click)="setViewMode('chart')"
+          >
+            Chart
+          </button>
+        </div>
+      </div>
+      <!-- <span class="main-badge">IDX · Indices</span> -->
+    </div>
   </div>
 
   <!-- Toolbar Controls -->
-  <div class="flex flex-wrap items-center justify-between gap-3 pb-1">
+  <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 dark:border-zinc-800 pb-3">
     <!-- Timeframe Selector -->
     <div class="flex items-center gap-2">
       <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Timeframe</span>
@@ -30,37 +52,60 @@
       </div>
     </div>
 
-    <!-- Sorting & Filters -->
+    <!-- Conditional Actions based on View Mode -->
     <div class="flex items-center gap-2">
-      <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Sort</span>
-      <div class="tab-wrapper-theme text-xs">
-        <button
-          type="button"
-          class="tab-item-theme"
-          [class.active]="sortBy() === 'performance-desc'"
-          (click)="setSortBy('performance-desc')"
-        >
-          Highest Return
-        </button>
-        <button
-          type="button"
-          class="tab-item-theme"
-          [class.active]="sortBy() === 'performance-asc'"
-          (click)="setSortBy('performance-asc')"
-        >
-          Lowest Return
-        </button>
-        <button
-          type="button"
-          class="tab-item-theme"
-          [class.active]="sortBy() === 'name'"
-          (click)="setSortBy('name')"
-        >
-          Name
-        </button>
-      </div>
+      <!-- Grid View: Sorting -->
+      @if (viewMode() === 'grid') {
+        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Sort</span>
+        <div class="tab-wrapper-theme text-xs">
+          <button
+            type="button"
+            class="tab-item-theme"
+            [class.active]="sortBy() === 'performance-desc'"
+            (click)="setSortBy('performance-desc')"
+          >
+            Highest Return
+          </button>
+          <button
+            type="button"
+            class="tab-item-theme"
+            [class.active]="sortBy() === 'performance-asc'"
+            (click)="setSortBy('performance-asc')"
+          >
+            Lowest Return
+          </button>
+          <button
+            type="button"
+            class="tab-item-theme"
+            [class.active]="sortBy() === 'name'"
+            (click)="setSortBy('name')"
+          >
+            Name
+          </button>
+        </div>
+      }
 
-      <!-- Refresh / Loading spinner -->
+      <!-- Chart View: Selection Controls -->
+      @if (viewMode() === 'chart') {
+        <div class="flex items-center gap-1.5 text-xs">
+          <button
+            type="button"
+            class="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 transition font-medium"
+            (click)="selectAllIndices()"
+          >
+            Select All
+          </button>
+          <button
+            type="button"
+            class="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 transition font-medium"
+            (click)="selectDefaultIndices()"
+          >
+            Reset (Top 3)
+          </button>
+        </div>
+      }
+
+      <!-- Updating / Loading Spinner -->
       @if (isLoading()) {
         <div class="flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500 ml-2 animate-pulse">
           <svg class="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none">
@@ -90,7 +135,7 @@
   <!-- Loading Skeletons -->
   @if (isLoading() && !indices().length) {
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5">
-      @for (n of [1,2,3,4,5,6,7,8,9,10]; track n) {
+      @for (n of [1,2,3,4,5,6,7,8,9]; track n) {
         <div class="h-44 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-800/40 animate-pulse p-3.5 flex flex-col justify-between">
           <div class="flex justify-between items-center">
             <div class="h-4 w-20 bg-zinc-200 dark:bg-zinc-700 rounded"></div>
@@ -103,12 +148,14 @@
     </div>
   }
 
-  <!-- 1. Grid Cards View (Reference: Image (6).jfif) -->
-  @if (sortedIndices().length) {
+  <!-- =================== -->
+  <!-- VIEW 1: GRID CARDS  -->
+  <!-- =================== -->
+  @if (viewMode() === 'grid' && sortedIndices().length) {
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
       @for (idx of sortedIndices(); track idx.code) {
         <div
-          class="group relative flex flex-col justify-between p-4 rounded-lg border transition-all duration-200 cursor-default"
+          class="group relative flex flex-col justify-between p-4 rounded-xl border transition-all duration-200 cursor-default"
           [class.bg-emerald-500/5]="idx.changePercent >= 0"
           [class.dark:bg-emerald-950/20]="idx.changePercent >= 0"
           [class.border-emerald-300/60]="idx.changePercent >= 0"
@@ -121,21 +168,22 @@
           [class.hover:border-rose-500/60]="idx.changePercent < 0"
         >
           <!-- Top Row: Code + Name -->
+          <div class="flex flex-col min-w-0">
+            <span class="font-bold text-sm tracking-tight text-zinc-900 dark:text-zinc-100">
+              {{ idx.code }}
+            </span>
+            <span class="text-[11px] text-zinc-500 dark:text-zinc-400 truncate mt-0.5" [title]="idx.name">
+              {{ idx.name }}
+            </span>
+          </div>
           <div class="flex items-start justify-between gap-2">
-            <div class="flex flex-col min-w-0">
-              <span class="font-semibold text-sm tracking-tight text-zinc-900 dark:text-zinc-100">
-                {{ idx.code }}
-              </span>
-              <span class="text-[11px] text-zinc-500 dark:text-zinc-400 truncate mt-0.5" [title]="idx.name">
-                {{ idx.name }}
-              </span>
-            </div>
+
           </div>
 
           <!-- Hero Metric: Big Bold Percentage Change (Just like Image (6).jfif) -->
           <div class="my-2.5">
             <div
-              class="text-3xl font-bold tracking-tight"
+              class="text-2xl font-semibold tracking-tight"
               [class.text-emerald-600]="idx.changePercent >= 0"
               [class.dark:text-emerald-400]="idx.changePercent >= 0"
               [class.text-rose-600]="idx.changePercent < 0"
@@ -143,8 +191,8 @@
             >
               {{ idx.changePercent >= 0 ? '+' : '' }}{{ idx.changePercent | number:'1.2-2' }}%
             </div>
-            <div class="flex items-center gap-1.5 text-xs mt-1">
-              <span class="font-bold text-zinc-500 dark:text-zinc-400">{{ idx.price | number:'1.2-2' }}</span>
+            <div class="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 mt-1">
+              <span class="font-bold">{{ idx.price | number:'1.2-2' }}</span>
               <span
                 class="font-medium"
                 [class.text-emerald-600]="idx.change >= 0"
@@ -185,7 +233,7 @@
                   [attr.d]="getSparklineLine(idx.sparkline, 120, 34)"
                   fill="none"
                   [attr.stroke]="idx.changePercent >= 0 ? '#10b981' : '#f43f5e'"
-                  stroke-width="1.75"
+                  stroke-width="1.25"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 />
@@ -194,13 +242,279 @@
           }
 
           <!-- Bottom Row: Range / Period Low-High -->
-          <div class="flex items-center justify-between text-[10px] text-zinc-500 dark:text-zinc-400 pt-2 border-t border-zinc-200/50 dark:border-zinc-800/80 mt-1">
+          <!-- <div class="flex items-center justify-between text-[10px] text-zinc-500 dark:text-zinc-400 pt-2 border-t border-zinc-200/50 dark:border-zinc-800/80 mt-1"> -->
+          <div class="flex items-center justify-between text-[10px] text-zinc-500 dark:text-zinc-400 mt-2.5">
             <span>Low: {{ idx.low | number:'1.1-1' }}</span>
             <!-- <span class="text-zinc-400">•</span> -->
             <span>High: {{ idx.high | number:'1.1-1' }}</span>
           </div>
         </div>
       }
+    </div>
+  }
+
+  <!-- ========================= -->
+  <!-- VIEW 2: MULTI-LINE CHART  -->
+  <!-- ========================= -->
+  @if (viewMode() === 'chart' && indices().length) {
+    <div class="flex flex-col gap-4">
+      <!-- Index Selector Chips / Legend -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mr-1">Compare:</span>
+        @for (idx of indices(); track idx.code) {
+          @let isSelected = selectedIndices().includes(idx.code);
+          <button
+            type="button"
+            class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-xs font-medium transition cursor-pointer select-none"
+            [class.bg-zinc-100]="!isSelected"
+            [class.dark:bg-zinc-800]="!isSelected"
+            [class.border-zinc-200]="!isSelected"
+            [class.dark:border-zinc-700]="!isSelected"
+            [class.text-zinc-400]="!isSelected"
+            [class.dark:text-zinc-500]="!isSelected"
+            [class.opacity-60]="!isSelected"
+            [class.bg-white]="isSelected"
+            [class.dark:bg-zinc-850]="isSelected"
+            [class.border-zinc-300]="isSelected"
+            [class.dark:border-zinc-600]="isSelected"
+            [class.shadow-sm]="isSelected"
+            [class.text-zinc-900]="isSelected"
+            [class.dark:text-zinc-100]="isSelected"
+            (click)="toggleIndexSelection(idx.code)"
+          >
+            <!-- Colored Checkbox / Dot Indicator -->
+            <span
+              class="w-2.5 h-2.5 rounded-full transition-transform"
+              [style.backgroundColor]="isSelected ? INDEX_COLORS[idx.code] : '#9ca3af'"
+              [class.scale-110]="isSelected"
+            ></span>
+            <span class="font-bold">{{ idx.code }}</span>
+            <span
+              class="text-[11px] font-semibold"
+              [class.text-emerald-600]="isSelected && idx.changePercent >= 0"
+              [class.dark:text-emerald-400]="isSelected && idx.changePercent >= 0"
+              [class.text-rose-600]="isSelected && idx.changePercent < 0"
+              [class.dark:text-rose-400]="isSelected && idx.changePercent < 0"
+            >
+              {{ idx.changePercent >= 0 ? '+' : '' }}{{ idx.changePercent | number:'1.2-2' }}%
+            </span>
+          </button>
+        }
+      </div>
+
+      <!-- Main Comparison Chart Card -->
+      <div class="relative w-full rounded-xl border border-zinc-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-850/60 p-4 shadow-sm">
+        <!-- Chart Canvas Container -->
+        <div class="relative w-full h-[360px] select-none">
+          <svg
+            class="w-full h-full overflow-visible cursor-crosshair"
+            [attr.viewBox]="'0 0 ' + chartWidth + ' ' + chartHeight"
+            preserveAspectRatio="none"
+            (mousemove)="onChartMouseMove($event)"
+            (mouseleave)="onChartMouseLeave()"
+          >
+            <!-- 1. Background Grid Lines & Percentage Y-Axis Labels -->
+            @for (grid of chartScale().gridLines; track grid.percent) {
+              <g>
+                <!-- Horizontal Gridline -->
+                <line
+                  [attr.x1]="chartPadding.left"
+                  [attr.y1]="grid.y"
+                  [attr.x2]="chartWidth - chartPadding.right"
+                  [attr.y2]="grid.y"
+                  [attr.stroke]="grid.isZero ? '#71717a' : '#d4d4d8'"
+                  [attr.stroke-width]="grid.isZero ? '1.5' : '1'"
+                  [attr.stroke-dasharray]="grid.isZero ? '4 3' : '2 2'"
+                  class="dark:stroke-zinc-700/60"
+                  [class.dark:stroke-zinc-400]="grid.isZero"
+                />
+                <!-- Right-aligned Y-Axis Percentage Label -->
+                <text
+                  [attr.x]="chartWidth - chartPadding.right + 8"
+                  [attr.y]="grid.y + 4"
+                  class="text-[10px] font-mono fill-zinc-400 dark:fill-zinc-500 select-none"
+                  [class.font-bold]="grid.isZero"
+                  [class.fill-zinc-700]="grid.isZero"
+                  [class.dark:fill-zinc-200]="grid.isZero"
+                >
+                  {{ grid.percent >= 0 && !grid.isZero ? '+' : '' }}{{ grid.percent | number:'1.1-1' }}%
+                </text>
+              </g>
+            }
+
+            <!-- 2. Active Index Trend Lines -->
+            @for (line of chartLines(); track line.code) {
+              @if (line.path) {
+                <path
+                  [attr.d]="line.path"
+                  fill="none"
+                  [attr.stroke]="line.color"
+                  stroke-width="1"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="transition-opacity duration-150"
+                />
+              }
+            }
+
+            <!-- 3. Interactive Hover Tracking Cursor & Dot Intersections -->
+            @if (hoverData(); as hover) {
+              <!-- Vertical Crosshair Line -->
+              <line
+                [attr.x1]="hover.x"
+                [attr.y1]="chartPadding.top"
+                [attr.x2]="hover.x"
+                [attr.y2]="chartHeight - chartPadding.bottom"
+                stroke="#a1a1aa"
+                stroke-width="1.25"
+                stroke-dasharray="3 3"
+                class="dark:stroke-zinc-500"
+              />
+
+              <!-- Highlight Dots on each line -->
+              @for (item of hover.items; track item.code) {
+                <circle
+                  [attr.cx]="hover.x"
+                  [attr.cy]="chartScale().yForPercent(item.percent)"
+                  r="4.5"
+                  [attr.fill]="item.color"
+                  stroke="#ffffff"
+                  stroke-width="2"
+                  class="shadow-sm"
+                />
+              }
+            }
+
+            <!-- 4. Bottom X-Axis Time / Date Labels -->
+            @for (label of xAxisLabels(); track label.text) {
+              <text
+                [attr.x]="label.x"
+                [attr.y]="chartHeight - 12"
+                text-anchor="middle"
+                class="text-[10px] fill-zinc-400 dark:fill-zinc-500 font-sans select-none"
+              >
+                {{ label.text }}
+              </text>
+            }
+          </svg>
+
+          <!-- Floating Hover Tooltip Box -->
+          @if (hoverData(); as hover) {
+            <div
+              class="pointer-events-none absolute top-4 z-30 p-2.5 rounded-lg bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200 dark:border-zinc-700 shadow-xl text-xs w-48 transition-all duration-75"
+              [style.left.px]="hover.x > (chartWidth / 2) ? hover.x - 210 : hover.x + 20"
+            >
+              <div class="font-semibold text-zinc-800 dark:text-zinc-200 border-b border-zinc-100 dark:border-zinc-800 pb-1 mb-1.5 flex items-center justify-between">
+                <span>{{ hover.dateStr }}</span>
+                <span class="text-[10px] text-zinc-400 font-normal">{{ selectedTimeframe() }}</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                @for (item of hover.items; track item.code) {
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-1.5 truncate">
+                      <span class="w-2 h-2 rounded-full shrink-0" [style.backgroundColor]="item.color"></span>
+                      <span class="font-medium truncate text-zinc-700 dark:text-zinc-300">{{ item.code }}</span>
+                    </div>
+                    <span
+                      class="font-mono font-bold text-[11px] shrink-0"
+                      [class.text-emerald-600]="item.percent >= 0"
+                      [class.dark:text-emerald-400]="item.percent >= 0"
+                      [class.text-rose-600]="item.percent < 0"
+                      [class.dark:text-rose-400]="item.percent < 0"
+                    >
+                      {{ item.percent >= 0 ? '+' : '' }}{{ item.percent | number:'1.2-2' }}%
+                    </span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Comparison Summary Table (MSN Money style) -->
+      <div class="w-full overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-850 shadow-sm">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-zinc-50 dark:bg-zinc-800/60 text-zinc-500 dark:text-zinc-400 font-semibold border-b border-zinc-200 dark:border-zinc-800">
+            <tr>
+              <th class="py-2.5 px-3">Benchmark Index</th>
+              <th class="py-2.5 px-3 text-right">Latest Price</th>
+              <th class="py-2.5 px-3 text-right">Return ({{ selectedTimeframe() }})</th>
+              <th class="py-2.5 px-3 text-right">Points Change</th>
+              <th class="py-2.5 px-3 text-right">Period Low</th>
+              <th class="py-2.5 px-3 text-right">Period High</th>
+              <th class="py-2.5 px-3 text-center">Chart View</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800 text-zinc-700 dark:text-zinc-300">
+            @for (idx of indices(); track idx.code) {
+              @let isSelected = selectedIndices().includes(idx.code);
+              <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition">
+                <!-- Name & Color Indicator -->
+                <td class="py-2.5 px-3">
+                  <div class="flex items-center gap-2">
+                    <span
+                      class="w-2.5 h-2.5 rounded-full shrink-0"
+                      [style.backgroundColor]="INDEX_COLORS[idx.code]"
+                    ></span>
+                    <span class="font-bold text-zinc-900 dark:text-zinc-100">{{ idx.code }}</span>
+                    <span class="text-zinc-400 dark:text-zinc-500 hidden sm:inline truncate max-w-[180px]">
+                      {{ idx.name }}
+                    </span>
+                  </div>
+                </td>
+                <!-- Latest Price -->
+                <td class="py-2.5 px-3 text-right font-mono font-bold text-zinc-900 dark:text-zinc-100">
+                  {{ idx.price | number:'1.2-2' }}
+                </td>
+                <!-- Return % -->
+                <td class="py-2.5 px-3 text-right font-mono font-bold">
+                  <span
+                    class="px-1.5 py-0.5 rounded text-[11px]"
+                    [class.text-emerald-600]="idx.changePercent >= 0"
+                    [class.bg-emerald-50]="idx.changePercent >= 0"
+                    [class.dark:bg-emerald-950/40]="idx.changePercent >= 0"
+                    [class.dark:text-emerald-400]="idx.changePercent >= 0"
+                    [class.text-rose-600]="idx.changePercent < 0"
+                    [class.bg-rose-50]="idx.changePercent < 0"
+                    [class.dark:bg-rose-950/40]="idx.changePercent < 0"
+                    [class.dark:text-rose-400]="idx.changePercent < 0"
+                  >
+                    {{ idx.changePercent >= 0 ? '+' : '' }}{{ idx.changePercent | number:'1.2-2' }}%
+                  </span>
+                </td>
+                <!-- Points Change -->
+                <td
+                  class="py-2.5 px-3 text-right font-mono text-[11px]"
+                  [class.text-emerald-600]="idx.change >= 0"
+                  [class.dark:text-emerald-400]="idx.change >= 0"
+                  [class.text-rose-600]="idx.change < 0"
+                  [class.dark:text-rose-400]="idx.change < 0"
+                >
+                  {{ idx.change >= 0 ? '+' : '' }}{{ idx.change | number:'1.2-2' }}
+                </td>
+                <!-- Period Low -->
+                <td class="py-2.5 px-3 text-right font-mono text-zinc-500 text-[11px]">
+                  {{ idx.low | number:'1.2-2' }}
+                </td>
+                <!-- Period High -->
+                <td class="py-2.5 px-3 text-right font-mono text-zinc-500 text-[11px]">
+                  {{ idx.high | number:'1.2-2' }}
+                </td>
+                <!-- Checkbox Toggle -->
+                <td class="py-2.5 px-3 text-center">
+                  <input
+                    type="checkbox"
+                    class="rounded border-zinc-300 dark:border-zinc-700 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                    [checked]="isSelected"
+                    (change)="toggleIndexSelection(idx.code)"
+                  />
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   }
 </main>

@@ -81,6 +81,10 @@ class IndexService {
         const period1 = new Date(now.getTime() - 90 * 24 * 3600 * 1000);
         return { period1, period2: now, interval: '1h' };
       }
+      case '6M': {
+        const period1 = new Date(now.getTime() - 180 * 24 * 3600 * 1000);
+        return { period1, period2: now, interval: '1h' };
+      }
       case 'YTD': {
         const period1 = new Date(now.getFullYear(), 0, 1);
         return { period1, period2: now, interval: '1h' };
@@ -89,11 +93,14 @@ class IndexService {
         const period1 = new Date(now.getTime() - 365 * 24 * 3600 * 1000);
         return { period1, period2: now, interval: '1h' };
       }
-      case '3Y': {
-        const period1 = new Date(now.getTime() - 3 * 365 * 24 * 3600 * 1000);
-        return { period1, period2: now, interval: '1wk' };
+      case '2Y': {
+        // ~700 days — max range for 1h interval on .JK suffix indices
+        const period1 = new Date(now.getTime() - 700 * 24 * 3600 * 1000);
+        return { period1, period2: now, interval: '1h' };
       }
       case '5Y': {
+        // Only ^JKSE, ^JKLQ45, ^JKII return data for 1wk interval over 5 years
+        // .JK suffix indices will return minimal data (expected)
         const period1 = new Date(now.getTime() - 5 * 365 * 24 * 3600 * 1000);
         return { period1, period2: now, interval: '1wk' };
       }
@@ -104,7 +111,7 @@ class IndexService {
     }
   }
 
-  downsample(data, maxPoints = 40) {
+  downsample(data, maxPoints = 60) {
     if (!data || data.length <= maxPoints) return data;
     const step = Math.ceil(data.length / maxPoints);
     const sampled = [];
@@ -192,7 +199,7 @@ class IndexService {
           });
         }
 
-        const downsampledHistory = this.downsample(historyPoints, 40);
+        const downsampledHistory = this.downsample(historyPoints, 60);
         const sparkline = downsampledHistory.map((h) => h.value);
 
         return {
