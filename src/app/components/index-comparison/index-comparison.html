@@ -74,19 +74,11 @@
   
         <!-- Chart View: Selection Controls -->
         @if (viewMode() === 'chart') {
-          <div class="flex items-center gap-1.5 text-xs">
-            <button
-              type="button"
-              class="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 transition font-medium"
-              (click)="selectAllIndices()"
-            >
+          <div class="flex items-center gap-1.5">
+            <button type="button" class="button-prm" (click)="selectAllIndices()">
               Select All
             </button>
-            <button
-              type="button"
-              class="px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 transition font-medium"
-              (click)="selectDefaultIndices()"
-            >
+            <button type="button" class="button-prm" (click)="selectDefaultIndices()">
               Reset (Top 3)
             </button>
           </div>
@@ -244,23 +236,22 @@
     @if (viewMode() === 'chart' && indices().length) {
       <div class="flex flex-col gap-3">
         <!-- Index Selector Chips / Legend -->
-        <div class="flex flex-wrap items-center gap-1">
-          <!-- <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400 mr-1">Compare:</span> -->
+        <div class="flex flex-wrap items-center gap-1.5">
           @for (idx of indices(); track idx.code) {
             @let isSelected = selectedIndices().includes(idx.code);
             <button
               type="button"
               class="flex items-center gap-2 px-2.5 py-1.5 rounded-md border text-xs font-medium transition cursor-pointer select-none"
               [ngClass]="isSelected
-                ? 'bg-white dark:bg-zinc-850 border-zinc-300 dark:border-zinc-600 text-zinc-900 dark:text-zinc-100'
-                : 'bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-400 dark:text-zinc-500 opacity-60'"
+                ? 'bg-white dark:bg-zinc-800 border-zinc-300 dark:border-zinc-600 text-zinc-900 dark:text-zinc-100 shadow-xs dark:shadow-none'
+                : 'bg-zinc-50 dark:bg-zinc-900/60 border-zinc-200 dark:border-zinc-800 text-zinc-400 dark:text-zinc-500 opacity-60 hover:opacity-100 hover:border-zinc-300 dark:hover:border-zinc-700'"
               (click)="toggleIndexSelection(idx.code)"
             >
-              <!-- Colored Checkbox / Dot Indicator -->
+              <!-- Colored Dot Indicator -->
               <span
-                class="w-2.5 h-2.5 rounded-full transition-transform"
-                [style.backgroundColor]="isSelected ? INDEX_COLORS[idx.code] : '#9ca3af'"
-                [class.scale-110]="isSelected"
+                class="w-2.5 h-2.5 rounded-full transition-transform shrink-0"
+                [style.backgroundColor]="isSelected ? INDEX_COLORS[idx.code] : undefined"
+                [ngClass]="!isSelected ? 'bg-zinc-300 dark:bg-zinc-700' : 'scale-110'"
               ></span>
               <span class="font-bold">{{ idx.code }}</span>
               <span
@@ -277,7 +268,7 @@
         </div>
   
         <!-- Main Comparison Chart Card -->
-        <div class="relative w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-850/60 p-4 ">
+        <div class="relative w-full rounded-lg border border-zinc-200/90 dark:border-zinc-700 bg-white dark:bg-zinc-900/90 dark:ring-1 dark:ring-zinc-800/80 p-4">
           <!-- Chart Container -->
           <div class="relative w-full h-[360px] select-none">
             <svg
@@ -296,20 +287,20 @@
                     [attr.y1]="grid.y"
                     [attr.x2]="chartWidth - chartPadding.right"
                     [attr.y2]="grid.y"
-                    [attr.stroke]="grid.isZero ? '#71717a' : '#d4d4d8'"
-                    [attr.stroke-width]="grid.isZero ? '1.5' : '1'"
+                    [attr.stroke-width]="grid.isZero ? '1' : '1'"
                     [attr.stroke-dasharray]="grid.isZero ? '4 3' : '2 2'"
-                    class="dark:stroke-zinc-700/60"
-                    [class.dark:stroke-zinc-400]="grid.isZero"
+                    [ngClass]="grid.isZero
+                      ? 'stroke-zinc-400/60 dark:stroke-zinc-500/80'
+                      : 'stroke-zinc-200 dark:stroke-zinc-800'"
                   />
                   <!-- Right-aligned Y-Axis Percentage Label -->
                   <text
                     [attr.x]="chartWidth - chartPadding.right + 8"
-                    [attr.y]="grid.y + 4"
-                    class="text-[10px] font-mono fill-zinc-400 dark:fill-zinc-500 select-none"
-                    [class.font-bold]="grid.isZero"
-                    [class.fill-zinc-700]="grid.isZero"
-                    [class.dark:fill-zinc-200]="grid.isZero"
+                    [attr.y]="grid.y + 3.5"
+                    class="text-[10px] select-none"
+                    [ngClass]="grid.isZero
+                      ? 'font-bold fill-zinc-500 dark:fill-zinc-300'
+                      : 'font-normal fill-zinc-400 dark:fill-zinc-400'"
                   >
                     {{ grid.percent >= 0 && !grid.isZero ? '+' : '' }}{{ grid.percent | number:'1.1-1' }}%
                   </text>
@@ -323,7 +314,8 @@
                     [attr.d]="line.path"
                     fill="none"
                     [attr.stroke]="line.color"
-                    stroke-width="1"
+                    [attr.stroke-width]="line.code === 'IHSG' ? '1.5' : '1'"
+                    vector-effect="non-scaling-stroke"
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     class="transition-opacity duration-150"
@@ -339,10 +331,9 @@
                   [attr.y1]="chartPadding.top"
                   [attr.x2]="hover.x"
                   [attr.y2]="chartHeight - chartPadding.bottom"
-                  stroke="#a1a1aa"
-                  stroke-width="1.25"
+                  stroke-width="1"
                   stroke-dasharray="3 3"
-                  class="dark:stroke-zinc-500"
+                  class="stroke-zinc-400 dark:stroke-zinc-500 pointer-events-none"
                 />
   
                 <!-- Highlight Dots on each line -->
@@ -352,9 +343,8 @@
                     [attr.cy]="chartScale().yForPercent(item.percent)"
                     r="4.5"
                     [attr.fill]="item.color"
-                    stroke="#ffffff"
                     stroke-width="2"
-                    class="shadow-sm"
+                    class="stroke-white dark:stroke-zinc-900 pointer-events-none shadow-sm"
                   />
                 }
               }
@@ -365,7 +355,7 @@
                   [attr.x]="label.x"
                   [attr.y]="chartHeight - 12"
                   text-anchor="middle"
-                  class="text-[10px] fill-zinc-400 dark:fill-zinc-500 select-none"
+                  class="text-[10px] font-sans fill-zinc-400 dark:fill-zinc-400 select-none"
                 >
                   {{ label.text }}
                 </text>
@@ -375,29 +365,32 @@
             <!-- Floating Hover Tooltip Box -->
             @if (hoverData(); as hover) {
               <div
-                class="pointer-events-none absolute top-4 z-30 p-2.5 rounded-lg bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200 dark:border-zinc-700 shadow-xl text-xs w-48 transition-all duration-75"
-                [style.left.px]="hover.x > (chartWidth / 2) ? hover.x - 210 : hover.x + 20"
+                class="pointer-events-none absolute top-4 z-30 p-3 rounded-lg bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-zinc-200/90 dark:border-zinc-700/80 shadow-xl dark:shadow-2xl dark:shadow-black/70 ring-1 ring-black/5 dark:ring-white/10 text-xs w-52 transition-all duration-75"
+                [style.left.px]="hover.x > (chartWidth / 2) ? hover.x - 224 : hover.x + 20"
               >
-                <div class="font-semibold text-zinc-800 dark:text-zinc-200 border-b border-zinc-100 dark:border-zinc-800 pb-1 mb-1.5 flex items-center justify-between">
+                <div class="font-semibold text-zinc-800 dark:text-zinc-200 border-b border-zinc-100 dark:border-zinc-800 pb-1.5 mb-2 flex items-center justify-between">
                   <span>{{ hover.dateStr }}</span>
-                  <span class="text-[10px] text-zinc-400 font-normal">{{ selectedTimeframe() }}</span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">{{ selectedTimeframe() }}</span>
                 </div>
-                <div class="flex flex-col gap-1">
+                <div class="flex flex-col gap-1.5">
                   @for (item of hover.items; track item.code) {
                     <div class="flex items-center justify-between">
                       <div class="flex items-center gap-1.5 truncate">
                         <span class="w-2 h-2 rounded-full shrink-0" [style.backgroundColor]="item.color"></span>
-                        <span class="font-medium truncate text-zinc-700 dark:text-zinc-300">{{ item.code }}</span>
+                        <span class="font-medium truncate text-zinc-700 dark:text-zinc-200">{{ item.code }}</span>
                       </div>
-                      <span
-                        class="font-mono font-bold text-[11px] shrink-0"
-                        [class.text-emerald-600]="item.percent >= 0"
-                        [class.dark:text-emerald-400]="item.percent >= 0"
-                        [class.text-rose-600]="item.percent < 0"
-                        [class.dark:text-rose-400]="item.percent < 0"
-                      >
-                        {{ item.percent >= 0 ? '+' : '' }}{{ item.percent | number:'1.2-2' }}%
-                      </span>
+                      <div class="flex items-center gap-2 shrink-0 ">
+                        <span class="text-[11px] text-zinc-400/90 dark:text-zinc-500">{{ item.value | number:'1.1-1' }}</span>
+                        <span
+                          class="font-semibold text-[11px]"
+                          [class.text-emerald-600]="item.percent >= 0"
+                          [class.dark:text-emerald-400]="item.percent >= 0"
+                          [class.text-rose-600]="item.percent < 0"
+                          [class.dark:text-rose-400]="item.percent < 0"
+                        >
+                          {{ item.percent >= 0 ? '+' : '' }}{{ item.percent | number:'1.2-2' }}%
+                        </span>
+                      </div>
                     </div>
                   }
                 </div>
@@ -406,10 +399,10 @@
           </div>
         </div>
   
-        <!-- Comparison Summary Table (MSN Money style) -->
-        <div class="w-full overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-850 shadow-sm">
+        <!-- Comparison Table -->
+        <div class="w-full overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/80">
           <table class="w-full text-left text-xs">
-            <thead class="bg-zinc-50 dark:bg-zinc-800/60 text-zinc-500 dark:text-zinc-400 font-semibold border-b border-zinc-200 dark:border-zinc-800">
+            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 font-semibold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th class="py-2.5 px-3">Benchmark Index</th>
                 <th class="py-2.5 px-3 text-right">Latest Price</th>
@@ -420,10 +413,15 @@
                 <th class="py-2.5 px-3 text-center">Chart View</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800 text-zinc-700 dark:text-zinc-300">
-              @for (idx of indices(); track idx.code) {
+            <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800/80 text-zinc-700 dark:text-zinc-300">
+              @for (idx of sortedTableIndices(); track idx.code) {
                 @let isSelected = selectedIndices().includes(idx.code);
-                <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition">
+                <tr
+                  class="transition-colors hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40"
+                  [class.opacity-75]="!isSelected"
+                  [class.dark:opacity-90]="!isSelected"
+                  [class.dark:bg-zinc-800/20]="isSelected"
+                >
                   <!-- Name & Color Indicator -->
                   <td class="py-2.5 px-3">
                     <div class="flex items-center gap-2">
@@ -438,28 +436,24 @@
                     </div>
                   </td>
                   <!-- Latest Price -->
-                  <td class="py-2.5 px-3 text-right font-mono font-bold text-zinc-900 dark:text-zinc-100">
+                  <td class="py-2.5 px-3 text-right font-bold text-zinc-900 dark:text-zinc-100">
                     {{ idx.price | number:'1.2-2' }}
                   </td>
                   <!-- Return % -->
-                  <td class="py-2.5 px-3 text-right font-mono font-bold">
-                    <span
-                      class="px-1.5 py-0.5 rounded text-[11px]"
-                      [class.text-emerald-600]="idx.changePercent >= 0"
-                      [class.bg-emerald-50]="idx.changePercent >= 0"
-                      [class.dark:bg-emerald-950/40]="idx.changePercent >= 0"
-                      [class.dark:text-emerald-400]="idx.changePercent >= 0"
-                      [class.text-rose-600]="idx.changePercent < 0"
-                      [class.bg-rose-50]="idx.changePercent < 0"
-                      [class.dark:bg-rose-950/40]="idx.changePercent < 0"
-                      [class.dark:text-rose-400]="idx.changePercent < 0"
-                    >
+                  <td class="py-2.5 px-3 text-right font-bold">
+                    <span 
+                      class="text-right font-semibold"
+                      [ngClass]="{
+                        'text-emerald-600 dark:text-emerald-400': idx.changePercent >= 0,
+                        'text-rose-600 dark:text-rose-400': idx.changePercent < 0
+                      }"
+                      >
                       {{ idx.changePercent >= 0 ? '+' : '' }}{{ idx.changePercent | number:'1.2-2' }}%
                     </span>
                   </td>
                   <!-- Points Change -->
                   <td
-                    class="py-2.5 px-3 text-right font-mono text-[11px]"
+                    class="py-2.5 px-3 text-right text-[11px]"
                     [class.text-emerald-600]="idx.change >= 0"
                     [class.dark:text-emerald-400]="idx.change >= 0"
                     [class.text-rose-600]="idx.change < 0"
@@ -468,18 +462,27 @@
                     {{ idx.change >= 0 ? '+' : '' }}{{ idx.change | number:'1.2-2' }}
                   </td>
                   <!-- Period Low -->
-                  <td class="py-2.5 px-3 text-right font-mono text-zinc-500 text-[11px]">
+                  <td class="py-2.5 px-3 text-right text-zinc-500 dark:text-zinc-400 text-[11px]">
                     {{ idx.low | number:'1.2-2' }}
                   </td>
                   <!-- Period High -->
-                  <td class="py-2.5 px-3 text-right font-mono text-zinc-500 text-[11px]">
+                  <td class="py-2.5 px-3 text-right text-zinc-500 dark:text-zinc-400 text-[11px]">
                     {{ idx.high | number:'1.2-2' }}
                   </td>
                   <!-- Checkbox Toggle -->
                   <td class="py-2.5 px-3 text-center">
+                    <!-- <input
+                      type="checkbox"
+                      class="rounded border-zinc-300 dark:border-zinc-600 dark:bg-zinc-800 text-slate-600 focus:ring-slate-500 appearance-none checked:bg-red-500 cursor-pointer"
+                      [checked]="isSelected"
+                      (change)="toggleIndexSelection(idx.code)"
+                    /> -->
                     <input
                       type="checkbox"
-                      class="rounded border-zinc-300 dark:border-zinc-700 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                      class="rounded cursor-pointer
+                          
+                            accent-zinc-700 dark:accent-zinc-100
+                            "
                       [checked]="isSelected"
                       (change)="toggleIndexSelection(idx.code)"
                     />

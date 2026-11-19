@@ -1,13 +1,14 @@
-<div class="min-h-screen p-3 flex flex-col gap-4 font-sans overflow-x-hidden transition-colors duration-300
+<div class="min-h-screen p-3 flex flex-col gap-4 font-sans overflow-x-clip transition-colors duration-300
   bg-[#F3F5ED] dark:bg-[#0f1117]">
   <!-- Header -->
   <!-- <app-index-header></app-index-header> -->
 
   <div class="flex gap-2 grow flex-col lg:flex-row min-w-0">
 
-    <!-- Sidebar -->
-    <aside [class]="'shrink-0 flex flex-col gap-5 p-1.5 transition-all duration-300 ' + (sidebarCollapsed() ? '' : 'w-full lg:w-60')">
+    <!-- Sidebar (Sticky on desktop without layout disruption) -->
+    <aside [class]="'shrink-0 flex flex-col p-1.5 transition-all duration-300 lg:sticky lg:top-3 lg:self-start lg:h-[calc(100vh-1.5rem)] ' + (sidebarCollapsed() ? '' : 'w-full lg:w-60')">
       <app-sector-sidebar
+        class="h-full flex flex-col"
         [ihsg]="ihsg()"
         [advancing]="marketStats().advancing"
         [unchanged]="marketStats().unchanged"

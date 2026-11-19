@@ -136,3 +136,23 @@ html.dark {
 .full-tab .item:last-child {
   @apply w-full;
 } 
+
+/* ── Button ──────────────────────────────────────────────────── */
+/* .button-prm {
+  @apply px-2.5 py-1 rounded-md bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 
+  text-zinc-700 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-700/80 transition font-medium
+} */
+
+.button-prm {
+  @apply px-2.5 h-7 rounded-md transition font-medium text-[13px] cursor-pointer
+  bg-zinc-800 hover:bg-zinc-950 dark:bg-zinc-100 dark:hover:bg-zinc-200 
+  text-zinc-100 dark:text-zinc-800
+}
+
+
+
+  /* .v-two .tab-item-theme.active {
+    @apply bg-zinc-800 dark:bg-[#F2F2F2] 
+    text-zinc-100 dark:text-zinc-800
+    font-medium;
+  } */

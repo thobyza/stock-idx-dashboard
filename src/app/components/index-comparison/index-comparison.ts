@@ -93,6 +93,15 @@ export class IndexComparison implements OnInit {
     }
   });
 
+  // Sorted list for the Comparison Table (always sorted by return descending)
+  sortedTableIndices = computed(() => {
+    let list = [...this.indices()];
+    if (this.selectedTimeframe() === '5Y') {
+      list = list.filter((idx) => this.FIVE_YEAR_INDICES.has(idx.code));
+    }
+    return list.sort((a, b) => b.changePercent - a.changePercent);
+  });
+
   // Active indices selected for the chart
   activeChartIndices = computed(() => {
     const selected = new Set(this.selectedIndices());
