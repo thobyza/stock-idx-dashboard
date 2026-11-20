@@ -6,7 +6,7 @@
       <h2 class="main-title">Stock Screener</h2>
       <!-- <p class="main-subtitle">Live rankings of top performers, high-liquidity volume leaders, and 52-week breakout candidates</p> -->
     </div>
-    <span class="main-badge">IDX · Screener</span>
+    <!-- <span class="main-badge">IDX · Screener</span> -->
   </div>
 
   <!-- KPI Highlights -->
@@ -205,35 +205,26 @@
     </div>
     <!-- MCap Filter -->
     <div class="flex items-center gap-2 text-xs">
-      <span class="text-zinc-700/80 dark:text-zinc-400">Cap</span>
+      <span class="text-zinc-700/80 dark:text-zinc-400">MCap</span>
       <div class="tab-wrapper-theme">
         <button
-          class="px-2.5 py-1 text-zinc-700/70 dark:text-zinc-400 rounded-md transition-all cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
-          [class.bg-zinc-200]="marketCapTier() === 'ALL'"
-          [class.dark:bg-zinc-700]="marketCapTier() === 'ALL'"
-          [class.text-zinc-800]="marketCapTier() === 'ALL'"
-          [class.dark:text-zinc-100]="marketCapTier() === 'ALL'"
+          class="tab-item-theme"
+          [class.active]="marketCapTier() === 'ALL'"
           (click)="setCapTier('ALL')"
         >
           All
         </button>
         <button
-          class="px-2.5 py-1 text-zinc-700/70 dark:text-zinc-400 rounded-md transition-all cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
-          [class.bg-zinc-200]="marketCapTier() === 'LARGE'"
-          [class.dark:bg-zinc-700]="marketCapTier() === 'LARGE'"
-          [class.text-zinc-800]="marketCapTier() === 'LARGE'"
-          [class.dark:text-zinc-100]="marketCapTier() === 'LARGE'"
+          class="tab-item-theme"
+          [class.active]="marketCapTier() === 'LARGE'"
           (click)="setCapTier('LARGE')"
           title="Market Cap > Rp 50 Trillion"
         >
           Big Cap (>50T)
         </button>
         <button
-          class="px-2.5 py-1 text-zinc-700/70 dark:text-zinc-400 rounded-md transition-all cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/50"
-          [class.bg-zinc-200]="marketCapTier() === 'MID'"
-          [class.dark:bg-zinc-700]="marketCapTier() === 'MID'"
-          [class.text-zinc-800]="marketCapTier() === 'MID'"
-          [class.dark:text-zinc-100]="marketCapTier() === 'MID'"
+          class="tab-item-theme"
+          [class.active]="marketCapTier() === 'MID'"
           (click)="setCapTier('MID')"
           title="Market Cap Rp 10T - Rp 50T"
         >
@@ -491,10 +482,11 @@
       </thead>
       <tbody>
         @for (stock of rankedStocks(); track stock.symbol; let idx = $index) {
-          <tr class="border-b border-zinc-100 dark:border-zinc-700/80 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-all text-zinc-800 dark:text-zinc-200">
+          <tr class="border-b border-zinc-100 text-xs dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-all text-zinc-800 dark:text-zinc-200">
             <!-- Symbol -->
             <td class="font-bold uppercase">
-              <span class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700">{{ stock.symbol }}</span>
+              <!-- <span class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700">{{ stock.symbol }}</span> -->
+              <span class="text-zinc-800 dark:text-zinc-200 ">{{ stock.symbol }}</span>
             </td>
 
             <!-- Name -->
@@ -506,7 +498,7 @@
             <td class="text-zinc-400 dark:text-zinc-400 text-[11px]">{{ stock.sector }}</td>
 
             <!-- Price -->
-            <td class="text-right font-medium text-zinc-500 dark:text-zinc-400">
+            <td class="text-right font-medium text-zinc-600 dark:text-zinc-300/90">
               {{ stock.price | number }}
             </td>
 
@@ -543,7 +535,7 @@
                     [style.width.%]="get52WeekPosition(stock.price, stock.fiftyTwoWeekLow, stock.fiftyTwoWeekHigh)"
                   ></div>
                 </div>
-                <div class="flex justify-between w-full text-[9px] text-zinc-500/80 dark:text-zinc-400">
+                <div class="flex justify-between w-full text-[10px] text-zinc-500 dark:text-zinc-400">
                   <span>{{ stock.fiftyTwoWeekLow | number }}</span>
                   <span>{{ stock.fiftyTwoWeekHigh | number }}</span>
                 </div>
@@ -551,17 +543,17 @@
             </td>
 
             <!-- Volume -->
-            <td class="text-right text-zinc-600 dark:text-zinc-400">
+            <td class="text-right text-zinc-600 dark:text-zinc-400 text-[11px]">
               {{ stock.volume | number }}
             </td>
 
             <!-- Turnover -->
-            <td class="text-right font-mono font-medium text-zinc-800 dark:text-zinc-200">
+            <td class="text-right font-medium text-zinc-800 dark:text-zinc-200">
               {{ formatTurnover(stock) }}
             </td>
 
             <!-- Market Cap -->
-            <td class="text-right font-mono text-zinc-500 dark:text-zinc-400">
+            <td class="text-right text-zinc-500 dark:text-zinc-400">
               {{ formatMarketCap(stock.marketCap) }}
             </td>
           </tr>

@@ -4,6 +4,7 @@ import cors from 'cors';
 import { socketService } from './services/socketService.js';
 import stockRoutes from './routes/stockRoutes.js';
 import newsRoutes from './routes/newsRoutes.js';
+import indexRoutes from './routes/indexRoutes.js';
 
 const app = express();
 app.use(cors());
@@ -12,6 +13,7 @@ app.use(express.json());
 // Routes
 app.use('/api/stocks', stockRoutes);
 app.use('/api/news', newsRoutes);
+app.use('/api/indices', indexRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

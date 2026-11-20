@@ -41,7 +41,7 @@ class StockService {
               const ihsgChart = await yahooFinance.chart('^JKSE', { period1: sevenDaysAgo, interval: '15m' });                                                                                                            
               if (ihsgChart && ihsgChart.quotes && ihsgChart.quotes.length > 0) {                                                                                                                                      
                 const validQuotes = ihsgChart.quotes.filter(item => item.close !== null && item.close !== undefined);                                                                                                     
-                history = validQuotes.slice(-30).map(item => item.close);                                                                                                                                            
+                history = validQuotes.slice(-60).map(item => item.close);                                                                                                                                            
               }                                                                                                                                                                                                        
             } catch (cErr) {                                                                                                                                                                                           
               console.warn("Could not fetch IHSG intraday chart history:", cErr.message);                                                                                                                                       

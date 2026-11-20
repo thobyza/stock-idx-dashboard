@@ -1,7 +1,5 @@
 import { Component, input } from '@angular/core';                                          
-import { DecimalPipe } from '@angular/common';                                             
-import { IndexData } from '../../stock.service';                                           
-                                                    
+import { DecimalPipe } from '@angular/common';                                                                                
 
 @Component({
   selector: 'app-index-header',

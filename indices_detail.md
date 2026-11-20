@@ -128,8 +128,8 @@ JII70_TICKERS = [
 ];
 
 IDXHIDIV20_TICKERS = [
-    "ACES", "ADRO", "AKRA", "ANTM", "ASII",
-    "BBCA", "BBNI", "BBRI", "BMRI", "ERAA",
-    "HMSP", "INDF", "ITMG", "PGAS", "PTBA",
-    "SCMA", "TAPG", "TLKM", "UNTR", "UNVR",
+  "ACES", "ADRO", "AKRA", "ANTM", "ASII",
+  "BBCA", "BBNI", "BBRI", "BMRI", "ERAA",
+  "HMSP", "INDF", "ITMG", "PGAS", "PTBA",
+  "SCMA", "TAPG", "TLKM", "UNTR", "UNVR",
 ]

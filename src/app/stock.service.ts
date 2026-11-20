@@ -65,6 +65,30 @@ export interface CorporateAction {
   status: 'UPCOMING' | 'ONGOING' | 'COMPLETED';
 }
 
+// export type ComparisonTimeframe = '1D' | '1W' | '3M' | 'YTD' | '1Y' | '3Y' | '5Y';
+export type ComparisonTimeframe = '1D' | '1W' | '3M' | '6M' | 'YTD' | '1Y' | '2Y' | '5Y';
+
+export interface IndexComparisonItem {
+  code: string;
+  symbol: string;
+  name: string;
+  description: string;
+  price: number;
+  change: number;
+  changePercent: number;
+  startPrice: number;
+  high: number;
+  low: number;
+  sparkline: number[];
+  history: { date: string; value: number; percent: number }[];
+}
+
+export interface IndexComparisonResponse {
+  timeframe: string;
+  updatedAt: string;
+  indices: IndexComparisonItem[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -155,6 +179,12 @@ export class StockService {
   getCorporateActions(): Observable<{ actions: CorporateAction[] }> {
     return this.http.get<{ actions: CorporateAction[] }>(`${this.apiUrl}/corporate-actions`).pipe(
       catchError(() => of({ actions: this.getFallbackCorporateActions() }))
+    );
+  }
+
+  getIndexComparison(timeframe: ComparisonTimeframe = '1D'): Observable<IndexComparisonResponse> {
+    return this.http.get<IndexComparisonResponse>(
+      `${this.apiUrl}/indices/comparison?timeframe=${timeframe}`
     );
   }
 

@@ -1,15 +1,26 @@
-<main class="flex flex-col grow gap-3 bg-white dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800 p-4 rounded-lg shadow-md transition-colors">
-  <!-- Header -->
+<main class="flex flex-col grow gap-1 bg-white dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800 p-4 rounded-lg shadow-md transition-colors">
+
   <div class="main-header">
     <div>
-      <h2 class="main-title">Stock Heatmap</h2>
+      <h2 class="main-title">Stock Overview</h2>
       <!-- <p class="main-subtitle">Visualize stock movements, daily price changes, and compare sector performance</p> -->
     </div>
-    <span class="main-badge">IDX · Heatmap</span>
+    <!-- <span class="main-badge">IDX · Heatmap</span> -->
   </div>
 
+  <section class="flex flex-col grow gap-3">
+    <div class="full-tab">
+      <div class="item" [class.active]="viewMode() === 'grid'" (click)="setViewMode('grid')">
+        <span>Heatmap</span>
+      </div>
+      <div class="item" [class.active]="viewMode() === 'sectors'" (click)="setViewMode('sectors')">
+        <span>Sector</span>
+      </div>
+      <div class="item"></div>
+    </div>
+  
     <!-- Toolbar controls -->
-    <div class="flex flex-col gap-3">
+    <div class="flex flex-col gap-2">
       <div class="flex justify-between items-center gap-4">
         <!-- Search bar & filters -->
         <div class="flex items-center gap-3">
@@ -157,14 +168,14 @@
   
         <div class="flex items-center gap-6 flex-wrap text-xs">
           <!-- Views toggles -->
-          <div class="flex items-center gap-2">
+          <!-- <div class="flex items-center gap-2">
             <span class="text-zinc-700/80 dark:text-zinc-400">View</span>
             <div class="tab-wrapper-theme">
               <button class="tab-item-theme" [class.active]="viewMode() === 'grid'" (click)="setViewMode('grid')">Heatmap</button>
-              <!-- <button class="tab-item-theme" [class.active]="viewMode() === 'list'" (click)="setViewMode('list')">List</button> -->
+              <button class="tab-item-theme" [class.active]="viewMode() === 'list'" (click)="setViewMode('list')">List</button>
               <button class="tab-item-theme" [class.active]="viewMode() === 'sectors'" (click)="setViewMode('sectors')">Sectors</button>
             </div>
-          </div>
+          </div> -->
   
           <!-- Sorting triggers -->
           @if (viewMode() !== 'sectors') {
@@ -181,7 +192,7 @@
         </div>
       </div>
   
-      <div class="flex gap-2 text-xs text-zinc-400 dark:text-zinc-400/80">
+      <div class="flex gap-2 text-[13px] text-zinc-400 dark:text-zinc-400/80">
         <div class="flex gap-1">
           <span class="font-medium text-zinc-700 dark:text-zinc-300">{{ filteredStocks().length }}</span>
           <span>stocks</span>
@@ -194,11 +205,11 @@
             @if (selectedIndexInfo() && selectedIndexInfo().description) {
               <div
                 class="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2.5 w-72 p-3 
-                       rounded-lg bg-white/95 dark:bg-zinc-850 dark:bg-zinc-800/95 backdrop-blur-sm
-                       text-xs leading-relaxed text-zinc-600 dark:text-zinc-300 shadow-xl 
-                       border border-zinc-200/90 dark:border-zinc-700/80
-                       opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 
-                       transition-all duration-200 ease-out z-50 select-none"
+                        rounded-lg bg-white/95 dark:bg-zinc-850 dark:bg-zinc-800/95 backdrop-blur-sm
+                        text-xs leading-relaxed text-zinc-600 dark:text-zinc-300 shadow-xl 
+                        border border-zinc-200/90 dark:border-zinc-700/80
+                        opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 
+                        transition-all duration-200 ease-out z-50 select-none"
               >
                 <div class="font-semibold text-zinc-900 dark:text-zinc-100 mb-1 flex items-center justify-between">
                   <span>{{ selectedIndex() }}</span>
@@ -209,8 +220,8 @@
                 <!-- Left-pointing arrow -->
                 <div
                   class="absolute right-full top-1/2 -translate-y-1/2 -mr-[1px]
-                         border-solid border-r-white/95 dark:border-r-zinc-800/95 border-r-4 
-                         border-y-transparent border-y-4 border-l-0"
+                          border-solid border-r-white/95 dark:border-r-zinc-800/95 border-r-4 
+                          border-y-transparent border-y-4 border-l-0"
                 ></div>
               </div>
             }
@@ -219,14 +230,13 @@
       </div>
     </div>
     
-
     <!-- 1. Heatmap  -->
     @if (viewMode() === 'grid') {
       <app-heatmap-grid
         [stocks]="filteredStocks()"
       ></app-heatmap-grid>
     }
-
+  
     <!-- 2. List -->
     @if (viewMode() === 'list') {
       <div class="table-list overflow-x-auto border border-zinc-300 dark:border-zinc-800 rounded-md grow max-h-[85vh]">
@@ -251,7 +261,7 @@
                 <td class="font-bold uppercase">{{ stock.symbol }}</td>
                 <td class="max-w-50 truncate">{{ stock.name }}</td>
                 <td class="text-zinc-700/70 dark:text-zinc-400">{{ stock.sector }}</td>
-
+  
                 <td class="text-right font-semibold"
                   [class.text-emerald-500]="stock.change >= 0"
                   [class.text-rose-500]="stock.change < 0"
@@ -259,14 +269,14 @@
                   >
                   {{ stock.change >= 0 ? '+' : '' }}{{ stock.change | number:'1.2-2' }}%
                 </td>
-
+  
                 <td class="text-right font-semibold"
                   [class.text-emerald-500]="(stock.change1w || 0) >= 0"
                   [class.text-rose-500]="(stock.change1w || 0) < 0"
                   [class.text-slate-400]="(stock.change1w || 0) == 0">
                   {{ (stock.change1w || 0) >= 0 ? '+' : '' }}{{ (stock.change1w || 0) | number:'1.2-2' }}%
                 </td>
-
+  
                 <td class="text-right text-zinc-800 dark:text-zinc-200 font-medium">{{ stock.price | number }}</td>
                 <td class="text-center text-xs">
                   <div class="flex flex-col items-center gap-1 mx-auto w-32">
@@ -295,7 +305,7 @@
                     Rp {{ (stock.price * stock.volume) | number }}
                   }
                 </td>
-
+  
                 <td class="text-right font-mono text-zinc-700/70 dark:text-zinc-400 font-medium">Rp {{ stock.marketCap / 1e12 | number:'1.1-2' }} T</td>
               </tr>
             }
@@ -303,7 +313,7 @@
         </table>
       </div>
     }
-
+  
     <!-- 3. Sectors Card -->
     @if (viewMode() === 'sectors') {
       <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 grow auto-rows-max">
@@ -329,7 +339,7 @@
                 {{ sec.avgChange >= 0 ? '+' : '' }}{{ sec.avgChange }}%
               </span>
             </div>
-
+  
             <div class="flex gap-1 text-xs gap-2">
               <span class="text-zinc-600 dark:text-zinc-400">{{ sec.count }} stocks</span>
               <span class="text-zinc-500">•</span>
@@ -338,7 +348,7 @@
                   <span class="text-rose-600 dark:text-rose-400">↘︎ {{ sec.declining }}</span>
               </div>
             </div>
-
+  
             <div class="relative pt-2 border-t border-zinc-200/90 dark:border-zinc-700">
               <div class="flex flex-wrap gap-1.5 max-h-[50px] md:max-h-[80px] lg:max-h-[100px] overflow-y-auto pb-4 pr-1">
                 @for (stock of getStocksForSector(sec.sector); track stock.symbol) {
@@ -352,13 +362,15 @@
                   </div>
                 }
               </div>
-
+  
               <!-- Fade Gradient overlay  -->
               <div class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-zinc-100 dark:from-zinc-800 to-transparent pointer-events-none"></div>
             </div>
-
+  
           </div>
         }
       </div>
     }
-  </main>
+  </section>
+
+</main>

@@ -5,6 +5,7 @@ export const INDICES_LIST = [
   'IDX80',
   'IDX30',
   'IDX-SMCLIQ',
+  'IDXHIDIV20',
   'JII',
   'JII70',
 ] as const;
@@ -46,6 +47,11 @@ export const INDICES_METADATA: Record<IndexCode, IndexInfo> = {
     name: 'IDX Small-Mid Cap Liquid',
     description:
       'Tracks the price performance of small- and mid-cap stocks characterized by active trading liquidity.',
+  },
+  IDXHIDIV20: {
+    name: 'IDX High Dividend 20',
+    description: 
+    `Measures the price performance of 20 stocks that consistently distribute high cash dividends over the past 3 years and have a high dividend yield.`,
   },
   JII: {
     name: 'Jakarta Islamic Index',

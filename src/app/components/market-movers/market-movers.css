@@ -3,7 +3,7 @@
 
 /* ── Container ───────────────────────────────────────────────── */
 .movers-container {
-  @apply w-full h-full flex flex-col gap-4 p-4 bg-white rounded-lg shadow-md min-w-0 overflow-hidden
+  @apply w-full h-full flex flex-col gap-3 p-4 bg-white rounded-lg shadow-md min-w-0 overflow-hidden
          dark:bg-zinc-900 dark:ring-1 dark:ring-zinc-800 dark:shadow-none transition-colors;
 }
 
@@ -14,7 +14,7 @@
 }
 
 .kpi-label {
-  @apply text-[10px] font-bold text-zinc-400 uppercase tracking-wider
+  @apply text-[11px] font-bold text-zinc-400 
          dark:text-zinc-400/80;
 }
 
@@ -66,7 +66,7 @@
 
 /* ── Table List ──────────────────────────────────────────────── */
 .table-list th {
-  @apply px-3 py-2.5 text-zinc-600 bg-zinc-100 font-semibold text-[11px] uppercase tracking-wider whitespace-nowrap
+  @apply px-3 py-2.5 text-zinc-600 bg-zinc-100 font-semibold text-xs whitespace-nowrap
          dark:text-zinc-300 dark:bg-zinc-800;
 }
 
@@ -84,5 +84,5 @@
 }
 
 .table-list td {
-  @apply px-3 py-2.5 whitespace-nowrap text-xs;
+  @apply px-3 py-2.5 whitespace-nowrap;
 }
