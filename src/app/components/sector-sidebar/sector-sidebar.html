@@ -2,10 +2,9 @@
 
   <div class="flex flex-col gap-4">
     <div class="flex items-center transition-all duration-300" [class.justify-between]="!collapsed()" [class.flex-col]="collapsed()" [class.gap-2]="collapsed()">
-      <div class="flex items-center gap-2.5" [class.h-7]="collapsed()" [class.content-center]="collapsed()">
+      <div class="flex items-center gap-2.5 h-7" [class.content-center]="collapsed()">
         <img 
-          class="object-contain" 
-          [class]="collapsed() ? 'w-7' : 'w-6'" 
+          class="object-contain w-7" 
           [src]="themeService.isDark() ? 'assets/images/app_logo_idx2-wh.png' : 'assets/images/app_logo_idx2.png'" 
           alt=""
         >
@@ -132,11 +131,11 @@
         @if (!collapsed()) { <label>Index Comparison</label> }
       </div>
       <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'news'" (click)="onSelectPage('news')">                                                                                                             
-        <svg lucideTextAlignStart></svg>                                                                                                                                                                               
+        <svg lucideSummary></svg>                                                                                                                                                                               
         @if (!collapsed()) { <label>Market News</label> }                                                                                                                                                            
       </div>                                                                                                                                                                                                  
       <div class="menu-wrapper" [class.justify-center]="collapsed()" [class.active]="activePage() === 'calendar'" (click)="onSelectPage('calendar')">                                                                                                     
-        <svg lucideWorkflow></svg>                                                                                                                                                                                 
+        <svg lucideScale></svg>                                                                                                                                                                                 
         @if (!collapsed()) { <label>Corp Actions</label> }                                                                                                                                                      
       </div>              
     </section>
