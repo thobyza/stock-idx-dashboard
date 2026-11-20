@@ -2,33 +2,13 @@ import { Component, input, output, inject } from '@angular/core';
 import { IndexData } from '../../stock.service';
 import { ThemeService } from '../../theme.service';
 import { DecimalPipe, DatePipe, NgClass } from '@angular/common';
-import {
-  LucideTrendingUp,
-  LucideLayoutGrid,
-  LucideWorkflow,
-  LucideSummary,
-  LucideSun,
-  LucideMoon,
-  LucideChevronLeft,
-  LucideChevronRight,
-  LucideScale,
-} from '@lucide/angular';
+import { LucideTrendingUp, LucideLayoutGrid, LucideWorkflow, LucideSummary, LucideSun, LucideMoon, 
+  LucideChevronLeft, LucideChevronRight, LucideScale } from '@lucide/angular';
 
 @Component({
   selector: 'app-sector-sidebar',
-  imports: [
-    NgClass,
-    DecimalPipe,
-    DatePipe,
-    LucideTrendingUp,
-    LucideLayoutGrid,
-    LucideWorkflow,
-    LucideSun,
-    LucideMoon,
-    LucideChevronLeft,
-    LucideChevronRight,
-    LucideScale,
-    LucideSummary,
+  imports: [ NgClass, DecimalPipe, DatePipe, LucideTrendingUp, LucideLayoutGrid, LucideWorkflow,
+    LucideSun, LucideMoon, LucideChevronLeft, LucideChevronRight, LucideScale, LucideSummary,
   ],
   templateUrl: './sector-sidebar.html',
   styleUrl: './sector-sidebar.css',
