@@ -54,6 +54,10 @@ html.dark {
   dark:bg-zinc-800 dark:ring-zinc-700;
 }
 
+  .tab-wrapper-theme.v-two {
+    @apply bg-transparent ring-0 shadow-none gap-1;
+  }
+
 .tab-item-theme {
   @apply px-2.5 py-1 text-zinc-700/70 rounded-md transition-all cursor-pointer hover:bg-zinc-100
   dark:text-zinc-400 dark:hover:bg-zinc-700/50 dark:hover:text-zinc-200;
@@ -61,6 +65,10 @@ html.dark {
   .tab-item-theme.active {
     @apply bg-zinc-200 text-zinc-800
     dark:bg-zinc-700 dark:text-zinc-100;
+  }
+
+  .v-two .tab-item-theme {
+    @apply px-2;
   }
 
   .v-two .tab-item-theme.active {
