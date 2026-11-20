@@ -84,5 +84,5 @@
 }
 
 .table-list td {
-  @apply px-3 py-2.5 whitespace-nowrap text-xs;
+  @apply px-3 py-2.5 whitespace-nowrap;
 }

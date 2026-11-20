@@ -482,7 +482,7 @@
       </thead>
       <tbody>
         @for (stock of rankedStocks(); track stock.symbol; let idx = $index) {
-          <tr class="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-all text-zinc-800 dark:text-zinc-200">
+          <tr class="border-b border-zinc-100 text-xs dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-all text-zinc-800 dark:text-zinc-200">
             <!-- Symbol -->
             <td class="font-bold uppercase">
               <!-- <span class="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700">{{ stock.symbol }}</span> -->
@@ -498,7 +498,7 @@
             <td class="text-zinc-400 dark:text-zinc-400 text-[11px]">{{ stock.sector }}</td>
 
             <!-- Price -->
-            <td class="text-right font-medium text-zinc-500 dark:text-zinc-400">
+            <td class="text-right font-medium text-zinc-600 dark:text-zinc-300/90">
               {{ stock.price | number }}
             </td>
 
@@ -535,7 +535,7 @@
                     [style.width.%]="get52WeekPosition(stock.price, stock.fiftyTwoWeekLow, stock.fiftyTwoWeekHigh)"
                   ></div>
                 </div>
-                <div class="flex justify-between w-full text-[9px] text-zinc-500/80 dark:text-zinc-400">
+                <div class="flex justify-between w-full text-[10px] text-zinc-500 dark:text-zinc-400">
                   <span>{{ stock.fiftyTwoWeekLow | number }}</span>
                   <span>{{ stock.fiftyTwoWeekHigh | number }}</span>
                 </div>
@@ -543,17 +543,17 @@
             </td>
 
             <!-- Volume -->
-            <td class="text-right text-zinc-600 dark:text-zinc-400">
+            <td class="text-right text-zinc-600 dark:text-zinc-400 text-[11px]">
               {{ stock.volume | number }}
             </td>
 
             <!-- Turnover -->
-            <td class="text-right font-mono font-medium text-zinc-800 dark:text-zinc-200">
+            <td class="text-right font-medium text-zinc-800 dark:text-zinc-200">
               {{ formatTurnover(stock) }}
             </td>
 
             <!-- Market Cap -->
-            <td class="text-right font-mono text-zinc-500 dark:text-zinc-400">
+            <td class="text-right text-zinc-500 dark:text-zinc-400">
               {{ formatMarketCap(stock.marketCap) }}
             </td>
           </tr>

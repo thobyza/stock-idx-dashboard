@@ -55,7 +55,8 @@ export class App {
     const allStocks = this.stocks();
 
     // 1. Filter by selected index
-    let result = allStocks.filter((s) => s.indices.includes(index));
+    let result =
+      index === 'All' ? [...allStocks] : allStocks.filter((s) => s.indices.includes(index));
 
     // 2. Always filter (hide) by sector if it's not 'All'
     if (sector !== 'All') {
@@ -89,7 +90,8 @@ export class App {
 
   readonly marketStats = computed(() => {
     const index = this.selectedIndex();
-    const list = this.stocks().filter((s) => s.indices.includes(index));
+    const list =
+      index === 'All' ? this.stocks() : this.stocks().filter((s) => s.indices.includes(index));
     let advancing = 0;
     let declining = 0;
     let unchanged = 0;
@@ -103,7 +105,8 @@ export class App {
 
   readonly sectorPerformances = computed(() => {
     const index = this.selectedIndex();
-    const list = this.stocks().filter((s) => s.indices.includes(index));
+    const list =
+      index === 'All' ? this.stocks() : this.stocks().filter((s) => s.indices.includes(index));
     const uniqueSectors = Array.from(new Set(list.map((s) => s.sector)));
 
     const result = uniqueSectors.map((sec) => {

@@ -402,7 +402,7 @@
         <!-- Comparison Table -->
         <div class="w-full overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/80">
           <table class="w-full text-left text-xs">
-            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 font-semibold border-b border-zinc-200 dark:border-zinc-800">
+            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-semibold border-b border-zinc-200 dark:border-zinc-800">
               <tr>
                 <th class="py-2.5 px-3">Benchmark Index</th>
                 <th class="py-2.5 px-3 text-right">Latest Price</th>
@@ -436,11 +436,11 @@
                     </div>
                   </td>
                   <!-- Latest Price -->
-                  <td class="py-2.5 px-3 text-right font-bold text-zinc-900 dark:text-zinc-100">
+                  <td class="py-2.5 px-3 text-right font-semibold text-zinc-700 dark:text-zinc-200">
                     {{ idx.price | number:'1.2-2' }}
                   </td>
                   <!-- Return % -->
-                  <td class="py-2.5 px-3 text-right font-bold">
+                  <td class="py-2.5 px-3 text-right">
                     <span 
                       class="text-right font-semibold"
                       [ngClass]="{
@@ -453,7 +453,7 @@
                   </td>
                   <!-- Points Change -->
                   <td
-                    class="py-2.5 px-3 text-right text-[11px]"
+                    class="py-2.5 px-3 text-right "
                     [class.text-emerald-600]="idx.change >= 0"
                     [class.dark:text-emerald-400]="idx.change >= 0"
                     [class.text-rose-600]="idx.change < 0"
@@ -462,11 +462,11 @@
                     {{ idx.change >= 0 ? '+' : '' }}{{ idx.change | number:'1.2-2' }}
                   </td>
                   <!-- Period Low -->
-                  <td class="py-2.5 px-3 text-right text-zinc-500 dark:text-zinc-400 text-[11px]">
+                  <td class="py-2.5 px-3 text-right text-zinc-500 dark:text-zinc-400">
                     {{ idx.low | number:'1.2-2' }}
                   </td>
                   <!-- Period High -->
-                  <td class="py-2.5 px-3 text-right text-zinc-500 dark:text-zinc-400 text-[11px]">
+                  <td class="py-2.5 px-3 text-right text-zinc-500 dark:text-zinc-400">
                     {{ idx.high | number:'1.2-2' }}
                   </td>
                   <!-- Checkbox Toggle -->

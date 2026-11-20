@@ -47,10 +47,17 @@ export class HeatmapBoard {
   isIndexOpen = signal<boolean>(false);
   isSectorOpen = signal<boolean>(false);
 
-  readonly indicesList = INDICES_LIST;
+  readonly indicesList: readonly string[] = ['All', ...INDICES_LIST];
   readonly indicesMetadata = INDICES_METADATA;
 
   readonly selectedIndexInfo = computed(() => {
+    if (this.selectedIndex() === 'All') {
+      return {
+        name: 'All Stocks',
+        description:
+          'Overview of stocks listed on the Indonesia Stock Exchange (IDX), with 123 stocks currently tracked on the platform.',
+      };
+    }
     return this.indicesMetadata[this.selectedIndex() as IndexCode];
   });
 
